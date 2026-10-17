@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CORVUS × genjutsu (paint)</title>
+  <link rel="stylesheet" href="tokens.css">
+  <!-- Pipeline genjutsu/paint · thèse « plume de corbeau » · modules : tells, ui-ux-pro-max, motion-principles, css-native, mobile-principles, design-audit · contenu : ../contenu-corvus.md -->
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--corvus-bg); color: var(--corvus-fg);
+      font-family: var(--corvus-font-voice); font-size: var(--corvus-t-body);
+      line-height: 1.7; padding-bottom: env(safe-area-inset-bottom);
+    }
+    ::selection { background: var(--corvus-accent); color: var(--corvus-ink); }
+    .wrap { max-width: 1200px; margin-inline: auto; padding-inline: var(--corvus-s4); }
+    section { padding-block: var(--corvus-s6); }
+    @media (min-width: 900px) { section { padding-block: var(--corvus-s7); } }
+
+    .skip { position: absolute; left: -9999px; top: 0; background: var(--corvus-accent); color: var(--corvus-ink);
+            padding: 10px 18px; font-weight: 600; text-decoration: none; z-index: 30; }
+    .skip:focus { left: var(--corvus-s3); top: var(--corvus-s3); }
+
+    /* en-tête */
+    header { position: sticky; top: 0; z-index: 10; background: var(--corvus-bg); border-bottom: 1px solid var(--corvus-line); }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--corvus-s4); padding-block: var(--corvus-s3); }
+    .brand { font-weight: 600; letter-spacing: 0.06em; color: var(--corvus-fg); text-decoration: none; font-size: var(--corvus-t-small); }
+    nav { display: flex; gap: var(--corvus-s4); flex-wrap: wrap; }
+    nav a { color: var(--corvus-fg-soft); text-decoration: none; font-size: var(--corvus-t-small); }
+    .veille { font-family: var(--corvus-font-mono); font-size: var(--corvus-t-label); color: var(--corvus-accent); white-space: nowrap; }
+
+    /* étiquettes (allowed pattern : mono, borné) */
+    .label { font-family: var(--corvus-font-mono); font-size: var(--corvus-t-label); font-weight: 500;
+             text-transform: uppercase; letter-spacing: 0.14em; color: var(--corvus-accent); display: block; margin-bottom: var(--corvus-s4); }
+    h1, h2, h3 { line-height: 1.1; font-weight: 600; }
+    h2 { font-size: var(--corvus-t-h2); margin: 0 0 var(--corvus-s5); }
+    h3 { font-size: var(--corvus-t-h3); margin: 0 0 var(--corvus-s2); }
+
+    /* héros */
+    .hero { padding-block: var(--corvus-s7) var(--corvus-s6); }
+    .hero-grid { display: grid; gap: var(--corvus-s6); align-items: center; }
+    @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.2fr 1fr; } }
+    .hero h1 { font-size: var(--corvus-t-hero); margin: 0 0 var(--corvus-s4); font-weight: 600; }
+    .hero .signature { color: var(--corvus-fg-soft); max-width: 34ch; margin: 0 0 var(--corvus-s5); font-size: var(--corvus-t-h3); font-weight: 300; }
+    .cta-row { display: flex; gap: var(--corvus-s3); flex-wrap: wrap; }
+    .escadrille { width: 100%; height: auto; display: block; }
+
+    /* boutons : 5 états, transform/opacity seulement */
+    .btn { display: inline-block; background: var(--corvus-accent); color: var(--corvus-ink); border: 1px solid var(--corvus-accent);
+           padding: 14px 28px; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; border-radius: var(--corvus-radius);
+           transition: transform var(--corvus-t-hover) var(--corvus-envol), filter var(--corvus-t-hover) var(--corvus-envol), border-color var(--corvus-t-hover) var(--corvus-envol), color var(--corvus-t-hover) var(--corvus-envol); }
+    .btn--ghost { background: transparent; color: var(--corvus-fg); border-color: var(--corvus-line); }
+    .btn:active { transform: translateY(1px); filter: brightness(0.95); }
+    .btn:focus-visible { outline: 2px solid var(--corvus-fg); outline-offset: 3px; }
+    .btn[disabled], .btn[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+    @media (hover: hover) and (pointer: fine) {
+      .btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+      .btn--ghost:hover { border-color: var(--corvus-accent); color: var(--corvus-accent); filter: none; }
+    }
+
+    /* manifeste */
+    .manifeste { max-width: 42em; }
+    .manifeste p { font-weight: 300; font-size: var(--corvus-t-h3); margin: 0 0 var(--corvus-s4); }
+    .manifeste p:first-of-type { font-size: var(--corvus-t-h2); }
+
+    /* chiffres */
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--corvus-s5); }
+    @media (min-width: 900px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+    .stat .val { display: block; margin-bottom: var(--corvus-s2); font-family: var(--corvus-font-mono); font-size: var(--corvus-t-stat); font-weight: 500; color: var(--corvus-fg); font-variant-numeric: tabular-nums; }
+    .stat .cap { display: block; color: var(--corvus-fg-soft); font-size: var(--corvus-t-small); max-width: 22ch; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+    /* capacités : liste deux colonnes, séparées par l'espace */
+    .caps { display: grid; gap: var(--corvus-s5) var(--corvus-s6); }
+    @media (min-width: 700px) { .caps { grid-template-columns: repeat(2, 1fr); } }
+    .cap h3 { font-size: var(--corvus-t-body); }
+    .cap p { margin: 0; color: var(--corvus-fg-soft); font-size: var(--corvus-t-small); line-height: 1.65; }
+
+    /* console de nuit */
+    .console { background: var(--corvus-bg-night); border: 1px solid var(--corvus-line); padding: var(--corvus-s5); overflow-x: auto; }
+    .console pre { margin: 0; font-family: var(--corvus-font-mono); font-size: var(--corvus-t-small); line-height: 2; }
+    .console .t { color: var(--corvus-fg-soft); }
+    .console .ko { color: var(--corvus-error); }
+    .console .ok { color: var(--corvus-success); }
+
+    /* récits */
+    .recit { max-width: 65ch; margin-bottom: var(--corvus-s6); }
+    .recit:last-child { margin-bottom: 0; }
+    .recit .label { color: var(--corvus-fg-soft); }
+    .recit p { margin: 0; color: var(--corvus-fg); }
+
+    /* photographie de nuit : désaturée au repos, couleur au survol (amélioration thése : images admises) */
+    .tables { display: grid; gap: var(--corvus-s4); }
+    @media (min-width: 900px) { .tables { grid-template-columns: 1.6fr 1fr; } }
+    .table-nuit { margin: 0; }
+    .table-nuit .cadre { overflow: hidden; border: 1px solid var(--corvus-line); }
+    .table-nuit img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+                      filter: grayscale(1) contrast(1.06);
+                      transition: filter var(--corvus-t-slow) var(--corvus-envol), transform var(--corvus-t-slow) var(--corvus-envol); }
+    .table-nuit:hover img { filter: grayscale(0) contrast(1); transform: scale(1.02); }
+    .table-nuit figcaption { font-family: var(--corvus-font-mono); font-size: var(--corvus-t-label);
+                             color: var(--corvus-fg-soft); margin-top: var(--corvus-s2); letter-spacing: 0.02em; }
+    .table-nuit figcaption b { color: var(--corvus-fg); font-weight: 500; }
+
+    /* témoignages */
+    .quotes { display: grid; gap: var(--corvus-s4); }
+    @media (min-width: 900px) { .quotes { grid-template-columns: repeat(3, 1fr); } }
+    .quote { border: 1px solid var(--corvus-line); padding: var(--corvus-s5); }
+    .quote p { margin: 0 0 var(--corvus-s4); }
+    .quote cite { font-style: normal; color: var(--corvus-fg-soft); font-size: var(--corvus-t-small); }
+
+    /* formules */
+    .formules { display: grid; gap: var(--corvus-s4); align-items: start; }
+    @media (min-width: 900px) { .formules { grid-template-columns: repeat(3, 1fr); } }
+    .offre { border: 1px solid var(--corvus-line); padding: var(--corvus-s5); display: flex; flex-direction: column; gap: var(--corvus-s3); }
+    .offre--rec { border-color: var(--corvus-accent); }
+    .offre .nom { font-family: var(--corvus-font-mono); font-size: var(--corvus-t-label); text-transform: uppercase; letter-spacing: 0.14em; color: var(--corvus-fg-soft); }
+    .offre--rec .nom { color: var(--corvus-accent); }
+    .offre .prix { font-family: var(--corvus-font-mono); font-size: var(--corvus-t-h2); font-weight: 500; }
+    .offre ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--corvus-s2); color: var(--corvus-fg-soft); font-size: var(--corvus-t-small); }
+    .offre .btn { margin-top: var(--corvus-s2); justify-self: start; }
+
+    /* questions */
+    .faq { max-width: 46em; }
+    .faq details { border-bottom: 1px solid var(--corvus-line); }
+    .faq details:first-of-type { border-top: 1px solid var(--corvus-line); }
+    .faq summary { cursor: pointer; list-style: none; padding: var(--corvus-s4) 0; font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: var(--corvus-s3); }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; font-family: var(--corvus-font-mono); font-weight: 400; color: var(--corvus-fg-soft); transition: transform var(--corvus-t-hover) var(--corvus-envol); }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq summary:focus-visible { outline: 2px solid var(--corvus-fg); outline-offset: 3px; }
+    .faq details p { margin: 0 0 var(--corvus-s4); color: var(--corvus-fg-soft); max-width: 60ch; }
+
+    /* équipe */
+    .equipe { display: grid; gap: var(--corvus-s5); grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 900px) { .equipe { grid-template-columns: repeat(4, 1fr); } }
+    .membre .who { font-family: var(--corvus-font-mono); font-size: var(--corvus-t-small); color: var(--corvus-fg); }
+    .membre .role { color: var(--corvus-fg-soft); font-size: var(--corvus-t-small); }
+
+    /* journal : une seule règle verticale, pas d'encadrement */
+    .journal { border-left: 1px solid var(--corvus-line); padding-left: var(--corvus-s5); display: grid; gap: var(--corvus-s4); max-width: 46em; }
+    .version .v { font-family: var(--corvus-font-mono); font-size: var(--corvus-t-small); color: var(--corvus-accent); }
+    .version p { margin: 0; color: var(--corvus-fg-soft); font-size: var(--corvus-t-small); }
+
+    /* appel final */
+    .final { text-align: center; }
+    .final h2 { font-size: var(--corvus-t-h1); }
+    .final .mail { color: var(--corvus-accent); }
+
+    footer { border-top: 1px solid var(--corvus-line); padding: var(--corvus-s5) 0 var(--corvus-s6); }
+    footer .wrap { display: flex; justify-content: space-between; gap: var(--corvus-s3); flex-wrap: wrap; color: var(--corvus-fg-soft); font-size: var(--corvus-t-small); }
+    footer a { color: var(--corvus-fg-soft); }
+
+    /* liens de texte */
+    a.lien { color: var(--corvus-accent); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+    a.lien:focus-visible { outline: 2px solid var(--corvus-fg); outline-offset: 3px; }
+
+    /* reveals : visibles par défaut, masqués seulement si JS tourne */
+    .js [data-reveal] { opacity: 0; transform: translateY(16px);
+      transition: opacity var(--corvus-t-med) var(--corvus-envol), transform var(--corvus-t-med) var(--corvus-envol); }
+    .js [data-reveal].is-visible { opacity: 1; transform: none; }
+    .js .hero [data-reveal] { transition-duration: var(--corvus-t-slow); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+      .btn, .faq summary::after { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Aller au contenu</a>
+
+  <header>
+    <div class="wrap bar">
+      <a class="brand" href="#top">CORVUS</a>
+      <nav aria-label="Principale">
+        <a href="#capacites">Capacités</a>
+        <a href="#tables">Tables</a>
+        <a href="#recits">Récits</a>
+        <a href="#formules">Formules</a>
+        <a href="#questions">Questions</a>
+      </nav>
+      <span class="veille" aria-hidden="true">en veille · --:--:--</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <span id="top"></span>
+
+    <section class="hero" aria-labelledby="titre">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="label" data-reveal>agent local d'automatisation</span>
+          <h1 id="titre" data-reveal>L'agent qui exécute tout. Sans un clic.</h1>
+          <p class="signature" data-reveal>Il travaille quand tu dors. Il signe son travail.</p>
+          <div class="cta-row" data-reveal>
+            <a class="btn" href="#formules">Laisser CORVUS veiller</a>
+            <a class="btn btn--ghost" href="#manifeste">Lire le manifeste</a>
+          </div>
+        </div>
+        <svg class="escadrille" viewBox="0 0 480 300" fill="none" aria-hidden="true" data-reveal>
+          <!-- concept « l'escadrille » : trois machines sur un fil, une seule veilleuse -->
+          <line x1="10" y1="200" x2="470" y2="200" stroke="var(--corvus-line)" stroke-width="1"/>
+          <rect x="70"  y="150" width="90" height="50" stroke="var(--corvus-line)" stroke-width="1"/>
+          <line x1="85"  y1="165" x2="130" y2="165" stroke="var(--corvus-line)" stroke-width="1"/>
+          <line x1="85"  y1="180" x2="115" y2="180" stroke="var(--corvus-line)" stroke-width="1"/>
+          <rect x="200" y="150" width="90" height="50" stroke="var(--corvus-accent)" stroke-width="1"/>
+          <line x1="215" y1="165" x2="260" y2="165" stroke="var(--corvus-accent)" stroke-width="1"/>
+          <line x1="215" y1="180" x2="245" y2="180" stroke="var(--corvus-accent)" stroke-width="1"/>
+          <circle cx="245" cy="143" r="3" fill="var(--corvus-accent)"/>
+          <line x1="245" y1="146" x2="245" y2="150" stroke="var(--corvus-accent)" stroke-width="1"/>
+          <rect x="330" y="150" width="90" height="50" stroke="var(--corvus-line)" stroke-width="1"/>
+          <line x1="345" y1="165" x2="390" y2="165" stroke="var(--corvus-line)" stroke-width="1"/>
+          <line x1="345" y1="180" x2="375" y2="180" stroke="var(--corvus-line)" stroke-width="1"/>
+          <line x1="20" y1="60" x2="60" y2="60" stroke="var(--corvus-line)" stroke-width="1"/>
+          <line x1="430" y1="250" x2="460" y2="250" stroke="var(--corvus-line)" stroke-width="1"/>
+        </svg>
+      </div>
+    </section>
+
+    <section id="manifeste" aria-labelledby="t-manifeste">
+      <div class="wrap">
+        <span class="label" data-reveal>manifeste</span>
+        <h2 id="t-manifeste" data-reveal>Le repos est une illusion.</h2>
+        <div class="manifeste" data-stagger>
+          <p data-reveal>Un agent n'est pas un assistant. Un assistant attend qu'on lui demande ; un agent sait déjà. CORVUS veille parce que la machine, elle, ne dort jamais : les disques se remplissent, les certificats expirent, les sauvegardes s'oublient. Ce travail invisible mérite un ouvrier invisible.</p>
+          <p data-reveal>Nous l'avons bâti sur le corbeau : il se souvient des visages, cache pour l'hiver, reconnaît les outils, et ne donne jamais l'alerte pour rien. La nuit, il patrouille. Au matin, il dépose un rapport signé. Pas une notification : un rapport, avec ce qu'il a vu, ce qu'il a fait, ce qu'il réparera demain.</p>
+          <p data-reveal>Aucune magie là-dedans. Des scripts écrits en langage naturel, relus, datés, signés. La seule illusion est celle du repos : tu crois que rien ne s'est passé, et c'est exactement le travail.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="chiffres" aria-labelledby="t-chiffres">
+      <div class="wrap">
+        <span class="label" data-reveal>chiffres</span>
+        <h2 id="t-chiffres" data-reveal>Ce que les nuits ont compté.</h2>
+        <div class="stats" data-stagger>
+          <div class="stat" data-reveal><span class="val" data-compte="2048" data-format="entier" aria-hidden="true">0</span><span class="sr-only">2 048</span><span class="cap">nuits sans incident majeur</span></div>
+          <div class="stat" data-reveal><span class="val" data-compte="97.3" data-format="decimal" aria-hidden="true">0</span><span class="sr-only">97,3 %</span><span class="cap">des incidents résolus avant le réveil</span></div>
+          <div class="stat" data-reveal><span class="val" data-compte="41" data-format="entier" aria-hidden="true">0</span><span class="sr-only">41</span><span class="cap">machines en escadrille, parc moyen constaté</span></div>
+          <div class="stat" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdomadaire</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="capacites" aria-labelledby="t-capacites">
+      <div class="wrap">
+        <span class="label" data-reveal>capacités</span>
+        <h2 id="t-capacites" data-reveal>Huit savoir-faire, un seul perchoir.</h2>
+        <div class="caps" data-stagger>
+          <div class="cap" data-reveal><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats : surveillés en continu, consignés au matin.</p></div>
+          <div class="cap" data-reveal><h3>Zéro clic</h3><p>La tâche dictée en langage naturel, le script écrit, relu, lancé.</p></div>
+          <div class="cap" data-reveal><h3>Auto-curatif</h3><p>Un service tombe : il redémarre, applique le correctif, consigne l'incident.</p></div>
+          <div class="cap" data-reveal><h3>Langage naturel</h3><p>« Sauvegarde la base toutes les nuits à 3 h, garde sept copies. » Il l'écrit en cron mieux que toi.</p></div>
+          <div class="cap" data-reveal><h3>Rapports signés</h3><p>Chaque intervention produit une note datée, signée, relisible. Rien d'anonyme.</p></div>
+          <div class="cap" data-reveal><h3>Mémoire de corvidé</h3><p>Il se souvient de la dernière panne, du dernier correctif, du dernier visage qui a validé.</p></div>
+          <div class="cap" data-reveal><h3>Escadrille</h3><p>Plusieurs machines, un seul regard : la console regroupe le parc, du portable au serveur de l'atelier.</p></div>
+          <div class="cap" data-reveal><h3>Silence respecté</h3><p>Tout tourne en local, permissions minimales, bac à sable pour tout essai. Il ne parle que quand c'est nécessaire.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="veille" aria-labelledby="t-veille">
+      <div class="wrap">
+        <span class="label" data-reveal>veille</span>
+        <h2 id="t-veille" data-reveal>Une nuit, ligne par ligne.</h2>
+        <div class="console" data-reveal>
+<pre><span class="t">$ corvus veille --nuit</span>
+<span class="t">23:41</span>  disque sauvegarde 94 % : compression des archives
+<span class="t">01:07</span>  service « photos » tombé ×1 : relance, correctif appliqué
+<span class="t">03:12</span>  purge doublons : 118 Go libérés
+<span class="t">04:55</span>  certificat atelier : J-72, renouvellement tenté (<span class="ko">échec ×2</span>)
+<span class="t">05:30</span>  <span class="ok">rapport signé déposé</span> : 3 lignes, 0 clic
+<span class="t">$ corvus bilan --matin</span>
+<span class="t">nuit #2048 · 2 interventions · 0 escalade</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="tables" aria-labelledby="t-tables">
+      <div class="wrap">
+        <span class="label" data-reveal>tables de nuit</span>
+        <h2 id="t-tables" data-reveal>Deux images de ce que tu ne vois jamais.</h2>
+        <div class="tables" data-stagger>
+          <figure class="table-nuit" data-reveal>
+            <div class="cadre"><img src="https://picsum.photos/seed/corvus-genjutsu-table/1600/900" alt="La table de nuit : le rapport papier de trois lignes posé à côté d'un téléphone muet" loading="lazy"></div>
+            <figcaption><b>la table de nuit</b> : le rapport de trois lignes, posé avant le réveil</figcaption>
+          </figure>
+          <figure class="table-nuit" data-reveal>
+            <div class="cadre"><img src="https://picsum.photos/seed/corvus-genjutsu-console/1600/900" alt="La console nocturne : écran seul dans le noir, curseur qui attend" loading="lazy"></div>
+            <figcaption><b>la console nocturne</b> : 5 h 30, le rapport se signe</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="recits" aria-labelledby="t-recits">
+      <div class="wrap">
+        <span class="label" data-reveal>récits</span>
+        <h2 id="t-recits" data-reveal>Trois nuits ordinaires.</h2>
+        <div data-stagger>
+          <article class="recit" data-reveal>
+            <span class="label">la nuit du disque plein</span>
+            <h3>Mercredi, 3 h 12.</h3>
+            <p>Le disque de sauvegarde atteint 94 %. CORVUS compresse les archives de la semaine, purge les doublons, re-classe les restes. Au matin : 41 %. Et une note de trois lignes sur la table de nuit.</p>
+          </article>
+          <article class="recit" data-reveal>
+            <span class="label">la sauvegarde oubliée</span>
+            <h3>Février, silencieusement.</h3>
+            <p>Le script de sauvegarde tournait plus depuis la mise à jour de février. Personne n'avait vu. Lui si : la date du dernier dépôt manquait au rituel. Il a relancé, vérifié, signé.</p>
+          </article>
+          <article class="recit" data-reveal>
+            <span class="label">l'escalade silencieuse</span>
+            <h3>72 heures avant l'échéance.</h3>
+            <p>Le certificat du serveur expire dans 72 heures et le renouvellement échoue deux fois. Il réessaie selon la procédure, échoue une troisième, et là, seulement là, il te réveille. Une alerte justifiée vaut dix ignorées.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="temoignages" aria-labelledby="t-temoignages">
+      <div class="wrap">
+        <span class="label" data-reveal>témoignages</span>
+        <h2 id="t-temoignages" data-reveal>Ce qu'en disent les repos.</h2>
+        <div class="quotes" data-stagger>
+          <blockquote class="quote" data-reveal>
+            <p>« Le matin, je lis trois lignes et je sais. Je n'ai plus ouvert un gestionnaire de tâches depuis mars. »</p>
+            <cite>Solène M., photographe, 2 machines</cite>
+          </blockquote>
+          <blockquote class="quote" data-reveal>
+            <p>« Il a relancé un service à 1 h du matin et je l'ai su en lisant le rapport. C'est ça, tenir une escadrille. »</p>
+            <cite>Karim B., indépendant, 4 machines</cite>
+          </blockquote>
+          <blockquote class="quote" data-reveal>
+            <p>« Mon ancien monitoring me criait dessus. Lui me parle quand il faut. Je dors. »</p>
+            <cite>Églantine R., dev backend, 3 machines</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="formules" aria-labelledby="t-formules">
+      <div class="wrap">
+        <span class="label" data-reveal>formules</span>
+        <h2 id="t-formules" data-reveal>Prendre le perchoir.</h2>
+        <div class="formules" data-stagger>
+          <div class="offre" data-reveal>
+            <span class="nom">corneille</span>
+            <span class="prix">0 €</span>
+            <p style="margin:0;color:var(--corvus-fg-soft);font-size:var(--corvus-t-small);">Pour dompter une machine avec l'agent.</p>
+            <ul>
+              <li>1 agent, 1 machine</li>
+              <li>Missions illimitées</li>
+              <li>Rapports quotidiens</li>
+              <li>Communauté</li>
+            </ul>
+            <a class="btn btn--ghost" href="#contact">Laisser CORVUS veiller</a>
+          </div>
+          <div class="offre offre--rec" data-reveal>
+            <span class="nom">corbeau · recommandé</span>
+            <span class="prix">9 €/mois</span>
+            <p style="margin:0;color:var(--corvus-fg-soft);font-size:var(--corvus-t-small);">L'escadrille complète, la mémoire longue.</p>
+            <ul>
+              <li>Agents illimités, 3 machines</li>
+              <li>Missions programmées</li>
+              <li>Rapports signés et archivés</li>
+              <li>Auto-curatif avancé</li>
+              <li>Priorité correctifs</li>
+            </ul>
+            <a class="btn" href="#contact">Laisser CORVUS veiller</a>
+          </div>
+          <div class="offre" data-reveal>
+            <span class="nom">murmuration</span>
+            <span class="prix">sur devis</span>
+            <p style="margin:0;color:var(--corvus-fg-soft);font-size:var(--corvus-t-small);">Pour les parcs qui bougent ensemble.</p>
+            <ul>
+              <li>Parc d'agents illimité</li>
+              <li>Console d'escadrille</li>
+              <li>Intégrations atelier</li>
+              <li>Accompagnement</li>
+            </ul>
+            <a class="btn btn--ghost" href="mailto:bonjour@corvus.dev">Nous écrire</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="questions" aria-labelledby="t-questions">
+      <div class="wrap">
+        <span class="label" data-reveal>questions fréquentes</span>
+        <h2 id="t-questions" data-reveal>Ce qu'on demande au perchoir.</h2>
+        <div class="faq" data-stagger>
+          <details data-reveal>
+            <summary>Est-ce que ça tourne dans le cloud ?</summary>
+            <p>Non. Tout est local : scripts, journaux, rapports. Rien ne quitte la machine, sauf les mises à jour que tu acceptes.</p>
+          </details>
+          <details data-reveal>
+            <summary>Que se passe-t-il si je débranche la machine la nuit ?</summary>
+            <p>Il reprend au retour, là où le rituel s'était arrêté, et le rapport mentionne le trou.</p>
+          </details>
+          <details data-reveal>
+            <summary>Peut-il casser quelque chose ?</summary>
+            <p>Chaque essai passe au bac à sable ; chaque action est journalisée et réversible pendant 30 jours.</p>
+          </details>
+          <details data-reveal>
+            <summary>Faut-il savoir coder ?</summary>
+            <p>Non. On lui parle, il écrit le script et te le montre avant de l'adopter.</p>
+          </details>
+          <details data-reveal>
+            <summary>Différence avec un cron ?</summary>
+            <p>Le cron exécute. CORVUS constate, décide, répare, et rend compte. Le cron ne signe rien.</p>
+          </details>
+          <details data-reveal>
+            <summary>Et mon ancien monitoring ?</summary>
+            <p>Il peut le remplacer, ou simplement le surveiller. Les corbeaux ne chassent pas les autres oiseaux, ils les observent.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="equipe" aria-labelledby="t-equipe">
+      <div class="wrap">
+        <span class="label" data-reveal>équipe</span>
+        <h2 id="t-equipe" data-reveal>Quatre sur le fil.</h2>
+        <div class="equipe" data-stagger>
+          <div class="membre" data-reveal><span class="who">anne.exe</span><br><span class="role">fondatrice, mécanique du vol. Écrit les boucles qui dorment.</span></div>
+          <div class="membre" data-reveal><span class="who">corbin</span><br><span class="role">scripts et langage naturel. Parle à la machine comme à un moineau.</span></div>
+          <div class="membre" data-reveal><span class="who">freya</span><br><span class="role">console d'escadrille. Dessine les tableaux de bord de nuit.</span></div>
+          <div class="membre" data-reveal><span class="who">m. le hibou</span><br><span class="role">revue de code nocturne. Ne fait pas de bruit, fait des remarques.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="journal" aria-labelledby="t-journal">
+      <div class="wrap">
+        <span class="label" data-reveal>journal des versions</span>
+        <h2 id="t-journal" data-reveal>Ce qu'il a appris.</h2>
+        <div class="journal" data-stagger>
+          <div class="version" data-reveal><span class="v">v2.4</span><p>Mémoire de corvidé : rappel de la dernière panne dans le rapport du matin.</p></div>
+          <div class="version" data-reveal><span class="v">v2.3</span><p>Bac à sable étendu aux scripts réseau ; 30 jours de retour arrière.</p></div>
+          <div class="version" data-reveal><span class="v">v2.2</span><p>Escadrille : la console regroupe jusqu'à 9 machines.</p></div>
+          <div class="version" data-reveal><span class="v">v2.1</span><p>Rapports signés : chaque intervention porte date et empreinte.</p></div>
+          <div class="version" data-reveal><span class="v">v2.0</span><p>Langage naturel : dicter la tâche, relire le script.</p></div>
+          <div class="version" data-reveal><span class="v">v1.0</span><p>Il a veillé sa première nuit. Personne ne l'a remarqué. C'était voulu.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="final" aria-labelledby="t-final">
+      <div class="wrap">
+        <span class="label" data-reveal>prendre contact</span>
+        <h2 id="t-final" data-reveal>Et ta nuit, à toi ?</h2>
+        <p data-reveal style="color:var(--corvus-fg-soft);max-width:38ch;margin:0 auto var(--corvus-s5);">CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
+        <div class="cta-row" data-reveal style="justify-content:center;">
+          <a class="btn" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller">Laisser CORVUS veiller</a>
+        </div>
+        <p data-reveal style="margin-top:var(--corvus-s4);"><a class="lien" href="mailto:bonjour@corvus.dev">bonjour@corvus.dev</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Corvus. Fait avec soin, la nuit.</span>
+      <span>Réalisé avec le skill genjutsu (pipeline paint). <a class="lien" href="../index.html">Galerie des styles</a></span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document.documentElement.classList.add("js");
+
+      /* horloge de veille : heure réelle de la machine (information, pas décor) */
+      var horloge = document.querySelector(".veille");
+      function tic() {
+        var d = new Date();
+        var p = function (n) { return String(n).padStart(2, "0"); };
+        horloge.textContent = "en veille · " + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+      }
+      tic();
+      setInterval(tic, 1000);
+
+      /* reveals : visibles par défaut sans JS ; stagger 60 ms dans un groupe */
+      var cibles = document.querySelectorAll("[data-reveal]");
+      if (!reduced && "IntersectionObserver" in window) {
+        cibles.forEach(function (el) {
+          var groupe = el.closest("[data-stagger]");
+          if (groupe) {
+            var freres = Array.prototype.slice.call(groupe.querySelectorAll("[data-reveal]"));
+            el.style.transitionDelay = (freres.indexOf(el) * 60) + "ms";
+          }
+        });
+        var io = new IntersectionObserver(function (entrees) {
+          entrees.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.15 });
+        cibles.forEach(function (el) { io.observe(el); });
+      } else {
+        cibles.forEach(function (el) { el.classList.add("is-visible"); });
+      }
+
+      /* compteurs : valeur finale directe si mouvement réduit */
+      function compte(el) {
+        var fin = parseFloat(el.dataset.compte), decimal = el.dataset.format === "decimal";
+        var fmt = function (v) {
+          return decimal
+            ? v.toFixed(1).replace(".", ",")
+            : Math.round(v).toLocaleString("fr-FR");
+        };
+        if (reduced) { el.textContent = fmt(fin); return; }
+        var debut = null, duree = 900;
+        function pas(t) {
+          if (debut === null) debut = t;
+          var p = Math.min((t - debut) / duree, 1);
+          var eased = 1 - Math.pow(1 - p, 4);
+          el.textContent = fmt(fin * eased);
+          if (p < 1) requestAnimationFrame(pas);
+        }
+        requestAnimationFrame(pas);
+      }
+      document.querySelectorAll("[data-compte]").forEach(function (el) {
+        if (reduced || !("IntersectionObserver" in window)) { compte(el); return; }
+        var o = new IntersectionObserver(function (entrees) {
+          entrees.forEach(function (e) {
+            if (e.isIntersecting) { compte(el); o.unobserve(el); }
+          });
+        }, { threshold: 0.4 });
+        o.observe(el);
+      });
+
+      /* l'unique parallaxe : l'escadrille, 40 px max, coupée si mouvement réduit */
+      var escadrille = document.querySelector(".escadrille");
+      if (escadrille && !reduced) {
+        var attente = false;
+        window.addEventListener("scroll", function () {
+          if (attente) return;
+          attente = true;
+          requestAnimationFrame(function () {
+            var h = window.innerHeight || 800;
+            var y = Math.min(window.scrollY, h);
+            escadrille.style.transform = "translateY(" + (y / h) * 40 + "px)";
+            attente = false;
+          });
+        }, { passive: true });
+      }
+    })();
+  </script>
+</body>
+</html>

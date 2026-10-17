@@ -1,0 +1,49 @@
+/* ============================================================
+   CORVUS × DIOR — tokens du skill style-dior
+   Valeurs documentées (dior.com) : noir, Dior Gray, didone espacée.
+   ============================================================ */
+
+:root {
+  /* --- Couleurs --- */
+  --dior-black: #000000;
+  --dior-gray: #9d9d9d;          /* le « Dior Gray » */
+  --dior-gray-soft: #e9e9e9;     /* gris de section clair */
+  --dior-white: #ffffff;
+
+  /* --- Typographie --- */
+  --dior-font-display: "GFS Didot", "Playfair Display", "Times New Roman", serif;
+  --dior-font-text: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --dior-ls: 0.3em;              /* capitales très espacées — signature */
+  --dior-ls-logo: 0.45em;
+  --dior-dur: 0.8s;
+  --dior-ease: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* --- Base --- */
+body.di { margin: 0; background: var(--dior-white); color: var(--dior-black); font-family: var(--dior-font-text); font-weight: 300; }
+.di h1, .di h2 { font-family: var(--dior-font-display); font-weight: 400; text-transform: uppercase; letter-spacing: var(--dior-ls); line-height: 1.15; margin: 0; }
+.di .label { font-size: 11px; text-transform: uppercase; letter-spacing: var(--dior-ls); color: var(--dior-gray); }
+.di .btn {
+  display: inline-block; padding: 16px 44px; border-radius: 0;
+  background: var(--dior-black); color: var(--dior-white);
+  text-decoration: none; font-size: 11px; letter-spacing: var(--dior-ls); text-transform: uppercase;
+  transition: opacity var(--dior-dur) ease;
+}
+.di .btn:hover { opacity: 0.72; }
+.di .btn--light { background: var(--dior-white); color: var(--dior-black); border: 1px solid var(--dior-black); }
+
+/* --- Images : photographie couture (gris, couleur au survol) --- */
+.di .media { overflow: hidden; background: var(--dior-gray-soft); }
+.di .media img { width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: grayscale(1) contrast(1.05); transition: filter 1s var(--dior-ease), transform 1.4s var(--dior-ease); }
+.di .media:hover img { filter: grayscale(0.1); transform: scale(1.02); }
+
+/* --- Reveals sobres (fondu + montée minimale) --- */
+.di [data-reveal] { opacity: 0; transform: translateY(24px);
+  transition: opacity 1s var(--dior-ease), transform 1s var(--dior-ease); }
+.di [data-reveal].is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  body.di *, body.di *::before, body.di *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  body.di [data-reveal] { opacity: 1; transform: none; }
+}

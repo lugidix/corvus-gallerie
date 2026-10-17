@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CORVUS — maison d'agentique. L'agent absolu, dessiné comme une pièce de couture.">
+  <title>CORVUS — Maison d'agentique</title>
+  <link rel="stylesheet" href="tokens.css">
+  <!-- Style : style-dior (noir, Dior Gray, didone espacée) · Renforts : genjutsu (reveals lents), design-dna (voiles, monolithe), threejs (obsidienne) · Contenu : ../contenu-corvus.md -->
+  <style>
+    html { scroll-behavior: smooth; }
+    body.di { margin: 0; }
+    section { position: relative; }
+    .wrap { max-width: 1160px; margin: 0 auto; padding-left: clamp(20px, 5vw, 80px); padding-right: clamp(20px, 5vw, 80px); }
+    .band { padding: clamp(80px, 14vh, 180px) 0; }
+    .band--black { background: var(--dior-black); color: var(--dior-white); }
+    .band--gray { background: var(--dior-gray-soft); }
+    .center { text-align: center; }
+    h2 { font-size: clamp(26px, 3.4vw, 44px); margin-bottom: clamp(32px, 6vh, 64px); }
+    .chapeau { max-width: 54ch; margin: 0 auto; font-weight: 300; line-height: 2; color: var(--dior-gray); font-size: 15px; }
+    .band--black .chapeau { color: var(--dior-gray); }
+
+    /* héros monumental + monolithe 3D en fond */
+    .hero { min-height: 96svh; display: grid; align-content: center; background: var(--dior-black); color: var(--dior-white); overflow: hidden; }
+    #scene-dior { position: absolute; inset: 0; z-index: 0; opacity: 0.9; }
+    .hero .wrap { position: relative; z-index: 1; }
+    .hero .surlabel { font-size: 11px; letter-spacing: var(--dior-ls); text-transform: uppercase; color: var(--dior-gray); display: block; margin-bottom: 28px; }
+    .hero h1 { font-size: clamp(34px, 6vw, 76px); letter-spacing: var(--dior-ls); }
+    .hero h1 .ligne { display: block; overflow: hidden; }
+    .hero h1 .ligne span { display: inline-block; transform: translateY(110%); transition: transform 1.2s var(--dior-ease); }
+    .pose .hero h1 .ligne span, .hero.pose h1 .ligne span { transform: none; }
+    .hero p.soustitre { color: var(--dior-gray); font-weight: 300; max-width: 44ch; margin: 28px 0 40px; line-height: 2; }
+
+    /* lignes de filets qui se déploient */
+    .filet { border: 0; border-top: 1px solid currentColor; width: 72px; margin: 0 auto clamp(40px, 7vh, 72px); transform: scaleX(0); transition: transform 1.2s var(--dior-ease); }
+    .filet.is-visible { transform: scaleX(1); }
+
+    /* galerie d'art : images gris → couleur */
+    .galerie { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(16px, 3vw, 40px); }
+    figure { margin: 0; }
+    .media { aspect-ratio: 3 / 4; }
+    figcaption { font-size: 11px; letter-spacing: var(--dior-ls); text-transform: uppercase; color: var(--dior-gray); margin-top: 16px; text-align: center; }
+
+    /* capacités : liste couture */
+    .pieces { max-width: 760px; margin: 0 auto; text-align: left; }
+    .piece { display: grid; grid-template-columns: 80px 1fr; gap: 24px; padding: 30px 0; border-bottom: 1px solid rgba(0,0,0,0.12); }
+    .band--black .piece { border-color: rgba(255,255,255,0.18); }
+    .piece .numero { font-family: var(--dior-font-display); font-size: 22px; color: var(--dior-gray); }
+    .piece h3 { font-family: var(--dior-font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.2em; font-size: 16px; margin: 0 0 8px; }
+    .piece p { margin: 0; color: var(--dior-gray); font-weight: 300; font-size: 14px; line-height: 1.9; }
+
+    /* transcript */
+    .console { max-width: 720px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.25); padding: clamp(24px, 4vw, 48px); text-align: left;
+      font-family: "Courier New", monospace; font-size: 12.5px; line-height: 2.2; color: var(--dior-white); overflow-x: auto; }
+    .console .t { color: var(--dior-gray); }
+
+    /* chiffres */
+    .nombres { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(24px, 5vw, 64px); max-width: 900px; margin: 0 auto; }
+    @media (min-width: 800px) { .nombres { grid-template-columns: repeat(4, 1fr); } }
+    .nombre .val { display: block; font-family: var(--dior-font-display); font-size: clamp(40px, 5vw, 68px); font-variant-numeric: tabular-nums; }
+    .nombre .cap { display: block; font-size: 10px; letter-spacing: var(--dior-ls); text-transform: uppercase; color: var(--dior-gray); margin-top: 14px; }
+
+    /* citations */
+    .paroles { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(24px, 4vw, 48px); max-width: 1100px; margin: 0 auto; }
+    .parole { border-top: 1px solid rgba(255,255,255,0.25); padding-top: 28px; text-align: left; }
+    .parole p { font-family: var(--dior-font-display); font-size: 17px; line-height: 1.8; margin: 0 0 18px; }
+    .parole cite { font-style: normal; font-size: 10px; letter-spacing: var(--dior-ls); text-transform: uppercase; color: var(--dior-gray); }
+
+    /* formules */
+    .collections { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; background: rgba(0,0,0,0.12); }
+    .collection { background: var(--dior-white); padding: clamp(40px, 6vw, 64px) 32px; text-align: center; display: grid; gap: 16px; justify-items: center; }
+    .band--black .collections { background: rgba(255,255,255,0.2); }
+    .band--black .collection { background: var(--dior-black); }
+    .collection .nom { font-family: var(--dior-font-display); text-transform: uppercase; letter-spacing: 0.22em; font-size: 15px; }
+    .collection .prix { font-family: var(--dior-font-display); font-size: 26px; }
+    .collection ul { list-style: none; margin: 0; padding: 0; color: var(--dior-gray); font-size: 12px; display: grid; gap: 8px; font-weight: 300; }
+    .collection.reco { outline: 1px solid var(--dior-black); }
+
+    /* faq, équipe, journal */
+    .faq { max-width: 640px; margin: 0 auto; text-align: left; }
+    .faq details { border-bottom: 1px solid rgba(0,0,0,0.12); }
+    .band--black .faq details { border-color: rgba(255,255,255,0.18); }
+    .faq summary { cursor: pointer; list-style: none; padding: 22px 0; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; display: flex; justify-content: space-between; gap: 16px; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; transition: transform .6s var(--dior-ease); }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq details p { margin: 0 0 22px; color: var(--dior-gray); font-weight: 300; }
+    .atelier { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: clamp(24px, 4vw, 48px); max-width: 1000px; margin: 0 auto; }
+    .main { text-align: center; }
+    .main .qui { font-family: var(--dior-font-display); font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; }
+    .main .quoi { color: var(--dior-gray); font-size: 13px; font-weight: 300; margin-top: 10px; line-height: 1.8; }
+    .journal { max-width: 620px; margin: 0 auto; text-align: left; display: grid; gap: 20px; }
+    .version { display: grid; grid-template-columns: 70px 1fr; gap: 20px; align-items: baseline; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 20px; }
+    .band--black .version { border-color: rgba(255,255,255,0.15); }
+    .version .v { font-family: var(--dior-font-display); }
+    .version p { margin: 0; color: var(--dior-gray); font-size: 13px; font-weight: 300; }
+
+    .js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 1s var(--dior-ease), transform 1s var(--dior-ease); }
+    .js [data-reveal].is-visible { opacity: 1; transform: none; }
+    footer { padding: 56px 24px; text-align: center; font-size: 10px; letter-spacing: var(--dior-ls); text-transform: uppercase; color: var(--dior-gray); border-top: 1px solid rgba(0,0,0,0.1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+      .hero h1 .ligne span { transform: none; transition: none; }
+      .filet { transform: none; }
+    }
+  </style>
+</head>
+<body class="di">
+
+  <main>
+    <section class="hero" id="haut">
+      <div id="scene-dior" aria-hidden="true"></div>
+      <div class="wrap">
+        <span class="surlabel" data-reveal>Maison d'agentique</span>
+        <h1 id="titre-dior">
+          <span class="ligne"><span>Corvus</span></span>
+          <span class="ligne"><span>L'agent absolu</span></span>
+        </h1>
+        <p class="soustitre" data-reveal>Il travaille quand tu dors. Il signe son travail. Chaque nuit, un rapport de trois lignes, posé comme une pièce de couture.</p>
+        <a class="btn" href="#collections" data-reveal>Découvrir la maison</a>
+      </div>
+    </section>
+
+    <section class="band center" id="manifeste">
+      <div class="wrap">
+        <hr class="filet" data-reveal>
+        <h2 data-reveal>Le manifeste</h2>
+        <p class="chapeau" data-reveal>Un agent n'est pas un assistant. Un assistant attend qu'on lui demande ; un agent sait déjà. Les disques se remplissent, les certificats expirent, les sauvegardes s'oublient. Ce travail invisible mérite un ouvrier invisible.</p>
+        <p class="chapeau" data-reveal style="margin-top: 24px;">Nous l'avons bâti sur le corbeau : il se souvient des visages, cache pour l'hiver, et ne donne jamais l'alerte pour rien. Au matin, un rapport signé. Pas une notification : un rapport.</p>
+      </div>
+    </section>
+
+    <section class="band center band--black" id="capacites">
+      <div class="wrap">
+        <h2 data-reveal>Huit savoir-faire</h2>
+        <div class="pieces">
+          <div class="piece" data-reveal><span class="numero">I</span><div><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats : surveillés en continu, consignés au matin.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">II</span><div><h3>Zéro clic</h3><p>La tâche dictée en langage naturel, le script écrit, relu, lancé.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">III</span><div><h3>Auto-curatif</h3><p>Un service tombe : il redémarre, applique le correctif, consigne l'incident.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">IV</span><div><h3>Langage naturel</h3><p>« Sauvegarde la base toutes les nuits à 3 h, garde sept copies. » Il l'écrit en cron mieux que toi.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">V</span><div><h3>Rapports signés</h3><p>Chaque intervention produit une note datée, signée, relisible. Rien d'anonyme.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">VI</span><div><h3>Mémoire de corvidé</h3><p>Il se souvient de la dernière panne, du dernier correctif, du dernier visage qui a validé.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">VII</span><div><h3>Escadrille</h3><p>Plusieurs machines, un seul regard : du portable au serveur de l'atelier.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">VIII</span><div><h3>Silence respecté</h3><p>Tout tourne en local, permissions minimales, bac à sable pour tout essai.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center band--gray" id="chiffres">
+      <div class="wrap">
+        <hr class="filet" data-reveal>
+        <h2 data-reveal>Ce que les nuits ont compté</h2>
+        <div class="nombres">
+          <div class="nombre" data-reveal><span class="val" data-compte="2048">0</span><span class="cap">nuits sans incident majeur</span></div>
+          <div class="nombre" data-reveal><span class="val" data-compte="97.3" data-decimal="1">0</span><span class="cap">% avant le réveil</span></div>
+          <div class="nombre" data-reveal><span class="val" data-compte="41">0</span><span class="cap">machines en escadrille</span></div>
+          <div class="nombre" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdomadaire</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center" id="galerie">
+      <div class="wrap">
+        <h2 data-reveal>Tables de nuit</h2>
+        <div class="galerie">
+          <figure data-reveal><div class="media"><img src="https://picsum.photos/seed/dior-table-nuit/900/1200" alt="La table de nuit, rapport papier de trois lignes" loading="lazy"></div><figcaption>La table de nuit</figcaption></figure>
+          <figure data-reveal><div class="media"><img src="https://picsum.photos/seed/dior-console/900/1200" alt="La console nocturne, écran dans le noir" loading="lazy"></div><figcaption>La console nocturne</figcaption></figure>
+          <figure data-reveal><div class="media"><img src="https://picsum.photos/seed/dior-escadrille/900/1200" alt="L'escadrille, machines sur un fil" loading="lazy"></div><figcaption>L'escadrille</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center band--black" id="nuit">
+      <div class="wrap">
+        <h2 data-reveal>Une nuit, ligne par ligne</h2>
+        <div class="console" data-reveal>
+<pre><span class="t">$ corvus veille --nuit</span>
+<span class="t">23:41</span>  disque sauvegarde 94 % : compression des archives
+<span class="t">01:07</span>  service « photos » tombé ×1 : relance, correctif appliqué
+<span class="t">03:12</span>  purge doublons : 118 Go libérés
+<span class="t">04:55</span>  certificat atelier : J-72, renouvellement tenté (échec ×2)
+<span class="t">05:30</span>  rapport signé déposé : 3 lignes, 0 clic
+<span class="t">$ corvus bilan --matin</span>
+<span class="t">nuit #2048 · 2 interventions · 0 escalade</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center" id="recits">
+      <div class="wrap">
+        <h2 data-reveal>Trois nuits ordinaires</h2>
+        <div class="pieces">
+          <div class="piece" data-reveal><span class="numero">1</span><div><h3>Mercredi, 3 h 12</h3><p>Le disque de sauvegarde atteint 94 %. CORVUS compresse, purge, re-classe. Au matin : 41 %, et une note de trois lignes.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">2</span><div><h3>Février, silencieusement</h3><p>La sauvegarde ne tournait plus depuis la mise à jour. Personne n'avait vu. Lui si : il a relancé, vérifié, signé.</p></div></div>
+          <div class="piece" data-reveal><span class="numero">3</span><div><h3>72 heures avant l'échéance</h3><p>Le certificat expire, deux échecs. Il réessaie, échoue une troisième fois, et là seulement, il te réveille.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center band--black" id="temoignages">
+      <div class="wrap">
+        <h2 data-reveal>Ce qu'en disent les repos</h2>
+        <div class="paroles">
+          <blockquote class="parole" data-reveal><p>« Le matin, je lis trois lignes et je sais. Je n'ai plus ouvert un gestionnaire de tâches depuis mars. »</p><cite>Solène M., photographe, 2 machines</cite></blockquote>
+          <blockquote class="parole" data-reveal><p>« Il a relancé un service à 1 h du matin et je l'ai su en lisant le rapport. C'est ça, tenir une escadrille. »</p><cite>Karim B., indépendant, 4 machines</cite></blockquote>
+          <blockquote class="parole" data-reveal><p>« Mon ancien monitoring me criait dessus. Lui me parle quand il faut. Je dors. »</p><cite>Églantine R., dev backend, 3 machines</cite></blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center" id="collections">
+      <div class="wrap">
+        <h2 data-reveal>Les collections</h2>
+        <div class="collections">
+          <div class="collection" data-reveal><span class="nom">Corneille</span><span class="prix">0 €</span>
+            <ul><li>1 agent, 1 machine</li><li>Missions illimitées</li><li>Rapports quotidiens</li><li>Communauté</li></ul>
+            <a class="btn" href="#contact">Découvrir</a></div>
+          <div class="collection reco" data-reveal><span class="nom">Corbeau</span><span class="prix">9 €/mois</span>
+            <ul><li>Agents illimités, 3 machines</li><li>Missions programmées</li><li>Rapports signés et archivés</li><li>Auto-curatif avancé</li><li>Priorité correctifs</li></ul>
+            <a class="btn" href="#contact">Découvrir</a></div>
+          <div class="collection" data-reveal><span class="nom">Murmuration</span><span class="prix">Sur devis</span>
+            <ul><li>Parc d'agents illimité</li><li>Console d'escadrille</li><li>Intégrations atelier</li><li>Accompagnement</li></ul>
+            <a class="btn btn--light" href="#contact">Nous écrire</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center band--gray" id="questions">
+      <div class="wrap">
+        <h2 data-reveal>Ce qu'on demande au perchoir</h2>
+        <div class="faq">
+          <details data-reveal><summary>Est-ce que ça tourne dans le cloud ?</summary><p>Non. Tout est local : scripts, journaux, rapports. Rien ne quitte la machine, sauf les mises à jour que tu acceptes.</p></details>
+          <details data-reveal><summary>Que se passe-t-il si je débranche la machine la nuit ?</summary><p>Il reprend au retour, là où le rituel s'était arrêté, et le rapport mentionne le trou.</p></details>
+          <details data-reveal><summary>Peut-il casser quelque chose ?</summary><p>Chaque essai passe au bac à sable ; chaque action est journalisée et réversible pendant 30 jours.</p></details>
+          <details data-reveal><summary>Faut-il savoir coder ?</summary><p>Non. On lui parle, il écrit le script et te le montre avant de l'adopter.</p></details>
+          <details data-reveal><summary>Différence avec un cron ?</summary><p>Le cron exécute. CORVUS constate, décide, répare, et rend compte. Le cron ne signe rien.</p></details>
+          <details data-reveal><summary>Et mon ancien monitoring ?</summary><p>Il peut le remplacer, ou simplement le surveiller. Les corbeaux observent, ils ne chassent pas.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center band--black" id="maison">
+      <div class="wrap">
+        <h2 data-reveal>L'atelier</h2>
+        <div class="atelier">
+          <div class="main" data-reveal><div class="qui">anne.exe</div><div class="quoi">Fondatrice, mécanique du vol. Écrit les boucles qui dorment.</div></div>
+          <div class="main" data-reveal><div class="qui">corbin</div><div class="quoi">Scripts et langage naturel. Parle à la machine comme à un moineau.</div></div>
+          <div class="main" data-reveal><div class="qui">freya</div><div class="quoi">Console d'escadrille. Dessine les tableaux de bord de nuit.</div></div>
+          <div class="main" data-reveal><div class="qui">m. le hibou</div><div class="quoi">Revue de code nocturne. Ne fait pas de bruit, fait des remarques.</div></div>
+        </div>
+        <div class="journal" style="margin-top: 72px;">
+          <div class="version" data-reveal><span class="v">v2.4</span><p>Mémoire de corvidé : rappel de la dernière panne dans le rapport du matin.</p></div>
+          <div class="version" data-reveal><span class="v">v2.3</span><p>Bac à sable étendu aux scripts réseau ; 30 jours de retour arrière.</p></div>
+          <div class="version" data-reveal><span class="v">v2.2</span><p>Escadrille : la console regroupe jusqu'à 9 machines.</p></div>
+          <div class="version" data-reveal><span class="v">v2.1</span><p>Rapports signés : chaque intervention porte date et empreinte.</p></div>
+          <div class="version" data-reveal><span class="v">v1.0</span><p>Il a veillé sa première nuit. Personne ne l'a remarqué. C'était voulu.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band center" id="contact">
+      <div class="wrap">
+        <hr class="filet" data-reveal>
+        <h2 data-reveal>Et ta nuit, à toi&nbsp;?</h2>
+        <p class="chapeau" data-reveal>CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
+        <a class="btn" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller" data-reveal style="margin-top: 40px;">Laisser CORVUS veiller</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 Corvus. Style Dior, reveals genjutsu, monolithe design-dna × threejs. <a href="../index.html" style="color: inherit;">Galerie</a></footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.documentElement.classList.add("js");
+
+    /* titres du héros qui montent depuis le bas (design-dna) */
+    if (!reduire) {
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        document.querySelector(".hero").classList.add("pose");
+      }); });
+    }
+
+    var cibles = document.querySelectorAll("[data-reveal], .filet");
+    if (!reduire && "IntersectionObserver" in window) {
+      cibles.forEach(function (el) {
+        var pere = el.parentElement;
+        if (pere && pere.querySelectorAll("[data-reveal]").length > 2) {
+          var freres = Array.prototype.slice.call(pere.querySelectorAll("[data-reveal]"));
+          el.style.transitionDelay = (freres.indexOf(el) * 90) + "ms";
+        }
+      });
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
+      }, { threshold: 0.15 });
+      cibles.forEach(function (el) { io.observe(el); });
+    } else {
+      cibles.forEach(function (el) { el.classList.add("is-visible"); });
+    }
+
+    function compte(el) {
+      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
+      var fmt = function (v) { return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR"); };
+      if (reduire) { el.textContent = fmt(fin); return; }
+      var t0 = null;
+      (function pas(t) { if (t0 === null) t0 = t;
+        var pr = Math.min((t - t0) / 1300, 1);
+        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
+        if (pr < 1) requestAnimationFrame(pas); })(performance.now());
+    }
+    document.querySelectorAll("[data-compte]").forEach(function (el) {
+      if (!("IntersectionObserver" in window)) { compte(el); return; }
+      var o = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { compte(el); o.unobserve(el); } });
+      }, { threshold: 0.4 });
+      o.observe(el);
+    });
+  })();
+  </script>
+
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  } }
+  </script>
+  <script type="module">
+    const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const modeste = (navigator.hardwareConcurrency || 4) <= 2;
+    let webgl = false;
+    try { webgl = !!document.createElement("canvas").getContext("webgl2") || !!document.createElement("canvas").getContext("webgl"); } catch (e) {}
+    if (!reduire && !modeste && webgl) {
+      try {
+        const THREE = await import("three");
+        const hote = document.getElementById("scene-dior");
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+        const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
+        camera.position.set(0, 0.4, 7);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        hote.appendChild(renderer.domElement);
+
+        const monolithe = new THREE.Mesh(
+          new THREE.BoxGeometry(1.25, 3.4, 1.25),
+          new THREE.MeshPhysicalMaterial({ color: 0x060606, roughness: 0.16, clearcoat: 1, clearcoatRoughness: 0.1, metalness: 0.2 })
+        );
+        scene.add(monolithe);
+        const socle = new THREE.Mesh(
+          new THREE.BoxGeometry(2.6, 0.06, 2.6),
+          new THREE.MeshStandardMaterial({ color: 0x101010, roughness: 0.6 })
+        );
+        socle.position.y = -1.85;
+        scene.add(socle);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.06));
+        const rim = new THREE.DirectionalLight(0xffffff, 3.4); rim.position.set(-4, 3, -3); scene.add(rim);
+        const doux = new THREE.DirectionalLight(0x9d9d9d, 0.5); doux.position.set(4, -1, 4); scene.add(doux);
+
+        const souris = { x: 0, y: 0 };
+        addEventListener("pointermove", (e) => {
+          souris.x = (e.clientX / innerWidth) * 2 - 1;
+          souris.y = (e.clientY / innerHeight) * 2 - 1;
+        }, { passive: true });
+
+        const horloge = new THREE.Clock();
+        let vu = true, actif = true;
+        new IntersectionObserver((es) => { vu = es[0].isIntersecting; }, { threshold: 0.02 }).observe(hote);
+        document.addEventListener("visibilitychange", () => { actif = !document.hidden; });
+        function taille() { const w = hote.clientWidth, h = hote.clientHeight;
+          camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h); }
+        taille(); addEventListener("resize", taille);
+
+        (function boucle() {
+          requestAnimationFrame(boucle);
+          if (!vu || !actif) return;
+          const t = horloge.getElapsedTime();
+          monolithe.rotation.y = t * 0.1;
+          monolithe.position.y = Math.sin(t * 0.4) * 0.06;
+          camera.position.x += (souris.x * 1.1 - camera.position.x) * 0.03;
+          camera.position.y += (0.4 - souris.y * 0.5 - camera.position.y) * 0.03;
+          camera.lookAt(0, 0, 0);
+          renderer.render(scene, camera);
+        })();
+      } catch (e) { /* le héros reste noir, la typographie porte la page */ }
+    }
+  </script>
+</body>
+</html>

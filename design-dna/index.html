@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CORVUS × design-dna</title>
+  <!-- Généré par design-dna Phase 3 depuis dna-corvus.json + contenu-corvus.md · palette mesurée (ΔE vérifié) -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+    :root {
+      --bg: #0f172a; --card: #223145; --elev: #2a3a55;
+      --fg: #f1f4f7; --soft: #bfc5ca; --muted: #848993; --line: #4b5264;
+      --acc: #3ed3bc; --deep: #297e83; --sky: #8ecdf7; --ink: #06251f;
+      --voice: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+      --mono: "JetBrains Mono", Consolas, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --micro: 150ms; --normal: 300ms; --macro: 700ms;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--voice);
+           font-size: 1.0625rem; line-height: 1.7; overflow-x: hidden; }
+    ::selection { background: var(--acc); color: var(--ink); }
+    .wrap { max-width: 1200px; margin-inline: auto; padding-inline: 24px; }
+    section { padding-block: 104px; position: relative; z-index: 2; }
+    @media (max-width: 900px) { section { padding-block: 64px; } }
+
+    /* couches d'effets : dust (0) < spotlight (1) < contenu (2) */
+    #dust { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    #spot { position: fixed; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: screen;
+            background: radial-gradient(240px circle at var(--mx, -600px) var(--my, -600px), rgba(62,211,188,0.10), transparent 70%); }
+
+    .skip { position: absolute; left: -9999px; }
+    .skip:focus { left: 16px; top: 16px; background: var(--acc); color: var(--ink); padding: 10px 18px; z-index: 40; }
+
+    header { position: sticky; top: 0; z-index: 10; background: rgba(15,23,42,0.88); border-bottom: 1px solid var(--line); }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 16px; }
+    .brand { font-weight: 600; letter-spacing: 0.06em; color: var(--fg); text-decoration: none; }
+    nav { display: flex; gap: 24px; flex-wrap: wrap; }
+    nav a { color: var(--soft); text-decoration: none; font-size: 0.8125rem; transition: color var(--micro) var(--ease); }
+    nav a:hover { color: var(--acc); }
+    .clock { font-family: var(--mono); font-size: 0.75rem; color: var(--acc); }
+
+    .overline { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; text-transform: uppercase;
+                letter-spacing: 0.14em; color: var(--acc); display: block; margin-bottom: 24px; }
+    h1, h2, h3 { line-height: 1.1; font-weight: 600; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 40px; }
+
+    /* héros : split-letter + iridescence + corbeau au trait */
+    .hero { min-height: 86vh; display: flex; align-items: center; padding-block: 104px; }
+    .hero-grid { display: grid; gap: 64px; align-items: center; width: 100%; }
+    @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.15fr 1fr; } }
+    .hero h1 { font-size: clamp(3rem, 8vw, 5.5rem); margin: 0 0 24px; letter-spacing: -0.01em; }
+    .hero h1 .iri { background: linear-gradient(90deg, var(--acc), var(--sky), var(--deep), var(--acc));
+                    background-size: 300% 100%; -webkit-background-clip: text; background-clip: text;
+                    color: transparent; animation: iri 8s linear infinite; }
+    @keyframes iri { to { background-position: 300% 0; } }
+    .hero h1 .ch { display: inline-block; opacity: 0; transform: translateY(0.4em);
+                   transition: opacity var(--macro) var(--ease), transform var(--macro) var(--ease); }
+    .hero h1.pose .ch { opacity: 1; transform: none; }
+    .hero .sig { color: var(--soft); font-weight: 300; font-size: 1.25rem; max-width: 34ch; margin: 0 0 40px; }
+    .cta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn { display: inline-block; background: var(--acc); color: var(--ink); border: 1px solid var(--acc);
+           padding: 14px 28px; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+           transition: transform var(--normal) var(--ease), filter var(--normal) var(--ease); }
+    .btn--ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .btn--ghost:hover { border-color: var(--acc); color: var(--acc); }
+    .btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+    .corbeau { width: 100%; height: auto; }
+    .corbeau path { stroke: var(--deep); fill: none; stroke-width: 1.4; }
+    .corbeau .oeil { fill: var(--acc); }
+    .corbeau .vol { stroke-dasharray: 4 8; stroke: var(--acc); }
+
+    /* chiffres */
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    @media (min-width: 900px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+    .stat .val { display: block; font-family: var(--mono); font-size: clamp(2.5rem, 5vw, 4rem);
+                 font-weight: 500; font-variant-numeric: tabular-nums; margin-bottom: 8px; }
+    .stat .cap { display: block; color: var(--muted); font-size: 0.8125rem; max-width: 22ch; }
+
+    /* rituel : canvas génératif */
+    .rituel-grid { display: grid; gap: 40px; align-items: end; }
+    @media (min-width: 900px) { .rituel-grid { grid-template-columns: 1fr 1.4fr; } }
+    #lignes { width: 100%; height: 320px; display: block; }
+    .rituel-note { color: var(--soft); max-width: 44ch; }
+    .rituel-note .mono { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+
+    /* images : clip reveal, désaturé → couleur */
+    .photos { display: grid; gap: 24px; }
+    @media (min-width: 900px) { .photos { grid-template-columns: 1.4fr 1fr; } }
+    figure { margin: 0; }
+    .photo { overflow: hidden; border: 1px solid var(--line); }
+    .photo img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
+                 filter: grayscale(0.8) contrast(1.05); transition: filter 450ms var(--ease), transform 450ms var(--ease); }
+    .photo:hover img { filter: grayscale(0) contrast(1); transform: scale(1.02); }
+    .clip { clip-path: inset(0 100% 0 0); transition: clip-path var(--macro) var(--ease); }
+    .clip.vu { clip-path: inset(0 0 0 0); }
+    figcaption { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-top: 12px; letter-spacing: 0.02em; }
+    figcaption b { color: var(--soft); font-weight: 500; }
+
+    /* capacités */
+    .caps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 64px; }
+    .cap { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding-block: 24px; border-bottom: 1px solid var(--line); }
+    .cap .n { font-family: var(--mono); font-size: 0.75rem; color: var(--deep); padding-top: 4px; }
+    .cap h3 { margin: 0 0 4px; font-size: 1.0625rem; }
+    .cap p { margin: 0; color: var(--muted); font-size: 0.8125rem; }
+
+    /* éléments flottants parallaxe */
+    .flotte { position: absolute; font-family: var(--mono); font-size: 0.75rem; color: var(--line);
+              letter-spacing: 0.14em; text-transform: uppercase; z-index: 1; pointer-events: none; }
+
+    /* contact */
+    .final { text-align: center; }
+    .final h2 { font-size: clamp(2.25rem, 5vw, 3rem); }
+    .final p { color: var(--soft); max-width: 38ch; margin: 0 auto 40px; }
+
+    footer { border-top: 1px solid var(--line); padding: 40px 0 64px; position: relative; z-index: 2; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+                   color: var(--muted); font-size: 0.8125rem; }
+    footer a { color: var(--soft); }
+
+    /* reveals */
+    .js [data-reveal] { opacity: 0; transform: translateY(16px);
+      transition: opacity var(--normal) var(--ease), transform var(--normal) var(--ease); }
+    .js [data-reveal].vu { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero h1 .ch, .js [data-reveal], .clip { opacity: 1; transform: none; transition: none; clip-path: none; }
+      .hero h1 .iri { animation: none; }
+      #dust, #spot { display: none; }
+      .photo img { filter: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Aller au contenu</a>
+  <canvas id="dust" aria-hidden="true"></canvas>
+  <div id="spot" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap bar">
+      <a class="brand" href="#main">CORVUS</a>
+      <nav aria-label="Principale">
+        <a href="#nuits">Nuits</a><a href="#rituel">Rituel</a><a href="#tables">Tables</a><a href="#capacites">Capacités</a>
+      </nav>
+      <span class="clock" aria-hidden="true">veille --:--</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="t-hero">
+      <span class="flotte" data-prof="0.3" style="top:12%;left:4%;">nuit #2048</span>
+      <span class="flotte" data-prof="0.5" style="bottom:10%;right:6%;">escadrille · 41 machines</span>
+      <div class="wrap hero-grid">
+        <div>
+          <span class="overline" data-reveal>agent local d'automatisation</span>
+          <h1 id="t-hero" data-split>La nuit <span class="iri">travaille</span> pour toi.</h1>
+          <p class="sig" data-reveal>Il patrouille, répare, consigne. Au matin, un rapport signé attend sur la table de nuit.</p>
+          <div class="cta" data-reveal>
+            <a class="btn" href="mailto:bonjour@corvus.dev">Laisser CORVUS veiller</a>
+            <a class="btn btn--ghost" href="#rituel">Voir le rituel</a>
+          </div>
+        </div>
+        <svg class="corbeau" viewBox="0 0 460 260" aria-hidden="true">
+          <path class="dessin" d="M30 150 C60 120 100 112 140 122 C150 96 176 84 204 90 C192 102 184 114 182 126 C204 128 224 140 236 158 C212 150 190 150 172 156 C162 176 142 190 118 192 C132 180 140 166 142 154 C110 160 64 162 30 150 Z"/>
+          <path class="dessin" d="M204 90 L232 78 L204 92"/>
+          <circle class="oeil" cx="196" cy="102" r="3"/>
+          <path class="vol" d="M260 70 C290 52 320 52 348 64 M270 96 C300 84 330 86 356 98 M282 122 C310 114 336 118 360 130"/>
+          <line x1="30" y1="208" x2="430" y2="208" stroke="#4b5264" stroke-width="1"/>
+          <line x1="118" y1="192" x2="118" y2="208" stroke="#4b5264" stroke-width="1"/>
+          <line x1="142" y1="192" x2="142" y2="208" stroke="#4b5264" stroke-width="1"/>
+        </svg>
+      </div>
+    </section>
+
+    <section id="nuits" aria-labelledby="t-nuits">
+      <span class="flotte" data-prof="0.35" style="top:14%;right:8%;">97,3 % avant le réveil</span>
+      <div class="wrap">
+        <span class="overline" data-reveal>nuits comptées</span>
+        <h2 id="t-nuits" data-reveal>Ce que le noir a rendu.</h2>
+        <div class="stats">
+          <div class="stat" data-reveal><span class="val" data-compte="2048">0</span><span class="cap">nuits sans incident majeur</span></div>
+          <div class="stat" data-reveal><span class="val" data-compte="97.3" data-decimal="1">0</span><span class="cap">des incidents résolus avant le réveil</span></div>
+          <div class="stat" data-reveal><span class="val" data-compte="41">0</span><span class="cap">machines en escadrille, parc moyen</span></div>
+          <div class="stat" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdomadaire</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rituel" aria-labelledby="t-rituel">
+      <div class="wrap rituel-grid">
+        <div>
+          <span class="overline" data-reveal>le rituel</span>
+          <h2 id="t-rituel" data-reveal>Un trait par nuit calme.</h2>
+          <p class="rituel-note" data-reveal>Chaque ligne du registre est une nuit patrouillée sans te réveiller. Le trait du jour, en accent, se pose à l'aube. Quand une nuit échoue, la ligne se brise : c'est le seul jour où tu lis quelque chose.</p>
+          <p class="rituel-note mono" data-reveal data-reveal>registre des 48 dernières nuits · corvus veille --nuit</p>
+        </div>
+        <canvas id="lignes" role="img" aria-label="Registre des 48 dernières nuits, un trait par nuit, le trait du jour en accent"></canvas>
+      </div>
+    </section>
+
+    <section id="tables" aria-labelledby="t-tables">
+      <div class="wrap">
+        <span class="overline" data-reveal>tables de nuit</span>
+        <h2 id="t-tables" data-reveal>Ce que tu ne vois jamais.</h2>
+        <div class="photos">
+          <figure data-reveal>
+            <div class="photo clip"><img src="https://picsum.photos/seed/corvus-table-nuit/1600/900" alt="La table de nuit, le rapport papier de trois lignes posé à côté d'un téléphone muet" loading="lazy"></div>
+            <figcaption><b>la table de nuit</b> : le rapport de trois lignes, posé avant le réveil</figcaption>
+          </figure>
+          <figure data-reveal>
+            <div class="photo clip"><img src="https://picsum.photos/seed/corvus-console/1600/900" alt="La console nocturne, écran seul dans le noir, curseur qui attend" loading="lazy"></div>
+            <figcaption><b>la console nocturne</b> : 5 h 30, le rapport se signe</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="capacites" aria-labelledby="t-cap">
+      <div class="wrap">
+        <span class="overline" data-reveal>capacités</span>
+        <h2 id="t-cap" data-reveal>Huit savoir-faire, un seul perchoir.</h2>
+        <div class="caps">
+          <div class="cap" data-reveal><span class="n">01</span><div><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats.</p></div></div>
+          <div class="cap" data-reveal><span class="n">02</span><div><h3>Zéro clic</h3><p>La tâche dictée, le script écrit, relu, lancé.</p></div></div>
+          <div class="cap" data-reveal><span class="n">03</span><div><h3>Auto-curatif</h3><p>Un service tombe : relance, correctif, consigne.</p></div></div>
+          <div class="cap" data-reveal><span class="n">04</span><div><h3>Langage naturel</h3><p>« Sauvegarde la base à 3 h, garde sept copies. »</p></div></div>
+          <div class="cap" data-reveal><span class="n">05</span><div><h3>Rapports signés</h3><p>Une note datée, signée, relisible. Rien d'anonyme.</p></div></div>
+          <div class="cap" data-reveal><span class="n">06</span><div><h3>Mémoire de corvidé</h3><p>La dernière panne, le dernier correctif, le dernier visage.</p></div></div>
+          <div class="cap" data-reveal><span class="n">07</span><div><h3>Escadrille</h3><p>Du portable au serveur, un seul regard.</p></div></div>
+          <div class="cap" data-reveal><span class="n">08</span><div><h3>Silence respecté</h3><p>Local, permissions minimales, bac à sable.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" aria-labelledby="t-final">
+      <div class="wrap">
+        <span class="overline" data-reveal>prendre contact</span>
+        <h2 id="t-final" data-reveal>Et ta nuit, à toi&nbsp;?</h2>
+        <p data-reveal>CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
+        <div class="cta" data-reveal style="justify-content:center;">
+          <a class="btn" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller">Laisser CORVUS veiller</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Corvus. Fait avec soin, la nuit.</span>
+      <span>Généré depuis <a href="dna-corvus.json">dna-corvus.json</a> · <a href="../index.html">Galerie</a></span>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var modeste = (navigator.hardwareConcurrency || 4) <= 2;
+    var actif = !reduire && !modeste;
+    document.documentElement.classList.add("js");
+
+    /* horloge réelle */
+    var clock = document.querySelector(".clock");
+    function tic() { var d = new Date(), p = function (n) { return String(n).padStart(2, "0"); };
+      clock.textContent = "veille " + p(d.getHours()) + ":" + p(d.getMinutes()); }
+    tic(); setInterval(tic, 10000);
+
+    /* reveals + clip + déclencheurs (#lignes observé pour lancer son dessin) */
+    var cibles = document.querySelectorAll("[data-reveal], .clip, #lignes");
+    if (reduire || !("IntersectionObserver" in window)) {
+      cibles.forEach(function (el) { el.classList.add("vu"); });
+      dessinerLignes();
+    } else {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("vu"); io.unobserve(e.target);
+          if (e.target.id === "lignes") dessinerLignes(); } });
+      }, { threshold: 0.2 });
+      cibles.forEach(function (el) { io.observe(el); });
+    }
+
+    /* split-letter du titre */
+    var titre = document.querySelector("[data-split]");
+    if (titre && actif) {
+      var frag = document.createDocumentFragment(), delai = 0;
+      titre.childNodes.forEach(function (noeud) {
+        if (noeud.nodeType === 3) {
+          noeud.textContent.split("").forEach(function (c) {
+            var s = document.createElement("span"); s.className = "ch";
+            s.style.transitionDelay = (delai += 28) + "ms"; s.textContent = c === " " ? "\u00A0" : c;
+            frag.appendChild(s);
+          });
+        } else if (noeud.nodeType === 1) {
+          var clone = noeud.cloneNode(false); clone.classList.add("ch");
+          clone.style.transitionDelay = (delai += 28) + "ms"; clone.textContent = noeud.textContent;
+          frag.appendChild(clone);
+        }
+      });
+      titre.innerHTML = ""; titre.appendChild(frag);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { titre.classList.add("pose"); }); });
+    } else if (titre) { titre.classList.add("pose"); }
+
+    /* corbeau au trait */
+    var dessin = document.querySelectorAll(".corbeau .dessin");
+    dessin.forEach(function (p, i) {
+      var L = p.getTotalLength ? p.getTotalLength() : 0;
+      if (!L) return;
+      p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+      p.style.transition = "stroke-dashoffset 1.2s " + (i * 0.4) + "s cubic-bezier(0.22,1,0.36,1)";
+      requestAnimationFrame(function () { requestAnimationFrame(function () { p.style.strokeDashoffset = 0; }); });
+    });
+
+    /* compteurs */
+    function compte(el) {
+      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
+      var fmt = function (v) { return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR"); };
+      if (!actif) { el.textContent = fmt(fin); return; }
+      var t0 = null, duree = 1100;
+      (function pas(t) { if (t0 === null) t0 = t;
+        var pr = Math.min((t - t0) / duree, 1);
+        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
+        if (pr < 1) requestAnimationFrame(pas); })(performance.now());
+    }
+    document.querySelectorAll("[data-compte]").forEach(function (el) {
+      if (!("IntersectionObserver" in window)) { compte(el); return; }
+      var o = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { compte(el); o.unobserve(el); } });
+      }, { threshold: 0.4 });
+      o.observe(el);
+    });
+
+    /* spotlight curseur */
+    var spot = document.getElementById("spot");
+    if (actif && spot && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      var sx = 0, sy = 0, attente = false;
+      window.addEventListener("pointermove", function (e) {
+        sx = e.clientX; sy = e.clientY;
+        if (attente) return; attente = true;
+        requestAnimationFrame(function () {
+          spot.style.setProperty("--mx", sx + "px"); spot.style.setProperty("--my", sy + "px");
+          attente = false;
+        });
+      }, { passive: true });
+    } else if (spot) { spot.remove(); }
+
+    /* canvas unique : dust + lucioles iridescentes */
+    var cvs = document.getElementById("dust");
+    if (actif && cvs && cvs.getContext) {
+      var ctx = cvs.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var W = 0, H = 0, souris = { x: -9999, y: -9999 };
+      function tailler() {
+        W = window.innerWidth; H = window.innerHeight;
+        cvs.width = W * dpr; cvs.height = H * dpr;
+        cvs.style.width = W + "px"; cvs.style.height = H + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      tailler();
+      window.addEventListener("resize", tailler);
+      window.addEventListener("pointermove", function (e) { souris.x = e.clientX; souris.y = e.clientY; }, { passive: true });
+
+      var POUSSIERE = [], LUCIOLES = [], N_DUST = Math.round(W * H / 9000), N_LUC = 140;
+      for (var i = 0; i < N_DUST; i++) POUSSIERE.push({
+        x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.2 + 0.4,
+        vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.08
+      });
+      for (var j = 0; j < N_LUC; j++) LUCIOLES.push({
+        x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.4, ph: Math.random() * Math.PI * 2, r: Math.random() * 1.5 + 1
+      });
+
+      var ACC = [62, 211, 188], SKY = [142, 205, 247];
+      function frame(t) {
+        ctx.clearRect(0, 0, W, H);
+        ctx.globalCompositeOperation = "screen";
+        /* dust */
+        ctx.fillStyle = "rgba(41,126,131,0.35)";
+        POUSSIERE.forEach(function (p) {
+          p.x = (p.x + p.vx + W) % W; p.y = (p.y + p.vy + H) % H;
+          ctx.globalAlpha = 0.5; ctx.fillRect(p.x, p.y, p.r, p.r);
+        });
+        /* lucioles : dérive bruit + répulsion curseur + scintillement */
+        LUCIOLES.forEach(function (p) {
+          p.ph += 0.02;
+          p.vx += Math.sin(t / 2400 + p.ph) * 0.004;
+          p.vy += Math.cos(t / 2800 + p.ph) * 0.003;
+          var dx = p.x - souris.x, dy = p.y - souris.y, d2 = dx * dx + dy * dy;
+          if (d2 < 14400) { var d = Math.sqrt(d2) || 1; p.vx += dx / d * 0.18; p.vy += dy / d * 0.18; }
+          p.vx *= 0.98; p.vy *= 0.98;
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10;
+          if (p.y < -10) p.y = H + 10; if (p.y > H + 10) p.y = -10;
+          var v = Math.min(Math.hypot(p.vx, p.vy) / 1.4, 1);
+          var r = ACC[0] + (SKY[0] - ACC[0]) * v, g = ACC[1] + (SKY[1] - ACC[1]) * v, b = ACC[2] + (SKY[2] - ACC[2]) * v;
+          ctx.globalAlpha = 0.35 + Math.abs(Math.sin(p.ph)) * 0.45;
+          ctx.fillStyle = "rgb(" + Math.round(r) + "," + Math.round(g) + "," + Math.round(b) + ")";
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        if (!document.hidden) requestAnimationFrame(frame);
+      }
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) requestAnimationFrame(frame);
+      });
+      requestAnimationFrame(frame);
+    }
+
+    /* registre génératif : un trait par nuit, bruit = incidents évités */
+    function dessinerLignes() {
+      var c = document.getElementById("lignes");
+      if (!c || !c.getContext) return;
+      if (c.dataset.fait) return; c.dataset.fait = "1";
+      var g = c.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = c.clientWidth, h = c.clientHeight;
+      c.width = w * dpr; c.height = h * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var N = 48, pas = h / (N + 1);
+      var t0 = null, duree = reduire ? 0 : 1300;
+      (function dessin(t) {
+        if (t0 === null) t0 = t;
+        var pr = duree ? Math.min((t - t0) / duree, 1) : 1;
+        g.clearRect(0, 0, w, h);
+        for (var i = 0; i < N; i++) {
+          var y = pas * (i + 1);
+          var visible = (i / N) <= pr;
+          if (!visible) continue;
+          var bruit = Math.sin(i * 12.9898) * 43758.5453;
+          bruit = bruit - Math.floor(bruit);
+          var L = w * (0.35 + bruit * 0.6);
+          var jour = i === N - 1;
+          g.strokeStyle = jour ? "#3ed3bc" : "#297e83";
+          g.globalAlpha = jour ? 1 : 0.55 + bruit * 0.3;
+          g.lineWidth = 1;
+          g.beginPath(); g.moveTo(w * 0.04, y); g.lineTo(w * 0.04 + L, y); g.stroke();
+          if (bruit > 0.9) { g.fillStyle = "#223145"; g.fillRect(w * 0.04 + L * 0.62, y - 2, w * 0.02, 4); }
+          if (jour) { g.fillStyle = "#3ed3bc"; g.beginPath(); g.arc(w * 0.04 + L, y, 2.5, 0, Math.PI * 2); g.fill(); }
+        }
+        g.globalAlpha = 1;
+        if (pr < 1) requestAnimationFrame(dessin);
+      })(performance.now());
+    }
+
+    /* parallaxe des étiquettes flottantes */
+    var flottes = Array.prototype.slice.call(document.querySelectorAll(".flotte"));
+    if (actif && flottes.length) {
+      var fAttente = false;
+      window.addEventListener("scroll", function () {
+        if (fAttente) return; fAttente = true;
+        requestAnimationFrame(function () {
+          var y = window.scrollY;
+          flottes.forEach(function (el) {
+            el.style.transform = "translateY(" + (-y * parseFloat(el.dataset.prof || 0.3)) + "px)";
+          });
+          fAttente = false;
+        });
+      }, { passive: true });
+    }
+  })();
+  </script>
+</body>
+</html>

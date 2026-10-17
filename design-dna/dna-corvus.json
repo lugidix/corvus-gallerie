@@ -1,0 +1,314 @@
+{
+  "meta": {
+    "name": "CORVUS — plume de corbeau",
+    "description": "ADN de design de CORVUS, agent local d'automatisation nocturne. Extrait par mesure déterministe de la page de référence (render genjutsu) et du code du projet ; dimension effets étendue sur demande explicite (particules, canvas, curseur, texte) : « tu peux insérer tout ce que tu veux, animations, aucune limite ».",
+    "source_references": [
+      "tests/genjutsu/index.html (render 1440x900, capture hero)",
+      "tests/genjutsu/tokens.css",
+      "tests/genjutsu/MASTER.md",
+      "tests/contenu-corvus.md",
+      "demande utilisateur du 2026-10-17 : effets sans limite"
+    ],
+    "created_at": "2026-10-17"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "monochromatic",
+      "primary": { "hex": "#0f172a", "role": "surface principale, la plume bleu-noir" },
+      "secondary": { "hex": "#297e83", "role": "teal profond, profondeur d'eau de nuit" },
+      "accent": { "hex": "#3ed3bc", "role": "nuque iridescente, CTA et états actifs" },
+      "neutral": {
+        "scale": ["#f1f4f7", "#bfc5ca", "#848993", "#4b5264", "#223145", "#0f172a"],
+        "usage": "#f1f4f7 texte principal sur fond sombre ; #bfc5ca texte d'appui ; #848993 légendes ; #4b5264 frontières secondaires ; #223145 cartes et surfaces relevées ; #0f172a fond"
+      },
+      "semantic": {
+        "success": "#7ce3b0",
+        "warning": "#f5c97b",
+        "error": "#ff8a80",
+        "info": "#8ecdf7"
+      },
+      "surface": {
+        "background": "#0f172a",
+        "card": "#223145",
+        "elevated": "#2a3a55"
+      },
+      "contrast_strategy": "high contrast",
+      "measurement": {
+        "k": 8,
+        "sampling": { "method": "deterministic_stratified", "max_pixels": 160000, "sampled_pixels": 160000 }
+      },
+      "measured_palette": [
+        { "hex": "#0f172a", "coverage": 0.9309, "role": "background" },
+        { "hex": "#f1f4f7", "coverage": 0.0345, "role": "text" },
+        { "hex": "#3ed3bc", "coverage": 0.0104, "role": "accent" },
+        { "hex": "#223145", "coverage": 0.008, "role": "surface" },
+        { "hex": "#4b5264", "coverage": 0.0058, "role": "border" },
+        { "hex": "#848993", "coverage": 0.0046, "role": "muted" },
+        { "hex": "#bfc5ca", "coverage": 0.0034, "role": "secondary-text" },
+        { "hex": "#297e83", "coverage": 0.0021, "role": "deep-accent" }
+      ]
+    },
+    "typography": {
+      "type_scale": {
+        "display": { "size": "clamp(3rem, 8vw, 5.5rem)", "weight": "600", "line_height": "1.1", "tracking": "-0.01em" },
+        "heading_1": { "size": "clamp(2.25rem, 5vw, 3rem)", "weight": "600", "line_height": "1.1", "tracking": "0" },
+        "heading_2": { "size": "clamp(1.5rem, 3vw, 2rem)", "weight": "600", "line_height": "1.15", "tracking": "0" },
+        "heading_3": { "size": "1.25rem", "weight": "600", "line_height": "1.3", "tracking": "0" },
+        "body": { "size": "1.0625rem", "weight": "400", "line_height": "1.7", "tracking": "0" },
+        "body_small": { "size": "0.8125rem", "weight": "400", "line_height": "1.65", "tracking": "0.01em" },
+        "caption": { "size": "0.75rem", "weight": "400", "line_height": "1.5", "tracking": "0.02em" },
+        "overline": { "size": "0.75rem", "weight": "500", "line_height": "1.4", "tracking": "0.14em" }
+      },
+      "font_families": {
+        "heading": "IBM Plex Sans",
+        "body": "IBM Plex Sans",
+        "mono": "JetBrains Mono"
+      },
+      "font_style_notes": "sans humaniste à deux voix : Plex Sans pour l'humain, JetBrains Mono borné aux étiquettes, au code et aux chiffres tabulaires"
+    },
+    "spacing": {
+      "base_unit": "8",
+      "scale": [4, 8, 16, 24, 40, 64, 104, 160],
+      "content_density": "spacious",
+      "section_rhythm": "104px vertical, doublé au héros, réduit à 64px sous 900px"
+    },
+    "layout": {
+      "grid_system": "colonne unique avec grilles internes 2/3/4 colonnes",
+      "max_content_width": "1200px",
+      "columns": "1 (contenu) · 2-4 (grilles internes)",
+      "gutter": "24px",
+      "breakpoints": ["700px", "900px"],
+      "alignment_tendency": "centered"
+    },
+    "shape": {
+      "border_radius": { "small": "0", "medium": "0", "large": "0", "pill": "0" },
+      "border_usage": "subtle 1px",
+      "divider_style": "hairline #4b5264, horizontale entre sections de liste"
+    },
+    "elevation": {
+      "shadow_style": "none",
+      "levels": { "low": "none", "medium": "none", "high": "none" },
+      "depth_cues": "overlapping layers + color intensity, jamais d'ombre"
+    },
+    "iconography": {
+      "style": "wireframe linéaire 1px",
+      "stroke_weight": "1px",
+      "size_scale": "16-24px inline, illustrations libres",
+      "preferred_set": "SVG dessinés maison (filets), pas de jeu d'icônes tiers"
+    },
+    "motion": {
+      "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+      "duration_scale": { "micro": "150ms", "normal": "300ms", "macro": "450ms" },
+      "entrance_pattern": "fade-up 16px, stagger 60ms, une fois",
+      "exit_pattern": "fade 150ms, opacité seule",
+      "philosophy": "cinematic sobre : lent, précis, jamais rebond"
+    },
+    "components": {
+      "button_style": "plein accent, texte encre sombre, rayon 0, padding 14/28 ; variante fantôme à filet 1px",
+      "input_style": "fond relevé #223145, filet 1px, rayon 0, focus par contour clair",
+      "card_style": "filet 1px #4b5264, fond transparent ou #223145, rayon 0",
+      "navigation_pattern": "barre sticky, filet bas, liens texte courts + horloge mono à droite",
+      "modal_style": "panneau à filet sur voile opaque, pas de flou",
+      "list_style": "listes sans puces, séparées par l'espace ou un filet",
+      "component_notes": "5 états obligatoires ; hover = translation -2px et luminosité, jamais d'échelle"
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": ["nocturne", "veilleux", "précis", "confiant", "silencieux"],
+      "visual_metaphor": "le corbeau de nuit : plume bleu-noir, reflet iridescent, patience",
+      "era_influence": "terminal rétro-futuriste adouci par l'éditorial contemporain",
+      "genre": "produit technique narratif",
+      "personality_traits": ["sûr de soi", "discret", "méticuleux", "un peu malicieux"],
+      "adjectives": ["profond", "froid", "iridescent", "aéré", "signé"]
+    },
+    "visual_language": {
+      "complexity": "moderate",
+      "ornamentation": "subtle accents",
+      "whitespace_usage": "généreux, la nuit respire",
+      "visual_weight_distribution": "masse à gauche, respiration à droite",
+      "focal_strategy": "progressive reveal",
+      "contrast_level": "high",
+      "texture_usage": "grain léger + dust de particules, jamais de dégradé décoratif"
+    },
+    "composition": {
+      "hierarchy_method": "scale contrast",
+      "balance_type": "asymmetric",
+      "flow_direction": "vertical descendant, dérive latérale douce",
+      "grouping_strategy": "groupes délimités par filets et espace, jamais par boîtes fermées",
+      "negative_space_role": "le noir est le sujet, le contenu flotte dedans"
+    },
+    "imagery": {
+      "photo_treatment": "désaturé froid, accent teal autorisé, couleur au survol",
+      "illustration_style": "wireframe 1px, schémas de machines et d'oiseaux",
+      "graphic_elements": "filets, crochets d'angle, horodatages mono",
+      "pattern_usage": "grain fin sur les fonds nuit",
+      "image_shape": "pleine largeur, rectangle franc, rayon 0"
+    },
+    "interaction_feel": {
+      "feedback_style": "instantané, sec, informationnel",
+      "hover_behavior": "translation -2px et luminosité, révèle la couleur des images",
+      "transition_personality": "smooth glide",
+      "loading_style": "skeleton à filets, jamais de spinner coloré",
+      "microinteraction_density": "moderate"
+    },
+    "brand_voice_in_ui": {
+      "tone": "sobriété avec une pointe de malice corvide",
+      "formality": "tutoiement assumé",
+      "cta_style": "direct imperative",
+      "empty_state_approach": "une phrase, un filet, un horodatage",
+      "error_tone": "factuel, jamais dramatique : « échec ×2, nouvel essai programmé »"
+    }
+  },
+  "visual_effects": {
+    "overview": {
+      "effect_intensity": "heavy-immersive",
+      "performance_tier": "heavy",
+      "fallback_strategy": "prefers-reduced-motion ou hardwareConcurrency <= 2 : canvas et particules remplacés par grain CSS statique, reveals instantanés, horloge conservée",
+      "primary_technology": "Canvas 2D + Three.js (scène dédiée threejs)"
+    },
+    "background_effects": {
+      "type": "noise-field",
+      "description": "dust de nuit : champ de bruit lent et très sombre derrière tout le contenu",
+      "technology": "Canvas 2D",
+      "params": {
+        "color_palette": ["#0f172a", "#223145", "#297e83"],
+        "speed": "0.2 (dérive imperceptible)",
+        "density": "faible, 1 point / 9000 px²",
+        "opacity": "0.35",
+        "blend_mode": "screen"
+      }
+    },
+    "particle_systems": {
+      "enabled": true,
+      "type": "fireflies",
+      "description": "poussières de plume iridescentes qui dérivent et fuient le curseur",
+      "technology": "Canvas 2D",
+      "params": {
+        "count": "140",
+        "shape": "cercles 1-2.5px, quelques fuseaux",
+        "size_range": "1-2.5px",
+        "movement_pattern": "dérive bruit de Perlin + répulsion douce du curseur",
+        "color_behavior": "dégradé entre #3ed3bc et #8ecdf7 selon la vitesse",
+        "interaction": "mouse-repel",
+        "spawn_area": "toute la fenêtre, recyclage aux bords"
+      }
+    },
+    "3d_elements": {
+      "enabled": false,
+      "type": "none",
+      "description": "la 3D vit dans la page sœur threejs ; ici le ciel reste plat",
+      "technology": "n/a",
+      "params": {
+        "renderer": "n/a",
+        "lighting": "n/a",
+        "camera": "n/a",
+        "materials": "n/a",
+        "geometry": "n/a",
+        "post_processing": "n/a",
+        "interaction_model": "n/a"
+      }
+    },
+    "shader_effects": {
+      "enabled": true,
+      "type": "color-shift",
+      "description": "iridescence de la nuque : dégradé animé cantonné au texte d'accent et aux filets du héros",
+      "technology": "CSS (background-clip: text + hue-rotate animé)",
+      "params": {
+        "uniforms": "n/a (CSS)",
+        "vertex_manipulation": "aucune",
+        "fragment_output": "dégradé #3ed3bc → #8ecdf7 → #297e83, cycle 8s",
+        "noise_type": "aucun",
+        "distortion": "aucune"
+      }
+    },
+    "scroll_effects": {
+      "parallax": {
+        "enabled": true,
+        "layers": "3 (fond dust, contenu, éléments flottants)",
+        "depth_range": "0.3x - 1x",
+        "speed_curve": "linéaire liée au scroll, amortie en rAF"
+      },
+      "scroll_triggered_animations": {
+        "enabled": true,
+        "trigger_points": "seuil 0.2, une fois",
+        "animation_type": "fade-up, clip-reveal sur les images, compteur",
+        "scrub_behavior": "triggered (pas scrubbed)"
+      },
+      "scroll_morphing": {
+        "enabled": false,
+        "description": "aucun morphing au scroll"
+      }
+    },
+    "text_effects": {
+      "type": "split-letter-animate",
+      "description": "le titre du héros se pose lettre à lettre, en ease-out franc",
+      "technology": "vanilla JS + CSS",
+      "params": {
+        "split_strategy": "by-char",
+        "animation_per_unit": "opacity + translateY 0.4em",
+        "stagger": "28ms",
+        "effect_style": "arrival, pas de glitch"
+      }
+    },
+    "cursor_effects": {
+      "enabled": true,
+      "type": "spotlight",
+      "description": "voile clair radial qui suit le curseur sur les sections nuit",
+      "params": {
+        "shape": "cercle radial 480px",
+        "size": "480px",
+        "blend_mode": "screen",
+        "trail": "aucune traînée",
+        "interaction_zone": "toute la page, désactivé au pointeur tactile"
+      }
+    },
+    "image_effects": {
+      "type": "reveal-clip",
+      "description": "images révélées par clip-path horizontal, désaturées puis couleur au survol",
+      "technology": "CSS (clip-path + filter)",
+      "params": {
+        "filter_pipeline": "grayscale(0.8) contrast(1.05) → grayscale(0) au survol, 450ms",
+        "hover_transform": "scale(1.02) sur l'image interne seulement",
+        "reveal_animation": "clip-path inset(0 100% 0 0) → inset(0), 700ms cubic-bezier(0.22,1,0.36,1)",
+        "distortion_type": "aucune"
+      }
+    },
+    "glassmorphism_neumorphism": {
+      "enabled": false,
+      "style": "none",
+      "params": {
+        "blur_radius": "0",
+        "transparency": "opaque",
+        "border_treatment": "filet 1px sec",
+        "shadow_type": "aucun",
+        "light_source_angle": "n/a"
+      }
+    },
+    "canvas_drawings": {
+      "enabled": true,
+      "type": "generative-lines",
+      "description": "section rituel : lignes de patrouille générées, un trait par nuit sans incident, dessinées à l'apparition",
+      "technology": "Canvas 2D",
+      "params": {
+        "draw_method": "lignes horizontales cumulées, longueur = bruit, trait 1px #297e83",
+        "animation_loop": "dessin progressif à l'entrée, puis figé",
+        "color_scheme": "#297e83 sur #0f172a, pointe #3ed3bc sur la ligne du jour",
+        "responsiveness": "ResizeObserver, redessin complet",
+        "interaction": "aucune, contemplatif"
+      }
+    },
+    "svg_animations": {
+      "enabled": true,
+      "type": "path-draw",
+      "description": "silhouette de corbeau en filet qui se dessine au trait dans le héros",
+      "params": {
+        "animation_method": "stroke-dashoffset animé à l'entrée",
+        "path_morphing": "aucun",
+        "stroke_animation": "dasharray = longueur du path, 2.4s, puis pointillés de vol",
+        "filter_effects": "aucun"
+      }
+    },
+    "composite_notes": "Empilement voulu : dust canvas (fond, screen) sous tout ; spotlight curseur au-dessus du fond mais sous le texte ; reveals clip-path sur les photos ; iridescence CSS réservée au héros. Budget : un seul canvas pleine page + un canvas section, devicePixelRatio plafonné à 2, pause totale hors viewport (IntersectionObserver) et sous prefers-reduced-motion. Le grain statique du fallback remplace dust et spotlight."
+  }
+}

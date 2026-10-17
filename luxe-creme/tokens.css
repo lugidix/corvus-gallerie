@@ -1,0 +1,53 @@
+/* ============================================================
+   STYLE LUXE CRÈME — tokens mesurés sur tengilemalamala.com (2026-10-06)
+   ============================================================ */
+
+:root {
+  /* --- Couleurs mesurées --- */
+  --lux-cream: #f5eee9;
+  --lux-sand: #e3e1d4;
+  --lux-ivory: #fbf8f6;
+  --lux-olive: #373f1d;
+  --lux-sage: #5c6e21;
+  --lux-sage-grey: #a5a593;
+
+  /* --- Typographie --- */
+  --lux-font-display: "Fraunces", "Instrument Serif", Georgia, serif;
+  --lux-font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --lux-h1-size: clamp(64px, 8.5vw, 120px);
+  --lux-h1-weight: 300;        /* PP Fragment mesuré à 220 ; Fraunces min 300 */
+  --lux-h1-ls: -0.02em;
+  --lux-body-size: 16px;
+
+  /* --- Mouvement mesuré --- */
+  --lux-ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --lux-ease-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --lux-ease-inout: cubic-bezier(0.77, 0, 0.175, 1);
+  --lux-dur: 0.9s;
+  --lux-dur-slow: 1.4s;
+}
+
+/* --- Base --- */
+.lux { background: var(--lux-cream); color: var(--lux-olive); font-family: var(--lux-font-body); font-size: var(--lux-body-size); line-height: 1.6; }
+.lux h1, .lux h2 { font-family: var(--lux-font-display); font-weight: var(--lux-h1-weight); letter-spacing: var(--lux-h1-ls); line-height: 1.05; margin: 0; }
+.lux .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--lux-sage-grey); }
+.lux .btn {
+  display: inline-block; padding: 14px 32px; border: 1px solid var(--lux-olive);
+  border-radius: 999px; color: var(--lux-olive); text-decoration: none;
+  transition: background var(--lux-dur) var(--lux-ease-out-expo), color var(--lux-dur) var(--lux-ease-out-expo);
+}
+.lux .btn:hover { background: var(--lux-olive); color: var(--lux-cream); }
+.lux .btn--fill { background: var(--lux-olive); color: var(--lux-cream); }
+
+/* --- Sections --- */
+.lux .section { padding: clamp(80px, 12vh, 160px) var(--gutter, 24px); }
+.lux .section--sand { background: var(--lux-sand); }
+
+/* --- Images : masque + zoom lent --- */
+.lux .media { overflow: hidden; border-radius: 4px; }
+.lux .media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transition: transform var(--lux-dur-slow) var(--lux-ease-out-expo); }
+.lux .media.is-visible img { transform: scale(1); }
+
+/* --- Reveals --- */
+.lux [data-reveal] { opacity: 0; transform: translateY(40px); transition: opacity var(--lux-dur-slow) var(--lux-ease-out-expo), transform var(--lux-dur-slow) var(--lux-ease-out-expo); }
+.lux [data-reveal].is-visible { opacity: 1; transform: none; }

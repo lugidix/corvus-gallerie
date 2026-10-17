@@ -1,0 +1,53 @@
+/* ============================================================
+   STYLE APPLE — tokens mesurés sur apple.com (2026-10-06)
+   ============================================================ */
+
+:root {
+  /* --- Couleurs --- */
+  --apple-bg: #ffffff;
+  --apple-bg-alt: #f5f5f7;
+  --apple-bg-dark: #000000;
+  --apple-bg-nav: rgba(29, 29, 31, 0.8);
+  --apple-text: #1d1d1f;
+  --apple-text-secondary: #86868b;
+  --apple-text-on-dark: #e8e8ed;
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ed;
+  --apple-link: #06c;
+
+  /* --- Couleurs système iOS (référence HIG) --- */
+  --apple-system-blue: #007aff;
+  --apple-system-green: #34c759;
+  --apple-system-red: #ff3b30;
+  --apple-system-orange: #ff9500;
+  --apple-system-gray: #8e8e93;
+
+  /* --- Typographie --- */
+  --apple-font: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --apple-font-display: -apple-system, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* --- Formes & mouvement --- */
+  --apple-radius-pill: 980px;
+  --apple-radius-card: 18px;
+  --apple-dur: 0.3s;
+}
+
+/* --- Base --- */
+.ap { background: var(--apple-bg); color: var(--apple-text); font-family: var(--apple-font); }
+.ap h1, .ap h2 { font-family: var(--apple-font-display); font-weight: 600; letter-spacing: -0.02em; }
+.ap .btn {
+  display: inline-block; padding: 12px 24px;
+  background: var(--apple-blue); color: #fff;
+  border-radius: var(--apple-radius-pill);
+  text-decoration: none; font-size: 17px;
+  transition: background var(--apple-dur) ease;
+}
+.ap .btn:hover { background: var(--apple-blue-hover); }
+.ap .btn--ghost { background: transparent; color: var(--apple-blue); border: 1px solid currentColor; }
+
+/* --- Sections --- */
+.ap .section { padding: clamp(60px, 10vh, 120px) 24px; text-align: center; }
+.ap .section--alt { background: var(--apple-bg-alt); }
+.ap .section--dark { background: var(--apple-bg-dark); color: var(--apple-text-on-dark); }
+.ap .media { max-width: 900px; margin: 40px auto 0; border-radius: var(--apple-radius-card); overflow: hidden; }
+.ap .media img { width: 100%; height: auto; display: block; }

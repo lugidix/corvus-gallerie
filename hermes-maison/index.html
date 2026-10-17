@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORVUS — style Maison Hermès</title>
+  <link rel="stylesheet" href="tokens.css">
+  <!-- Style : style-hermes-maison (blanc + orange #F37021 en événement, sérif éditorial, kraft, lenteur) · Renforts : genjutsu (mouvement lent), design-dna (grain papier, fil brodé), threejs (ruban orange) · Contenu : ../contenu-corvus.md -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Inter:wght@300;400;500&family=Bitter:wght@600&display=swap');
+    body { margin: 0; }
+    section { padding: clamp(72px, 12vh, 160px) 24px; max-width: 1100px; margin-inline: auto; text-align: center; position: relative; }
+    .plein { max-width: none; margin-inline: 0; }
+    .kraft { background: var(--hm-kraft); }
+    .label { font-size: var(--hm-label-size); text-transform: uppercase; letter-spacing: var(--hm-label-ls); color: var(--hm-grey); display: block; margin-bottom: 26px; }
+    h2 { margin: 0 0 44px; }
+    .italique { font-style: italic; }
+    .lead { max-width: 56ch; margin: 0 auto 44px; font-weight: 300; line-height: 2; color: #3a3a3a; font-size: 16px; }
+
+    /* orange en événement : soulignement qui se dessine */
+    .evenement { position: relative; display: inline-block; }
+    .evenement::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 3px;
+      background: var(--hm-accent); transform: scaleX(0); transform-origin: left; transition: transform 1s var(--hm-ease-soft) .4s; }
+    .pose .evenement::after { transform: scaleX(1); }
+
+    /* héros + fil brodé + ruban 3D */
+    .hero { min-height: 94svh; display: grid; align-content: center; }
+    #fil { position: absolute; inset: 0; pointer-events: none; opacity: 0.7; }
+    #scene-hm { width: min(720px, 86vw); aspect-ratio: 16 / 9; margin: 32px auto 0; position: relative; }
+    #scene-hm canvas { display: block; width: 100%; height: 100%; }
+    .hero h1 { font-size: clamp(36px, 5.5vw, 72px); }
+    .hero h1 .mot { display: inline-block; opacity: 0; transform: translateY(0.4em); transition: opacity .9s var(--hm-ease-soft), transform .9s var(--hm-ease-soft); }
+    .pose .hero h1 .mot, .hero.pose .mot { opacity: 1; transform: none; }
+
+    /* filets qui se dessinent */
+    .filet { border: 0; border-top: 1px solid var(--hm-kraft); max-width: 120px; margin: 0 auto clamp(40px, 7vh, 72px); transform: scaleX(0); transition: transform 1.1s var(--hm-ease-soft); }
+    .kraft .filet { border-color: #e4dcd4; }
+    .filet.is-visible { transform: scaleX(1); }
+
+    /* capacités : atelier */
+    .atelier { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: clamp(24px, 4vw, 48px); max-width: 1000px; margin: 0 auto; }
+    .poste { text-align: left; border-top: 2px solid var(--hm-kraft); padding-top: 22px; transition: border-color var(--hm-dur-slide) var(--hm-ease-soft); }
+    .poste:hover { border-color: var(--hm-accent); }
+    .poste .n { font-family: var(--hm-font-logo); font-size: 12px; color: var(--hm-grey); }
+    .poste h3 { font-family: var(--hm-font-display); font-weight: 400; font-size: 20px; margin: 10px 0 8px; }
+    .poste p { margin: 0; color: #4a4a4a; font-size: 14px; font-weight: 300; line-height: 1.85; }
+
+    /* transcript sur kraft */
+    .console { background: var(--hm-white); border: 1px solid #e4dcd4; padding: clamp(24px, 4vw, 48px); max-width: 760px; margin: 0 auto; text-align: left;
+      font-family: "Courier New", monospace; font-size: 13px; line-height: 2.1; color: #2a2a2a; overflow-x: auto; }
+    .console .t { color: var(--hm-grey); }
+    .console .ko { color: var(--hm-brick); }
+    .console .ok { color: var(--hm-blue); }
+
+    /* chiffres */
+    .nombres { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(28px, 5vw, 56px); max-width: 880px; margin: 0 auto; }
+    @media (min-width: 800px) { .nombres { grid-template-columns: repeat(4, 1fr); } }
+    .nombre .val { display: block; font-family: var(--hm-font-display); font-size: clamp(42px, 5vw, 68px); font-variant-numeric: tabular-nums; }
+    .nombre .cap { display: block; font-size: var(--hm-label-size); text-transform: uppercase; letter-spacing: var(--hm-label-ls); color: var(--hm-grey); margin-top: 14px; }
+
+    /* photos matière */
+    .paires { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(16px, 3vw, 40px); max-width: 1000px; margin: 0 auto; text-align: left; }
+    @media (max-width: 760px) { .paires { grid-template-columns: 1fr; } }
+    figure { margin: 0; }
+    .media { aspect-ratio: 16 / 10; }
+    figcaption { font-size: var(--hm-label-size); text-transform: uppercase; letter-spacing: var(--hm-label-ls); color: var(--hm-grey); margin-top: 12px; }
+
+    /* témoignages */
+    .paroles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 4vw, 48px); max-width: 1000px; margin: 0 auto; }
+    .parole { text-align: left; }
+    .parole p { font-family: var(--hm-font-display); font-style: italic; font-size: 18px; line-height: 1.85; margin: 0 0 18px; }
+    .parole cite { font-style: normal; font-size: var(--hm-label-size); text-transform: uppercase; letter-spacing: var(--hm-label-ls); color: var(--hm-grey); }
+
+    /* formules */
+    .offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: clamp(16px, 3vw, 32px); max-width: 1000px; margin: 0 auto; }
+    .offre { border: 1px solid #e4dcd4; padding: clamp(36px, 5vw, 52px) 28px; text-align: center; display: grid; gap: 14px; justify-items: center; transition: border-color var(--hm-dur-slide) var(--hm-ease-soft); }
+    .offre:hover { border-color: var(--hm-accent); }
+    .offre .nom { font-family: var(--hm-font-logo); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--hm-grey); }
+    .offre .prix { font-family: var(--hm-font-display); font-size: 32px; }
+    .offre ul { list-style: none; margin: 0; padding: 0; color: #4a4a4a; font-size: 13px; display: grid; gap: 8px; font-weight: 300; }
+    .offre .btn { margin-top: 10px; }
+
+    /* faq, équipe, journal */
+    .faq { max-width: 640px; margin: 0 auto; text-align: left; }
+    .faq details { border-bottom: 1px solid #e4dcd4; }
+    .faq summary { cursor: pointer; list-style: none; padding: 20px 0; font-family: var(--hm-font-display); font-size: 18px; display: flex; justify-content: space-between; gap: 16px; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; color: var(--hm-grey); transition: transform .6s var(--hm-ease-soft); }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq details p { margin: 0 0 20px; color: #4a4a4a; font-weight: 300; }
+    .equipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: clamp(24px, 4vw, 48px); max-width: 900px; margin: 0 auto; }
+    .membre .who { font-family: var(--hm-font-logo); font-size: 15px; }
+    .membre .role { color: var(--hm-grey); font-size: 13px; font-weight: 300; margin-top: 8px; line-height: 1.8; }
+    .journal { max-width: 600px; margin: 0 auto; text-align: left; display: grid; gap: 0; }
+    .version { display: grid; grid-template-columns: 64px 1fr; gap: 18px; padding: 18px 0; border-bottom: 1px solid #e4dcd4; align-items: baseline; }
+    .version .v { font-family: var(--hm-font-logo); font-size: 13px; color: var(--hm-brick); }
+    .version p { margin: 0; color: #4a4a4a; font-size: 14px; font-weight: 300; }
+
+    .js [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity .9s var(--hm-ease-soft), transform .9s var(--hm-ease-soft); }
+    .js [data-reveal].is-visible { opacity: 1; transform: none; }
+    footer { padding: 52px 24px; text-align: center; font-size: var(--hm-label-size); text-transform: uppercase; letter-spacing: var(--hm-label-ls); color: var(--hm-grey); border-top: 1px solid var(--hm-kraft); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+      .hero h1 .mot { opacity: 1; transform: none; transition: none; }
+      .evenement::after { transform: scaleX(1); }
+      .filet { transform: none; }
+      #fil { display: none; }
+    }
+  </style>
+</head>
+<body class="hm">
+
+  <main>
+    <section class="hero" id="haut">
+      <canvas id="fil" aria-hidden="true"></canvas>
+      <span class="label" data-reveal>Maison Corvus, depuis la nuit des temps</span>
+      <h1>
+        <span class="mot">L'artisan</span> <span class="mot">de</span> <span class="mot">tes</span> <span class="mot">nuits.</span>
+      </h1>
+      <p class="lead" data-reveal>Il travaille quand tu dors. Il signe son travail. Chaque matin, un rapport de trois lignes, cousu main.</p>
+      <a class="btn" href="#collections" data-reveal>Découvrir la maison</a>
+      <div id="scene-hm" aria-hidden="true"></div>
+    </section>
+
+    <section id="manifeste">
+      <hr class="filet" data-reveal>
+      <span class="label" data-reveal>Le manifeste</span>
+      <h2 data-reveal>Le repos est une <span class="evenement">illusion</span>.</h2>
+      <p class="lead" data-reveal>Un agent n'est pas un assistant. Un assistant attend qu'on lui demande ; un agent sait déjà. Les disques se remplissent, les certificats expirent, les sauvegardes s'oublient. Ce travail invisible mérite un ouvrier invisible.</p>
+      <p class="lead" data-reveal>Nous l'avons bâti sur le corbeau : il se souvient des visages, cache pour l'hiver, et ne donne jamais l'alerte pour rien. Au matin, un rapport signé. Pas une notification : un rapport.</p>
+    </section>
+
+    <section id="capacites" class="plein kraft">
+      <div style="max-width: 1000px; margin: 0 auto;">
+        <span class="label" data-reveal>Capacités</span>
+        <h2 data-reveal>Huit savoir-faire</h2>
+        <div class="atelier">
+          <div class="poste" data-reveal><span class="n">Poste 01</span><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats : surveillés en continu, consignés au matin.</p></div>
+          <div class="poste" data-reveal><span class="n">Poste 02</span><h3>Zéro clic</h3><p>La tâche dictée en langage naturel, le script écrit, relu, lancé.</p></div>
+          <div class="poste" data-reveal><span class="n">Poste 03</span><h3>Auto-curatif</h3><p>Un service tombe : il redémarre, applique le correctif, consigne l'incident.</p></div>
+          <div class="poste" data-reveal><span class="n">Poste 04</span><h3>Langage naturel</h3><p>« Sauvegarde la base toutes les nuits à 3 h, garde sept copies. » Il l'écrit en cron mieux que toi.</p></div>
+          <div class="poste" data-reveal><span class="n">Poste 05</span><h3>Rapports signés</h3><p>Chaque intervention produit une note datée, signée, relisible. Rien d'anonyme.</p></div>
+          <div class="poste" data-reveal><span class="n">Poste 06</span><h3>Mémoire de corvidé</h3><p>Il se souvient de la dernière panne, du dernier correctif, du dernier visage qui a validé.</p></div>
+          <div class="poste" data-reveal><span class="n">Poste 07</span><h3>Escadrille</h3><p>Plusieurs machines, un seul regard : du portable au serveur de l'atelier.</p></div>
+          <div class="poste" data-reveal><span class="n">Poste 08</span><h3>Silence respecté</h3><p>Tout tourne en local, permissions minimales, bac à sable pour tout essai.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="chiffres">
+      <hr class="filet" data-reveal>
+      <span class="label" data-reveal>Les chiffres</span>
+      <h2 data-reveal>Ce que les nuits ont compté</h2>
+      <div class="nombres">
+        <div class="nombre" data-reveal><span class="val" data-compte="2048">0</span><span class="cap">nuits sans incident majeur</span></div>
+        <div class="nombre" data-reveal><span class="val" data-compte="97.3" data-decimal="1">0</span><span class="cap">% avant le réveil</span></div>
+        <div class="nombre" data-reveal><span class="val" data-compte="41">0</span><span class="cap">machines en escadrille</span></div>
+        <div class="nombre" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdo</span></div>
+      </div>
+    </section>
+
+    <section id="photos">
+      <span class="label" data-reveal>Tables de nuit</span>
+      <h2 data-reveal>Ce que tu ne vois jamais</h2>
+      <div class="paires">
+        <figure data-reveal>
+          <div class="media"><img src="https://picsum.photos/seed/hm-table-nuit/1500/940" alt="La table de nuit, rapport papier de trois lignes" loading="lazy"></div>
+          <figcaption>La table de nuit : le rapport de trois lignes</figcaption>
+        </figure>
+        <figure data-reveal>
+          <div class="media"><img src="https://picsum.photos/seed/hm-console/1100/940" alt="La console nocturne" loading="lazy"></div>
+          <figcaption>La console nocturne : 5 h 30</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="nuit" class="plein kraft">
+      <div style="max-width: 860px; margin: 0 auto;">
+        <span class="label" data-reveal>La nuit</span>
+        <h2 data-reveal>Une nuit, ligne par ligne</h2>
+        <div class="console" data-reveal>
+<pre><span class="t">$ corvus veille --nuit</span>
+<span class="t">23:41</span>  disque sauvegarde 94 % : compression des archives
+<span class="t">01:07</span>  service « photos » tombé ×1 : relance, correctif appliqué
+<span class="t">03:12</span>  purge doublons : 118 Go libérés
+<span class="t">04:55</span>  certificat atelier : J-72, renouvellement tenté (<span class="ko">échec ×2</span>)
+<span class="t">05:30</span>  <span class="ok">rapport signé déposé</span> : 3 lignes, 0 clic
+<span class="t">$ corvus bilan --matin</span>
+<span class="t">nuit #2048 · 2 interventions · 0 escalade</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="recits">
+      <span class="label" data-reveal>Récits</span>
+      <h2 data-reveal>Trois nuits ordinaires</h2>
+      <div class="atelier" style="max-width: 860px;">
+        <div class="poste" data-reveal><span class="n">Nuit 1</span><h3>Mercredi, 3 h 12</h3><p>Le disque de sauvegarde atteint 94 %. CORVUS compresse, purge, re-classe. Au matin : 41 %, et une note de trois lignes.</p></div>
+        <div class="poste" data-reveal><span class="n">Nuit 2</span><h3>Février, silencieusement</h3><p>La sauvegarde ne tournait plus depuis la mise à jour. Personne n'avait vu. Lui si : il a relancé, vérifié, signé.</p></div>
+        <div class="poste" data-reveal><span class="n">Nuit 3</span><h3>72 heures avant l'échéance</h3><p>Le certificat expire, deux échecs. Il réessaie, échoue une troisième fois, et là seulement, il te réveille.</p></div>
+      </div>
+    </section>
+
+    <section id="temoignages" class="plein kraft">
+      <div style="max-width: 1000px; margin: 0 auto;">
+        <span class="label" data-reveal>Témoignages</span>
+        <h2 data-reveal>Ce qu'en disent les repos</h2>
+        <div class="paroles">
+          <blockquote class="parole" data-reveal><p>« Le matin, je lis trois lignes et je sais. Je n'ai plus ouvert un gestionnaire de tâches depuis mars. »</p><cite>Solène M., photographe, 2 machines</cite></blockquote>
+          <blockquote class="parole" data-reveal><p>« Il a relancé un service à 1 h du matin et je l'ai su en lisant le rapport. C'est ça, tenir une escadrille. »</p><cite>Karim B., indépendant, 4 machines</cite></blockquote>
+          <blockquote class="parole" data-reveal><p>« Mon ancien monitoring me criait dessus. Lui me parle quand il faut. Je dors. »</p><cite>Églantine R., dev backend, 3 machines</cite></blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="collections">
+      <hr class="filet" data-reveal>
+      <span class="label" data-reveal>Formules</span>
+      <h2 data-reveal>Prendre le perchoir</h2>
+      <div class="offres">
+        <div class="offre" data-reveal><span class="nom">Corneille</span><span class="prix">0 €</span>
+          <ul><li>1 agent, 1 machine</li><li>Missions illimitées</li><li>Rapports quotidiens</li><li>Communauté</li></ul>
+          <a class="btn" href="#contact">Découvrir</a></div>
+        <div class="offre" data-reveal><span class="nom">Corbeau, recommandé</span><span class="prix">9 €/mois</span>
+          <ul><li>Agents illimités, 3 machines</li><li>Missions programmées</li><li>Rapports signés et archivés</li><li>Auto-curatif avancé</li><li>Priorité correctifs</li></ul>
+          <a class="btn" href="#contact">Découvrir</a></div>
+        <div class="offre" data-reveal><span class="nom">Murmuration</span><span class="prix">Sur devis</span>
+          <ul><li>Parc d'agents illimité</li><li>Console d'escadrille</li><li>Intégrations atelier</li><li>Accompagnement</li></ul>
+          <a class="btn" href="#contact" style="background: var(--hm-black);">Nous écrire</a></div>
+      </div>
+    </section>
+
+    <section id="questions" class="plein kraft">
+      <div style="max-width: 700px; margin: 0 auto;">
+        <span class="label" data-reveal>FAQ</span>
+        <h2 data-reveal>Ce qu'on demande au perchoir</h2>
+        <div class="faq">
+          <details data-reveal><summary>Est-ce que ça tourne dans le cloud ?</summary><p>Non. Tout est local : scripts, journaux, rapports. Rien ne quitte la machine, sauf les mises à jour que tu acceptes.</p></details>
+          <details data-reveal><summary>Que se passe-t-il si je débranche la machine la nuit ?</summary><p>Il reprend au retour, là où le rituel s'était arrêté, et le rapport mentionne le trou.</p></details>
+          <details data-reveal><summary>Peut-il casser quelque chose ?</summary><p>Chaque essai passe au bac à sable ; chaque action est journalisée et réversible pendant 30 jours.</p></details>
+          <details data-reveal><summary>Faut-il savoir coder ?</summary><p>Non. On lui parle, il écrit le script et te le montre avant de l'adopter.</p></details>
+          <details data-reveal><summary>Différence avec un cron ?</summary><p>Le cron exécute. CORVUS constate, décide, répare, et rend compte. Le cron ne signe rien.</p></details>
+          <details data-reveal><summary>Et mon ancien monitoring ?</summary><p>Il peut le remplacer, ou simplement le surveiller. Les corbeaux observent, ils ne chassent pas.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="maison">
+      <span class="label" data-reveal>L'atelier</span>
+      <h2 data-reveal>Quatre sur le fil</h2>
+      <div class="equipe">
+        <div class="membre" data-reveal><div class="who">anne.exe</div><div class="role">Fondatrice, mécanique du vol. Écrit les boucles qui dorment.</div></div>
+        <div class="membre" data-reveal><div class="who">corbin</div><div class="role">Scripts et langage naturel. Parle à la machine comme à un moineau.</div></div>
+        <div class="membre" data-reveal><div class="who">freya</div><div class="role">Console d'escadrille. Dessine les tableaux de bord de nuit.</div></div>
+        <div class="membre" data-reveal><div class="who">m. le hibou</div><div class="role">Revue de code nocturne. Ne fait pas de bruit, fait des remarques.</div></div>
+      </div>
+      <div class="journal" style="margin-top: 56px;">
+        <div class="version" data-reveal><span class="v">v2.4</span><p>Mémoire de corvidé : rappel de la dernière panne dans le rapport du matin.</p></div>
+        <div class="version" data-reveal><span class="v">v2.3</span><p>Bac à sable étendu aux scripts réseau ; 30 jours de retour arrière.</p></div>
+        <div class="version" data-reveal><span class="v">v2.2</span><p>Escadrille : la console regroupe jusqu'à 9 machines.</p></div>
+        <div class="version" data-reveal><span class="v">v2.1</span><p>Rapports signés : chaque intervention porte date et empreinte.</p></div>
+        <div class="version" data-reveal><span class="v">v1.0</span><p>Il a veillé sa première nuit. Personne ne l'a remarqué. C'était voulu.</p></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <hr class="filet" data-reveal>
+      <h2 data-reveal>Et ta nuit, à toi&nbsp;?</h2>
+      <p class="lead" data-reveal>CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
+      <a class="btn" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller" data-reveal>Laisser CORVUS veiller</a>
+    </section>
+  </main>
+
+  <footer>© 2026 Corvus. Style Hermès maison, fil brodé design-dna, ruban threejs. <a href="../index.html" style="color: inherit;">Galerie</a></footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.documentElement.classList.add("js");
+
+    if (!reduire) {
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        document.querySelector(".hero").classList.add("pose");
+      }); });
+    } else { document.querySelector(".hero").classList.add("pose"); }
+
+    var cibles = document.querySelectorAll("[data-reveal], .filet");
+    if (!reduire && "IntersectionObserver" in window) {
+      cibles.forEach(function (el) {
+        var pere = el.parentElement;
+        if (pere && pere.querySelectorAll("[data-reveal]").length > 2) {
+          var freres = Array.prototype.slice.call(pere.querySelectorAll("[data-reveal]"));
+          el.style.transitionDelay = (freres.indexOf(el) * 100) + "ms";
+        }
+      });
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
+      }, { threshold: 0.15 });
+      cibles.forEach(function (el) { io.observe(el); });
+    } else { cibles.forEach(function (el) { el.classList.add("is-visible"); }); }
+
+    function compte(el) {
+      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
+      var fmt = function (v) { return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR"); };
+      if (reduire) { el.textContent = fmt(fin); return; }
+      var t0 = null;
+      (function pas(t) { if (t0 === null) t0 = t;
+        var pr = Math.min((t - t0) / 1400, 1);
+        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
+        if (pr < 1) requestAnimationFrame(pas); })(performance.now());
+    }
+    document.querySelectorAll("[data-compte]").forEach(function (el) {
+      if (!("IntersectionObserver" in window)) { compte(el); return; }
+      var o = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { compte(el); o.unobserve(el); } });
+      }, { threshold: 0.4 });
+      o.observe(el);
+    });
+
+    /* fil d'orange brodé lentement (design-dna canvas_drawings) */
+    var fil = document.getElementById("fil");
+    if (fil && fil.getContext && !reduire) {
+      var g = fil.getContext("2d"), fw = 0, fh = 0, dpr = Math.min(devicePixelRatio || 1, 1.5);
+      function tailler() { fw = fil.clientWidth; fh = fil.clientHeight;
+        fil.width = fw * dpr; fil.height = fh * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      tailler(); addEventListener("resize", tailler);
+      var progres = 0;
+      function points(t) {
+        var pts = [];
+        for (var i = 0; i <= 60; i++) {
+          var x = (i / 60) * fw;
+          var y = fh * 0.62 + Math.sin(i / 60 * Math.PI * 3 + t) * fh * 0.09 + Math.sin(i / 7) * 6;
+          pts.push([x, y]);
+        }
+        return pts;
+      }
+      function tour() {
+        if (document.hidden) { requestAnimationFrame(tour); return; }
+        progres = Math.min(progres + 0.0018, 1);
+        var t = performance.now() / 2400;
+        g.clearRect(0, 0, fw, fh);
+        var pts = points(t), n = Math.floor(pts.length * progres);
+        g.strokeStyle = "rgba(243,112,33,0.55)";
+        g.lineWidth = 1.4;
+        g.beginPath();
+        for (var i = 0; i < n; i++) { if (i === 0) g.moveTo(pts[i][0], pts[i][1]); else g.lineTo(pts[i][0], pts[i][1]); }
+        g.stroke();
+        if (n > 0) { g.fillStyle = "rgba(243,112,33,0.9)"; g.beginPath(); g.arc(pts[n - 1][0], pts[n - 1][1], 3, 0, Math.PI * 2); g.fill(); }
+        requestAnimationFrame(tour);
+      }
+      requestAnimationFrame(tour);
+    }
+  })();
+  </script>
+
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  } }
+  </script>
+  <script type="module">
+    const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const modeste = (navigator.hardwareConcurrency || 4) <= 2;
+    let webgl = false;
+    try { webgl = !!document.createElement("canvas").getContext("webgl2") || !!document.createElement("canvas").getContext("webgl"); } catch (e) {}
+    if (!reduire && !modeste && webgl) {
+      try {
+        const THREE = await import("three");
+        const hote = document.getElementById("scene-hm");
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 50);
+        camera.position.set(0, 0.4, 5.8);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        hote.appendChild(renderer.domElement);
+
+        const courbe = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(-2.2, -0.6, 0), new THREE.Vector3(-0.8, 0.9, 0.4),
+          new THREE.Vector3(0.4, -0.5, -0.3), new THREE.Vector3(1.6, 0.8, 0.2),
+          new THREE.Vector3(2.4, -0.2, -0.2)
+        ]);
+        const ruban = new THREE.Mesh(
+          new THREE.TubeGeometry(courbe, 140, 0.13, 24),
+          new THREE.MeshStandardMaterial({ color: 0xf37021, roughness: 0.42, metalness: 0.1 })
+        );
+        scene.add(ruban);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+        const matin = new THREE.DirectionalLight(0xfff4e6, 1.6); matin.position.set(3, 5, 4); scene.add(matin);
+        const douce = new THREE.DirectionalLight(0xffffff, 0.5); douce.position.set(-4, -2, 2); scene.add(douce);
+
+        const souris = { x: 0, y: 0 };
+        addEventListener("pointermove", (e) => {
+          souris.x = (e.clientX / innerWidth) * 2 - 1;
+          souris.y = (e.clientY / innerHeight) * 2 - 1;
+        }, { passive: true });
+
+        const horloge = new THREE.Clock();
+        let vu = true, actif = true;
+        new IntersectionObserver((es) => { vu = es[0].isIntersecting; }, { threshold: 0.05 }).observe(hote);
+        document.addEventListener("visibilitychange", () => { actif = !document.hidden; });
+        function taille() { const w = hote.clientWidth, h = hote.clientHeight;
+          camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h); }
+        taille(); addEventListener("resize", taille);
+
+        (function boucle() {
+          requestAnimationFrame(boucle);
+          if (!vu || !actif) return;
+          const t = horloge.getElapsedTime();
+          ruban.rotation.y = t * 0.16;
+          ruban.position.y = Math.sin(t * 0.4) * 0.1;
+          camera.position.x += (souris.x * 0.7 - camera.position.x) * 0.035;
+          camera.position.y += (0.4 - souris.y * 0.35 - camera.position.y) * 0.035;
+          camera.lookAt(0, 0, 0);
+          renderer.render(scene, camera);
+        })();
+      } catch (e) { /* la section reste blanche */ }
+    }
+  </script>
+</body>
+</html>

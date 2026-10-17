@@ -1,0 +1,50 @@
+/* CORVUS × genjutsu — tokens (source : MASTER.md, thèse « plume de corbeau ») */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* couleurs — nuit unique */
+  --corvus-bg: #0F172A;
+  --corvus-bg-lift: #16203A;
+  --corvus-bg-night: #0A101D;
+  --corvus-fg: #EEF2F6;
+  --corvus-fg-soft: #A8B3C7;
+  --corvus-accent: #3FD6BE;
+  --corvus-ink: #06251F;
+  --corvus-line: #5D6D89;
+  --corvus-error: #FF8A80;
+  --corvus-success: #7CE3B0;
+
+  /* typographie */
+  --corvus-font-voice: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --corvus-font-mono: "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+  --corvus-t-label: 0.75rem;
+  --corvus-t-small: 0.8125rem;
+  --corvus-t-body: 1.0625rem;
+  --corvus-t-h3: 1.25rem;
+  --corvus-t-h2: clamp(1.5rem, 3vw, 2rem);
+  --corvus-t-h1: clamp(2.25rem, 5vw, 3rem);
+  --corvus-t-hero: clamp(3rem, 8vw, 5.5rem);
+  --corvus-t-stat: clamp(2.5rem, 5vw, 4rem);
+
+  /* espacements — base 8, ample */
+  --corvus-s1: 4px;
+  --corvus-s2: 8px;
+  --corvus-s3: 16px;
+  --corvus-s4: 24px;
+  --corvus-s5: 40px;
+  --corvus-s6: 64px;
+  --corvus-s7: 104px;
+  --corvus-s8: 160px;
+
+  /* arêtes et ombres */
+  --corvus-radius: 0;
+  --corvus-shadow: none;
+
+  /* mouvement — ease-out franc, aucun dépassement */
+  --corvus-envol: cubic-bezier(0.22, 1, 0.36, 1);
+  --corvus-t-fast: 150ms;
+  --corvus-t-hover: 180ms;
+  --corvus-t-med: 300ms;
+  --corvus-t-slow: 450ms;
+  --corvus-stagger: 60ms;
+}

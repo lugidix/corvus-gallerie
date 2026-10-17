@@ -1,0 +1,79 @@
+/* ============================================================
+   SITE TEST — tokens du skill style-hermes-agent (mesurés 2026-10-06)
+   Couleur signature conservée : bleu électrique #0000F2 (test du style)
+   ============================================================ */
+
+:root {
+  /* --- Couleurs --- */
+  --ha-bg: #0000f2;
+  --ha-bg-deep: #000091;
+  --ha-ink: #f2f2f2;
+  --ha-ink-soft: rgba(242, 242, 242, 0.6);
+  --ha-line: rgba(242, 242, 242, 0.2);
+  --ha-line-strong: rgba(242, 242, 242, 0.9);
+
+  /* --- Typographie --- */
+  --ha-font-h: "Oswald", "Archivo", Arial, sans-serif;
+  --ha-font-body: "Archivo", Arial, sans-serif;
+  --ha-font-mono: "Courier Prime", "Courier New", monospace;
+  --ha-size-giant: clamp(120px, 24vw, 380px);
+  --ha-size-h1: clamp(56px, 7.5vw, 108px);
+  --ha-size-h3: clamp(26px, 3vw, 48px);
+  --ha-size-label: 11px;
+
+  /* --- Mouvement --- */
+  --ha-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ha-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ha-dur-fast: 0.15s;
+  --ha-dur-ui: 0.25s;
+  --ha-dur-section: 0.6s;
+
+  --ha-border: 0.8px solid var(--ha-ink-soft);
+  --ha-border-dotted: 0.8px dotted var(--ha-ink-soft);
+}
+
+/* --- Base --- */
+body.ha { margin: 0; background: var(--ha-bg); color: var(--ha-ink); font-family: var(--ha-font-body); }
+.ha h1, .ha h2, .ha h3 { font-family: var(--ha-font-h); text-transform: uppercase; }
+.ha .label { font-family: var(--ha-font-mono); font-size: var(--ha-size-label); text-transform: uppercase; letter-spacing: 1.4px; }
+.ha .btn { border-radius: 0; display: inline-block; padding: 14px 28px; border: 0.8px solid var(--ha-ink); color: var(--ha-ink); text-decoration: none; transition: background var(--ha-dur-fast) var(--ha-ease-standard), color var(--ha-dur-fast) var(--ha-ease-standard); }
+.ha .btn:hover { background: var(--ha-ink); color: var(--ha-bg); }
+.ha .btn--fill { background: var(--ha-ink); color: var(--ha-bg); }
+
+/* --- Keyframes du style --- */
+@keyframes ha-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.ha-cursor { animation: ha-blink 1s step-end infinite; }
+
+@keyframes ha-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(167%); } }
+.ha .btn-sweep { position: relative; overflow: hidden; }
+.ha .btn-sweep::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+  animation: ha-sweep 2.2s linear infinite;
+}
+
+@keyframes ha-march { to { background-position: 0.5rem 0; } }
+.ha-marching {
+  background-image: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 8px);
+  background-size: 0.5rem 100%;
+  animation: ha-march 0.6s linear infinite;
+}
+
+@keyframes ha-spin { to { transform: rotate(360deg); } }
+.ha-spin { animation: ha-spin 12s linear infinite; }
+
+@keyframes ha-sheet-in { 0% { opacity: 0; transform: translateX(100%); } }
+.ha-sheet-in { animation: ha-sheet-in var(--ha-dur-section) var(--ha-ease-out) both; }
+
+/* --- Images : duotone vers la couleur du fond --- */
+.ha .media { overflow: hidden; background: var(--ha-bg); position: relative; }
+.ha .media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1) contrast(1.15); mix-blend-mode: luminosity; }
+
+/* --- Reveals --- */
+.ha [data-reveal] { opacity: 0; transform: translateY(40px); transition: opacity var(--ha-dur-section) var(--ha-ease-out), transform var(--ha-dur-section) var(--ha-ease-out); }
+.ha [data-reveal].is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  body.ha *, body.ha *::before, body.ha *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  body.ha [data-reveal] { opacity: 1; transform: none; }
+}

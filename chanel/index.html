@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORVUS — style Chanel</title>
+  <link rel="stylesheet" href="tokens.css">
+  <!-- Style : style-chanel (noir & blanc strict) · Renforts : genjutsu (mouvement), design-dna (grain canvas, texte par lettre), threejs (tore porcelaine) · Contenu : ../contenu-corvus.md -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;600&display=swap');
+    body { margin: 0; }
+    .wrap { max-width: 1100px; margin-inline: auto; padding-inline: 16px; }
+    section { padding: clamp(64px, 10vh, 140px) 16px; text-align: center; }
+    .label { font-size: var(--chanel-nav-size); font-weight: var(--chanel-weight); letter-spacing: var(--chanel-ls); text-transform: uppercase; display: block; margin-bottom: 28px; }
+    h2 { font-size: clamp(32px, 4vw, 56px); margin: 0 0 40px; }
+    .lead { max-width: 52ch; margin: 0 auto; font-weight: 300; font-size: 17px; line-height: 1.9; }
+
+    /* héros photo plein cadre + grain canvas */
+    .hero { position: relative; min-height: 92svh; display: grid; align-items: end; justify-items: center; overflow: hidden; padding: 0; }
+    .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+    .hero .veil { position: absolute; inset: 0; background: var(--chanel-overlay); }
+    #grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.5; }
+    .hero .caption { position: relative; z-index: 2; color: var(--chanel-white); text-align: center; padding: 0 16px 12vh; }
+    .hero .caption .wordmark { font-size: clamp(34px, 4.5vw, 58px); letter-spacing: 10px; text-transform: uppercase; margin: 0 0 18px; }
+    .hero .caption h1 { font-size: clamp(20px, 2.4vw, 30px); font-weight: 300; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 32px; }
+    .hero h1 .lettre { display: inline-block; opacity: 0; transform: translateY(0.5em); transition: opacity .5s ease, transform .5s ease; }
+    .pose .lettre { opacity: 1; transform: none; }
+
+    header { text-align: center; padding: 28px 0 0; position: relative; z-index: 3; background: var(--chanel-white); }
+    header .wordmark { font-size: clamp(28px, 3vw, 40px); letter-spacing: 6px; text-transform: uppercase; }
+    header nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 28px; padding: 20px 16px; }
+    header nav a { font-size: var(--chanel-nav-size); font-weight: var(--chanel-weight); letter-spacing: var(--chanel-ls); text-transform: uppercase; transition: opacity .3s ease; }
+    header nav a:hover { opacity: 0.55; }
+
+    .filet { border: 0; border-top: 1px solid var(--chanel-black); width: 64px; margin: 0 auto 40px; transition: transform 0.9s ease; transform: scaleX(0); transform-origin: center; }
+    .is-visible .filet, .filet.is-visible { transform: scaleX(1); }
+
+    /* grille photo chanel : 2px noir entre images */
+    .grid-photo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; background: var(--chanel-black); }
+    .grid-photo figure { margin: 0; position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--chanel-black); }
+    .grid-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: transform 0.8s ease, filter 0.8s ease; }
+    .grid-photo figure:hover img { transform: scale(1.04); filter: grayscale(0.4); }
+    .grid-photo figcaption { position: absolute; inset: auto 0 0 0; padding: 18px; color: var(--chanel-white); font-size: var(--chanel-nav-size); letter-spacing: var(--chanel-ls); text-transform: uppercase; background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
+
+    /* capacités : liste éditoriale */
+    .caps { max-width: 720px; margin: 0 auto; text-align: left; }
+    .cap { display: grid; grid-template-columns: 1fr auto; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--chanel-dark); align-items: baseline; }
+    .cap h3 { font-size: 14px; margin: 0; letter-spacing: var(--chanel-ls); text-transform: uppercase; }
+    .cap p { margin: 8px 0 0; color: var(--chanel-gray-light); font-size: 14px; font-weight: 300; max-width: 52ch; }
+    .cap .n { font-size: 12px; color: var(--chanel-gray-light); }
+
+    /* console monochrome */
+    .console { background: var(--chanel-black); color: var(--chanel-white); padding: 32px; max-width: 720px; margin: 40px auto 0; text-align: left;
+      font-family: "Courier New", monospace; font-size: 13px; line-height: 2.1; overflow-x: auto; }
+    .console .t { color: var(--chanel-gray-light); }
+
+    /* stats */
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--chanel-black); max-width: 900px; margin: 40px auto 0; }
+    @media (min-width: 800px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+    .stat { background: var(--chanel-white); padding: 40px 16px; }
+    .stat .val { display: block; font-size: clamp(34px, 4vw, 52px); font-weight: 300; font-variant-numeric: tabular-nums; }
+    .stat .cap { display: block; font-size: 11px; letter-spacing: var(--chanel-ls); text-transform: uppercase; color: var(--chanel-gray-light); margin-top: 10px; }
+
+    /* citations */
+    .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; background: var(--chanel-black); }
+    .quote { background: var(--chanel-white); padding: 40px 28px; text-align: left; }
+    .quote p { font-weight: 300; font-size: 16px; line-height: 1.9; margin: 0 0 20px; }
+    .quote cite { font-style: normal; font-size: var(--chanel-nav-size); letter-spacing: var(--chanel-ls); text-transform: uppercase; color: var(--chanel-gray-light); }
+
+    /* formules */
+    .offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2px; background: var(--chanel-black); }
+    .offre { background: var(--chanel-white); padding: 44px 28px; display: flex; flex-direction: column; gap: 14px; text-align: left; }
+    .offre .nom { font-size: var(--chanel-nav-size); font-weight: var(--chanel-weight); letter-spacing: var(--chanel-ls); text-transform: uppercase; }
+    .offre .prix { font-size: 34px; font-weight: 300; }
+    .offre ul { list-style: none; margin: 0; padding: 0; color: var(--chanel-gray-light); font-size: 13px; display: grid; gap: 8px; font-weight: 300; }
+    .offre.reco { background: var(--chanel-black); color: var(--chanel-white); }
+    .offre.reco ul { color: var(--chanel-gray-light); }
+
+    /* faq, équipe, journal */
+    .faq { max-width: 640px; margin: 0 auto; text-align: left; }
+    .faq details { border-bottom: 1px solid var(--chanel-dark); }
+    .faq summary { cursor: pointer; list-style: none; padding: 20px 0; font-size: 13px; letter-spacing: var(--chanel-ls); text-transform: uppercase; display: flex; justify-content: space-between; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; transition: transform .4s ease; }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq details p { margin: 0 0 20px; color: var(--chanel-gray-light); font-weight: 300; }
+    .equipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2px; background: var(--chanel-black); }
+    .membre { background: var(--chanel-white); padding: 32px 24px; text-align: left; }
+    .membre .who { font-size: 14px; font-weight: var(--chanel-weight); letter-spacing: var(--chanel-ls); text-transform: uppercase; }
+    .membre .role { color: var(--chanel-gray-light); font-size: 13px; font-weight: 300; margin-top: 8px; }
+    .journal { max-width: 600px; margin: 40px auto 0; text-align: left; display: grid; gap: 16px; }
+    .version { display: grid; grid-template-columns: 64px 1fr; gap: 18px; align-items: baseline; }
+    .version .v { font-size: 13px; letter-spacing: var(--chanel-ls); }
+    .version p { margin: 0; color: var(--chanel-gray-light); font-size: 14px; font-weight: 300; }
+
+    .js [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .js [data-reveal].is-visible { opacity: 1; transform: none; }
+    footer { border-top: 1px solid var(--chanel-dark); padding: 40px 16px; font-size: 11px; letter-spacing: var(--chanel-ls); text-transform: uppercase; color: var(--chanel-gray-light); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+      .hero h1 .lettre { opacity: 1; transform: none; transition: none; }
+      #grain { display: none; }
+      .filet { transform: none; }
+    }
+  </style>
+</head>
+<body class="ch">
+
+  <header>
+    <div class="wordmark">Corvus</div>
+    <nav>
+      <a href="#capacites">Capacités</a><a href="#nuit">La nuit</a><a href="#formules">Formules</a><a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img src="https://picsum.photos/seed/ch-noir-blanc/1800/1100" alt="Ambiance nocturne noir et blanc">
+      <div class="veil"></div>
+      <canvas id="grain" aria-hidden="true"></canvas>
+      <div class="caption">
+        <p class="wordmark">Corvus</p>
+        <h1 id="titre-hero">Il travaille quand tu dors</h1>
+        <a class="btn" href="#formules">Découvrir</a>
+      </div>
+    </section>
+
+    <section id="manifeste">
+      <span class="label" data-reveal>Le manifeste</span>
+      <hr class="filet" data-reveal>
+      <p class="lead" data-reveal>Un agent n'est pas un assistant. Un assistant attend qu'on lui demande ; un agent sait déjà. Les disques se remplissent, les certificats expirent, les sauvegardes s'oublient. Ce travail invisible mérite un ouvrier invisible.</p>
+      <p class="lead" data-reveal style="margin-top: 28px;">Nous l'avons bâti sur le corbeau : il se souvient des visages, cache pour l'hiver, reconnaît les outils, et ne donne jamais l'alerte pour rien. Au matin, il dépose un rapport signé. Pas une notification : un rapport.</p>
+    </section>
+
+    <section id="capacites">
+      <span class="label" data-reveal>Capacités</span>
+      <h2 data-reveal>Huit savoir-faire</h2>
+      <div class="caps">
+        <div class="cap" data-reveal><div><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats : surveillés en continu, consignés au matin.</p></div><span class="n">01</span></div>
+        <div class="cap" data-reveal><div><h3>Zéro clic</h3><p>La tâche dictée en langage naturel, le script écrit, relu, lancé.</p></div><span class="n">02</span></div>
+        <div class="cap" data-reveal><div><h3>Auto-curatif</h3><p>Un service tombe : il redémarre, applique le correctif, consigne l'incident.</p></div><span class="n">03</span></div>
+        <div class="cap" data-reveal><div><h3>Langage naturel</h3><p>« Sauvegarde la base toutes les nuits à 3 h, garde sept copies. » Il l'écrit en cron mieux que toi.</p></div><span class="n">04</span></div>
+        <div class="cap" data-reveal><div><h3>Rapports signés</h3><p>Chaque intervention produit une note datée, signée, relisible. Rien d'anonyme.</p></div><span class="n">05</span></div>
+        <div class="cap" data-reveal><div><h3>Mémoire de corvidé</h3><p>Il se souvient de la dernière panne, du dernier correctif, du dernier visage qui a validé.</p></div><span class="n">06</span></div>
+        <div class="cap" data-reveal><div><h3>Escadrille</h3><p>Plusieurs machines, un seul regard : du portable au serveur de l'atelier.</p></div><span class="n">07</span></div>
+        <div class="cap" data-reveal><div><h3>Silence respecté</h3><p>Tout tourne en local, permissions minimales, bac à sable pour tout essai.</p></div><span class="n">08</span></div>
+      </div>
+    </section>
+
+    <section id="nuit" style="background: var(--chanel-black); color: var(--chanel-white);">
+      <div id="scene-chanel" aria-hidden="true" style="height:min(64vh,560px);overflow:hidden;"></div>
+      <span class="label" data-reveal style="margin-top:56px;">La nuit</span>
+      <h2 data-reveal>Une nuit, ligne par ligne</h2>
+      <div class="console" data-reveal>
+<pre><span class="t">$ corvus veille --nuit</span>
+<span class="t">23:41</span>  disque sauvegarde 94 % : compression des archives
+<span class="t">01:07</span>  service « photos » tombé ×1 : relance, correctif appliqué
+<span class="t">03:12</span>  purge doublons : 118 Go libérés
+<span class="t">04:55</span>  certificat atelier : J-72, renouvellement tenté (échec ×2)
+<span class="t">05:30</span>  rapport signé déposé : 3 lignes, 0 clic
+<span class="t">$ corvus bilan --matin</span>
+<span class="t">nuit #2048 · 2 interventions · 0 escalade</span></pre>
+      </div>
+    </section>
+
+    <section id="chiffres">
+      <span class="label" data-reveal>Les chiffres</span>
+      <h2 data-reveal>Ce que les nuits ont compté</h2>
+      <div class="stats">
+        <div class="stat" data-reveal><span class="val" data-compte="2048">0</span><span class="cap">nuits sans incident majeur</span></div>
+        <div class="stat" data-reveal><span class="val" data-compte="97.3" data-decimal="1">0</span><span class="cap">% avant le réveil</span></div>
+        <div class="stat" data-reveal><span class="val" data-compte="41">0</span><span class="cap">machines en escadrille</span></div>
+        <div class="stat" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdomadaire</span></div>
+      </div>
+    </section>
+
+    <section id="photos" style="padding-inline: 0;">
+      <span class="label" data-reveal>Tables de nuit</span>
+      <h2 data-reveal style="margin-bottom: 60px;">Ce que tu ne vois jamais</h2>
+      <div class="grid-photo">
+        <figure data-reveal><img src="https://picsum.photos/seed/ch-table-nuit/900/1200" alt="La table de nuit, rapport papier de trois lignes" loading="lazy"><figcaption>La table de nuit</figcaption></figure>
+        <figure data-reveal><img src="https://picsum.photos/seed/ch-console/900/1200" alt="La console nocturne, écran dans le noir" loading="lazy"><figcaption>La console nocturne</figcaption></figure>
+        <figure data-reveal><img src="https://picsum.photos/seed/ch-escadrille/900/1200" alt="L'escadrille, machines alignées sur un fil" loading="lazy"><figcaption>L'escadrille</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="recits">
+      <span class="label" data-reveal>Récits</span>
+      <h2 data-reveal>Trois nuits ordinaires</h2>
+      <div class="caps">
+        <div class="cap" data-reveal><div><h3>Mercredi, 3 h 12</h3><p>Le disque de sauvegarde atteint 94 %. CORVUS compresse, purge, re-classe. Au matin : 41 %, et une note de trois lignes.</p></div><span class="n">I</span></div>
+        <div class="cap" data-reveal><div><h3>Février, silencieusement</h3><p>La sauvegarde ne tournait plus depuis la mise à jour. Personne n'avait vu. Lui si : il a relancé, vérifié, signé.</p></div><span class="n">II</span></div>
+        <div class="cap" data-reveal><div><h3>72 heures avant l'échéance</h3><p>Le certificat expire, deux échecs. Il réessaie, échoue une troisième fois, et là seulement, il te réveille.</p></div><span class="n">III</span></div>
+      </div>
+    </section>
+
+    <section id="temoignages" style="padding-inline: 0;">
+      <span class="label" data-reveal>Témoignages</span>
+      <h2 data-reveal style="margin-bottom: 60px;">Ce qu'en disent les repos</h2>
+      <div class="quotes">
+        <blockquote class="quote" data-reveal><p>« Le matin, je lis trois lignes et je sais. Je n'ai plus ouvert un gestionnaire de tâches depuis mars. »</p><cite>Solène M., photographe, 2 machines</cite></blockquote>
+        <blockquote class="quote" data-reveal><p>« Il a relancé un service à 1 h du matin et je l'ai su en lisant le rapport. C'est ça, tenir une escadrille. »</p><cite>Karim B., indépendant, 4 machines</cite></blockquote>
+        <blockquote class="quote" data-reveal><p>« Mon ancien monitoring me criait dessus. Lui me parle quand il faut. Je dors. »</p><cite>Églantine R., dev backend, 3 machines</cite></blockquote>
+      </div>
+    </section>
+
+    <section id="formules" style="padding-inline: 0;">
+      <span class="label" data-reveal>Formules</span>
+      <h2 data-reveal style="margin-bottom: 60px;">Prendre le perchoir</h2>
+      <div class="offres">
+        <div class="offre" data-reveal><span class="nom">Corneille</span><span class="prix">0 €</span>
+          <ul><li>1 agent, 1 machine</li><li>Missions illimitées</li><li>Rapports quotidiens</li><li>Communauté</li></ul>
+          <a class="btn" href="#contact" style="margin-top: auto;">Choisir</a></div>
+        <div class="offre reco" data-reveal><span class="nom">Corbeau</span><span class="prix">9 €/mois</span>
+          <ul><li>Agents illimités, 3 machines</li><li>Missions programmées</li><li>Rapports signés et archivés</li><li>Auto-curatif avancé</li><li>Priorité correctifs</li></ul>
+          <a class="btn btn--outline" href="#contact" style="margin-top: auto;">Choisir</a></div>
+        <div class="offre" data-reveal><span class="nom">Murmuration</span><span class="prix">Sur devis</span>
+          <ul><li>Parc d'agents illimité</li><li>Console d'escadrille</li><li>Intégrations atelier</li><li>Accompagnement</li></ul>
+          <a class="btn" href="#contact" style="margin-top: auto;">Nous écrire</a></div>
+      </div>
+    </section>
+
+    <section id="questions">
+      <span class="label" data-reveal>Questions fréquentes</span>
+      <h2 data-reveal>Ce qu'on demande au perchoir</h2>
+      <div class="faq">
+        <details data-reveal><summary>Est-ce que ça tourne dans le cloud ?</summary><p>Non. Tout est local : scripts, journaux, rapports. Rien ne quitte la machine, sauf les mises à jour que tu acceptes.</p></details>
+        <details data-reveal><summary>Que se passe-t-il si je débranche la machine la nuit ?</summary><p>Il reprend au retour, là où le rituel s'était arrêté, et le rapport mentionne le trou.</p></details>
+        <details data-reveal><summary>Peut-il casser quelque chose ?</summary><p>Chaque essai passe au bac à sable ; chaque action est journalisée et réversible pendant 30 jours.</p></details>
+        <details data-reveal><summary>Faut-il savoir coder ?</summary><p>Non. On lui parle, il écrit le script et te le montre avant de l'adopter.</p></details>
+        <details data-reveal><summary>Différence avec un cron ?</summary><p>Le cron exécute. CORVUS constate, décide, répare, et rend compte. Le cron ne signe rien.</p></details>
+        <details data-reveal><summary>Et mon ancien monitoring ?</summary><p>Il peut le remplacer, ou simplement le surveiller. Les corbeaux observent, ils ne chassent pas.</p></details>
+      </div>
+    </section>
+
+    <section id="equipe">
+      <span class="label" data-reveal>L'équipe</span>
+      <h2 data-reveal>Quatre sur le fil</h2>
+      <div class="equipe">
+        <div class="membre" data-reveal><div class="who">anne.exe</div><div class="role">Fondatrice, mécanique du vol. Écrit les boucles qui dorment.</div></div>
+        <div class="membre" data-reveal><div class="who">corbin</div><div class="role">Scripts et langage naturel. Parle à la machine comme à un moineau.</div></div>
+        <div class="membre" data-reveal><div class="who">freya</div><div class="role">Console d'escadrille. Dessine les tableaux de bord de nuit.</div></div>
+        <div class="membre" data-reveal><div class="who">m. le hibou</div><div class="role">Revue de code nocturne. Ne fait pas de bruit, fait des remarques.</div></div>
+      </div>
+      <div class="journal">
+        <div class="version" data-reveal><span class="v">v2.4</span><p>Mémoire de corvidé : rappel de la dernière panne dans le rapport du matin.</p></div>
+        <div class="version" data-reveal><span class="v">v2.3</span><p>Bac à sable étendu aux scripts réseau ; 30 jours de retour arrière.</p></div>
+        <div class="version" data-reveal><span class="v">v2.2</span><p>Escadrille : la console regroupe jusqu'à 9 machines.</p></div>
+        <div class="version" data-reveal><span class="v">v2.1</span><p>Rapports signés : chaque intervention porte date et empreinte.</p></div>
+        <div class="version" data-reveal><span class="v">v1.0</span><p>Il a veillé sa première nuit. Personne ne l'a remarqué. C'était voulu.</p></div>
+      </div>
+    </section>
+
+    <section id="contact" style="background: var(--chanel-black); color: var(--chanel-white);">
+      <span class="label" data-reveal>Prendre contact</span>
+      <h2 data-reveal>Et ta nuit, à toi&nbsp;?</h2>
+      <p class="lead" data-reveal style="color: var(--chanel-gray-light);">CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
+      <a class="btn btn--outline" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller" data-reveal>Laisser CORVUS veiller</a>
+    </section>
+  </main>
+
+  <footer>© 2026 Corvus. Style Chanel, animations genjutsu, grain design-dna, 3D threejs. <a href="../index.html">Galerie</a></footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.documentElement.classList.add("js");
+
+    /* titre par lettre (design-dna text_effects) */
+    var titre = document.getElementById("titre-hero");
+    if (titre && !reduire) {
+      var texte = titre.textContent; titre.textContent = "";
+      Array.prototype.forEach.call(texte, function (c, i) {
+        var s = document.createElement("span"); s.className = "lettre";
+        s.style.transitionDelay = (i * 30) + "ms";
+        s.textContent = c === " " ? "\u00A0" : c;
+        titre.appendChild(s);
+      });
+      requestAnimationFrame(function () { requestAnimationFrame(function () { titre.classList.add("pose"); }); });
+    }
+
+    var cibles = document.querySelectorAll("[data-reveal], .filet");
+    if (!reduire && "IntersectionObserver" in window) {
+      cibles.forEach(function (el) {
+        var pere = el.parentElement;
+        if (pere && pere.querySelectorAll("[data-reveal]").length > 2) {
+          var freres = Array.prototype.slice.call(pere.querySelectorAll("[data-reveal]"));
+          el.style.transitionDelay = (freres.indexOf(el) * 60) + "ms";
+        }
+      });
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
+      }, { threshold: 0.15 });
+      cibles.forEach(function (el) { io.observe(el); });
+    } else {
+      cibles.forEach(function (el) { el.classList.add("is-visible"); });
+    }
+
+    function compte(el) {
+      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
+      var fmt = function (v) { return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR"); };
+      if (reduire) { el.textContent = fmt(fin); return; }
+      var t0 = null;
+      (function pas(t) { if (t0 === null) t0 = t;
+        var pr = Math.min((t - t0) / 1100, 1);
+        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
+        if (pr < 1) requestAnimationFrame(pas); })(performance.now());
+    }
+    document.querySelectorAll("[data-compte]").forEach(function (el) {
+      if (!("IntersectionObserver" in window)) { compte(el); return; }
+      var o = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { compte(el); o.unobserve(el); } });
+      }, { threshold: 0.4 });
+      o.observe(el);
+    });
+
+    /* grain noir & blanc animé (design-dna) */
+    var grain = document.getElementById("grain");
+    if (grain && grain.getContext && !reduire) {
+      var g = grain.getContext("2d"), gw = 0, gh = 0, dpr = Math.min(devicePixelRatio || 1, 1.5);
+      function tailler() { gw = grain.clientWidth; gh = grain.clientHeight;
+        grain.width = gw * dpr; grain.height = gh * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      tailler(); addEventListener("resize", tailler);
+      setInterval(function () {
+        if (document.hidden) return;
+        g.clearRect(0, 0, gw, gh);
+        for (var i = 0; i < 900; i++) {
+          var v = Math.random() * 255 | 0;
+          g.fillStyle = "rgba(" + v + "," + v + "," + v + ",0.08)";
+          g.fillRect(Math.random() * gw, Math.random() * gh, 1, 1);
+        }
+      }, 90);
+    }
+  })();
+  </script>
+
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  } }
+  </script>
+  <script type="module">
+    const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const modeste = (navigator.hardwareConcurrency || 4) <= 2;
+    let webgl = false;
+    try { webgl = !!document.createElement("canvas").getContext("webgl2") || !!document.createElement("canvas").getContext("webgl"); } catch (e) {}
+    if (!reduire && !modeste && webgl) {
+      try {
+        const THREE = await import("three");
+        const hote = document.getElementById("scene-chanel");
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+        scene.fog = new THREE.Fog(0x000000, 4, 12);
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 50);
+        camera.position.set(0, 0, 6);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        hote.appendChild(renderer.domElement);
+
+        const noeud = new THREE.Mesh(
+          new THREE.TorusKnotGeometry(1.35, 0.42, 220, 32),
+          new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.42, metalness: 0.05 })
+        );
+        scene.add(noeud);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.12));
+        const dure = new THREE.DirectionalLight(0xffffff, 3.2); dure.position.set(-5, 2, 4); scene.add(dure);
+
+        const souris = { x: 0, y: 0 };
+        addEventListener("pointermove", (e) => {
+          souris.x = (e.clientX / innerWidth) * 2 - 1;
+          souris.y = (e.clientY / innerHeight) * 2 - 1;
+        }, { passive: true });
+
+        const horloge = new THREE.Clock();
+        let vu = true, actif = true;
+        new IntersectionObserver((es) => { vu = es[0].isIntersecting; }, { threshold: 0.05 }).observe(hote);
+        document.addEventListener("visibilitychange", () => { actif = !document.hidden; });
+        function taille() { const w = hote.clientWidth, h = hote.clientHeight;
+          camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h); }
+        taille(); addEventListener("resize", taille);
+
+        (function boucle() {
+          requestAnimationFrame(boucle);
+          if (!vu || !actif) return;
+          const t = horloge.getElapsedTime();
+          noeud.rotation.y = t * 0.18; noeud.rotation.x = Math.sin(t * 0.2) * 0.2;
+          camera.position.x += (souris.x * 0.8 - camera.position.x) * 0.04;
+          camera.position.y += (-souris.y * 0.5 - camera.position.y) * 0.04;
+          camera.lookAt(0, 0, 0);
+          renderer.render(scene, camera);
+        })();
+      } catch (e) { /* scène indisponible : la section reste monochrome */ }
+    }
+  </script>
+</body>
+</html>

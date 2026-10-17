@@ -1,0 +1,39 @@
+/* ============================================================
+   STYLE LOUIS VUITTON — valeurs documentées publiquement
+   ============================================================ */
+
+:root {
+  /* --- Couleurs --- */
+  --lv-brown: #8b6337;         /* brun signature, Pantone 463 C approx. */
+  --lv-gold: #c5a572;          /* doré monogramme, approximation */
+  --lv-black: #000000;
+  --lv-white: #ffffff;
+  --lv-grey: #f6f5f3;          /* gris chaud très clair */
+
+  /* --- Typographie --- */
+  --lv-font: "Jost", "Futura", "Century Gothic", Arial, sans-serif;
+  --lv-ls: 0.25em;
+  --lv-dur: 0.4s;
+}
+
+/* --- Base --- */
+.lv { background: var(--lv-white); color: var(--lv-black); font-family: var(--lv-font); }
+.lv h1, .lv h2 { font-weight: 400; text-transform: uppercase; letter-spacing: var(--lv-ls); line-height: 1.1; margin: 0; }
+.lv .label { font-size: 12px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown); }
+.lv .btn {
+  display: inline-block; padding: 14px 36px; border-radius: 0;
+  background: var(--lv-brown); color: var(--lv-white);
+  text-decoration: none; font-size: 12px; letter-spacing: var(--lv-ls); text-transform: uppercase;
+  transition: background var(--lv-dur) ease;
+}
+.lv .btn:hover { background: var(--lv-black); }
+.lv .btn--outline { background: transparent; color: var(--lv-brown); border: 1px solid var(--lv-brown); }
+
+/* --- Sections --- */
+.lv .section { padding: clamp(64px, 10vh, 140px) var(--gutter, 24px); max-width: 1100px; margin: 0 auto; }
+.lv .section--grey { background: var(--lv-grey); max-width: none; }
+.lv .accent-line { border: 0; border-top: 2px solid var(--lv-gold); width: 64px; margin: 24px 0; }
+
+/* --- Images --- */
+.lv .media { overflow: hidden; }
+.lv .media img { width: 100%; height: 100%; object-fit: cover; display: block; }

@@ -1,0 +1,42 @@
+/* ============================================================
+   STYLE GUCCI — valeurs documentées publiquement (site anti-robots)
+   ============================================================ */
+
+:root {
+  /* --- Couleurs --- */
+  --gu-green: #006637;
+  --gu-red: #c8102e;
+  --gu-black: #000000;
+  --gu-white: #ffffff;
+  --gu-gold: #b99a45;
+
+  /* --- Typographie --- */
+  --gu-font-display: "EB Garamond", "Granjon", Garamond, "Times New Roman", serif;
+  --gu-font-text: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --gu-ls: 0.4em;
+  --gu-dur: 0.4s;
+}
+
+/* --- Base --- */
+.gu { background: var(--gu-white); color: var(--gu-black); font-family: var(--gu-font-text); }
+.gu h1, .gu h2 { font-family: var(--gu-font-display); font-weight: 400; line-height: 1.15; margin: 0; }
+.gu .wordmark { font-family: var(--gu-font-display); font-size: 22px; text-transform: uppercase; letter-spacing: var(--gu-ls); }
+.gu .label { font-size: 12px; letter-spacing: 0.12em; color: var(--gu-green); }
+.gu .btn {
+  display: inline-block; padding: 14px 36px; border-radius: 0;
+  background: var(--gu-black); color: var(--gu-white);
+  text-decoration: none; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  transition: background var(--gu-dur) ease;
+}
+.gu .btn:hover { background: var(--gu-green); }
+
+/* --- Liseré signature (à recolorer selon le projet) --- */
+.gu .stripe { height: 6px; background: linear-gradient(90deg, var(--gu-green) 0 40%, var(--gu-red) 40% 60%, var(--gu-green) 60% 100%); }
+
+/* --- Sections --- */
+.gu .section { padding: clamp(64px, 10vh, 140px) var(--gutter, 24px); max-width: 1100px; margin: 0 auto; text-align: center; }
+
+/* --- Images --- */
+.gu .media { overflow: hidden; }
+.gu .media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--gu-dur) ease; }
+.gu .media:hover img { transform: scale(1.02); }
