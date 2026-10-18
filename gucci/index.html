@@ -2,400 +2,1025 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CORVUS — style Gucci</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="CORVUS — Il Palazzo Corvus. Automatisation nocturne florentine, rigueur cryptographique et silence absolu.">
+  <title>CORVUS × GUCCI — Il Palazzo Corvus</title>
+
   <link rel="stylesheet" href="tokens.css">
-  <!-- Style : style-gucci (liseré vert/rouge, EB Garamond, maximalisme maîtrisé) · Renforts : genjutsu (mouvement), design-dna (filaments canvas, clip reveals), threejs (ruban laiton vert) · Contenu : ../contenu-corvus.md -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@500;700&family=Inter:wght@300;400;500&family=Courier+Prime&display=swap" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
-    body { margin: 0; }
-    section { padding: clamp(64px, 10vh, 140px) 24px; max-width: 1100px; margin-inline: auto; text-align: center; position: relative; }
-    .plein { max-width: none; margin-inline: 0; padding-inline: clamp(16px, 3vw, 48px); }
-    .label { font-size: 12px; letter-spacing: 0.12em; color: var(--gu-green); text-transform: uppercase; display: block; margin-bottom: 24px; }
-    h2 { font-size: clamp(30px, 4vw, 52px); margin: 0 0 18px; }
-    .italique { font-style: italic; font-weight: 500; }
-    .lead { max-width: 54ch; margin: 0 auto 48px; font-weight: 300; line-height: 1.9; color: #444; font-size: 16px; }
+    /* ============================================================
+       CORVUS × GUCCI — IL PALAZZO NOTTURNO
+       Style : EB Garamond, Cinzel, vert florentin #006637, rouge #C8102E,
+       liseré signature tripartite, dorures #B99A45, maximalisme baroque maîtrisé.
+       ============================================================ */
 
-    /* liseré signature qui se dessine */
-    .stripe { height: 6px; background: linear-gradient(90deg, var(--gu-green) 0 40%, var(--gu-red) 40% 60%, var(--gu-green) 60% 100%);
-              max-width: 180px; margin: 0 auto clamp(40px, 7vh, 72px); transform: scaleX(0); transition: transform 1s ease; }
-    .stripe.is-visible { transform: scaleX(1); }
+    :root {
+      --gu-green: #006637;
+      --gu-red: #c8102e;
+      --gu-gold: #b99a45;
+      --gu-cream: #fbf9f5;
+      --gu-dark: #121814;
+      --gu-border-gold: rgba(185, 154, 69, 0.35);
+      --gu-font-display: "EB Garamond", Georgia, serif;
+      --gu-font-heading: "Cinzel", "EB Garamond", serif;
+      --gu-font-text: "Inter", -apple-system, sans-serif;
+      --gu-font-mono: "Courier Prime", monospace;
+    }
 
-    /* héros + filaments canvas + ruban 3D */
-    .hero { max-width: none; min-height: 92svh; display: grid; align-content: center; position: relative; overflow: hidden; }
-    #filaments { position: absolute; inset: 0; pointer-events: none; opacity: 0.5; }
-    #scene-gucci { width: min(760px, 88vw); aspect-ratio: 16 / 9; margin: 24px auto 0; position: relative; }
-    #scene-gucci canvas { display: block; width: 100%; height: 100%; }
-    .hero .mot { display: inline-block; opacity: 0; transform: translateY(0.4em); transition: opacity .6s ease, transform .6s ease; }
-    .pose .hero .mot, .hero.pose .mot { opacity: 1; transform: none; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body.gucci-palazzo {
+      margin: 0;
+      background: var(--gu-cream);
+      color: #1a1a1a;
+      font-family: var(--gu-font-text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-    /* grille maximaliste */
-    .mosaique { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 1100px; margin: 0 auto; }
-    @media (max-width: 800px) { .mosaique { grid-template-columns: 1fr 1fr; } }
-    .mosaique figure { margin: 0; overflow: hidden; position: relative; }
-    .mosaique img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; transition: transform .6s ease; }
-    .mosaique figure:hover img { transform: scale(1.04); }
-    .mosaique figure::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(0,0,0,0.08); pointer-events: none; }
-    .mosaique .grande { grid-column: span 2; }
-    .mosaique .grande img { aspect-ratio: 6/4; }
-    .mosaique figcaption { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gu-green); padding: 12px 2px; text-align: left; }
+    /* --- Liseré Signature Tripartite Flottant --- */
+    .gucci-web-ribbon {
+      height: 6px;
+      background: linear-gradient(90deg, 
+        var(--gu-green) 0%, var(--gu-green) 40%, 
+        var(--gu-red) 40%, var(--gu-red) 60%, 
+        var(--gu-green) 60%, var(--gu-green) 100%);
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-    /* capacités : liste Garamond */
-    .liste { max-width: 720px; margin: 0 auto; text-align: left; }
-    .ligne-liste { padding: 24px 0; border-bottom: 1px solid rgba(0,0,0,0.1); display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: baseline; }
-    .ligne-liste h3 { font-family: var(--gu-font-display); font-weight: 500; font-size: 19px; margin: 0 0 6px; }
-    .ligne-liste p { margin: 0; color: #555; font-size: 14px; font-weight: 300; max-width: 52ch; }
-    .ligne-liste .n { font-family: var(--gu-font-display); font-style: italic; color: var(--gu-green); }
+    /* --- Top Florentine Bar --- */
+    .top-bar-florentine {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px clamp(20px, 4vw, 48px);
+      background: #ffffff;
+      border-bottom: 1px solid var(--gu-border-gold);
+      font-family: var(--gu-font-display);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gu-green);
+    }
+    .top-bar-florentine .gold-crest {
+      color: var(--gu-gold);
+      font-weight: 700;
+      margin-right: 8px;
+    }
 
-    /* transcript */
-    .console { background: var(--gu-black); color: var(--gu-white); padding: clamp(24px, 4vw, 44px); max-width: 760px; margin: 0 auto; text-align: left;
-      font-family: "Courier New", monospace; font-size: 13px; line-height: 2.1; overflow-x: auto; }
-    .console .t { color: #9aa89f; }
+    /* --- Header Palazzo --- */
+    header.palazzo-header {
+      background: #ffffff;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      text-align: center;
+      padding-top: 32px;
+      padding-bottom: 24px;
+      position: relative;
+    }
+    .palazzo-title {
+      font-family: var(--gu-font-heading);
+      font-size: clamp(28px, 4.5vw, 52px);
+      letter-spacing: 0.38em;
+      color: #000000;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .palazzo-sub {
+      font-family: var(--gu-font-display);
+      font-style: italic;
+      font-size: 15px;
+      color: var(--gu-green);
+      margin-bottom: 24px;
+      display: block;
+    }
+    .palazzo-nav {
+      display: flex;
+      justify-content: center;
+      gap: clamp(16px, 3.5vw, 40px);
+      flex-wrap: wrap;
+      font-family: var(--gu-font-display);
+      font-size: 13.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .palazzo-nav a {
+      color: #222222;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 4px;
+      transition: color 0.3s;
+    }
+    .palazzo-nav a:hover {
+      color: var(--gu-red);
+    }
 
-    /* chiffres */
-    .nombres { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; max-width: 860px; margin: 0 auto; }
-    @media (min-width: 800px) { .nombres { grid-template-columns: repeat(4, 1fr); } }
-    .nombre .val { display: block; font-family: var(--gu-font-display); font-size: clamp(40px, 5vw, 64px); font-variant-numeric: tabular-nums; }
-    .nombre .cap { display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gu-green); margin-top: 12px; }
+    /* --- Hero : Salone dei Cento --- */
+    .hero-salone {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(60px, 9vh, 110px) 24px;
+      text-align: center;
+      position: relative;
+    }
+    .salone-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--gu-font-display);
+      font-size: 12.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--gu-gold);
+      border: 1px solid var(--gu-border-gold);
+      padding: 6px 20px;
+      background: #ffffff;
+      margin-bottom: 28px;
+    }
+    .hero-h1-garamond {
+      font-family: var(--gu-font-display);
+      font-size: clamp(38px, 6vw, 82px);
+      font-weight: 400;
+      line-height: 1.08;
+      color: #111111;
+      margin: 0 auto 24px;
+      max-width: 16ch;
+    }
+    .hero-h1-garamond span.italic-red {
+      font-style: italic;
+      color: var(--gu-red);
+      font-weight: 500;
+    }
+    .hero-lead-florence {
+      font-family: var(--gu-font-display);
+      font-size: clamp(17px, 1.4vw, 21px);
+      line-height: 1.9;
+      color: #4a4a4a;
+      max-width: 62ch;
+      margin: 0 auto 36px;
+    }
 
-    /* témoignages */
-    .paroles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto; }
-    .parole { text-align: left; border-top: 2px solid var(--gu-green); padding-top: 24px; }
-    .parole p { font-family: var(--gu-font-display); font-style: italic; font-size: 17px; line-height: 1.8; margin: 0 0 16px; }
-    .parole cite { font-style: normal; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gu-green); }
+    /* --- CLI Strip Doré --- */
+    .cli-gucci-box {
+      display: inline-flex;
+      border: 2px solid var(--gu-green);
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(0, 102, 55, 0.08);
+      margin-bottom: 40px;
+    }
+    .cli-gucci-code {
+      font-family: var(--gu-font-mono);
+      font-size: 13px;
+      padding: 14px 26px;
+      color: #111111;
+    }
+    .cli-gucci-btn {
+      background: var(--gu-green);
+      color: #ffffff;
+      border: none;
+      padding: 0 28px;
+      font-family: var(--gu-font-display);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .cli-gucci-btn:hover {
+      background: var(--gu-red);
+    }
 
-    /* formules */
-    .offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; max-width: 1000px; margin: 0 auto; }
-    .offre { border: 1px solid rgba(0,0,0,0.14); padding: clamp(32px, 4vw, 48px) 28px; text-align: center; display: grid; gap: 14px; justify-items: center; }
-    .offre.reco { border: 2px solid var(--gu-green); }
-    .offre .nom { font-family: var(--gu-font-display); font-size: 20px; }
-    .offre .prix { font-family: var(--gu-font-display); font-style: italic; font-size: 30px; }
-    .offre ul { list-style: none; margin: 0; padding: 0; color: #555; font-size: 13px; display: grid; gap: 8px; font-weight: 300; }
-    .offre .btn { justify-self: center; margin-top: 8px; }
+    /* --- Ruban 3D Florentin Three.js --- */
+    #ribbon-canvas-box {
+      width: min(840px, 92vw);
+      height: clamp(320px, 44vh, 460px);
+      margin: 0 auto;
+      border: 1px solid var(--gu-border-gold);
+      background: radial-gradient(circle at center, #ffffff 0%, #f4ede4 100%);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    #ribbon-canvas-box canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .ribbon-caption {
+      font-family: var(--gu-font-display);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gu-gold);
+      margin-top: 14px;
+    }
 
-    /* faq, équipe, journal */
-    .faq { max-width: 640px; margin: 0 auto; text-align: left; }
-    .faq details { border-bottom: 1px solid rgba(0,0,0,0.1); }
-    .faq summary { cursor: pointer; list-style: none; padding: 20px 0; font-family: var(--gu-font-display); font-size: 17px; display: flex; justify-content: space-between; gap: 16px; }
-    .faq summary::-webkit-details-marker { display: none; }
-    .faq summary::after { content: "+"; transition: transform .5s ease; }
-    .faq details[open] summary::after { transform: rotate(45deg); }
-    .faq details p { margin: 0 0 20px; color: #555; font-weight: 300; font-size: 14px; }
-    .equipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; max-width: 900px; margin: 0 auto; }
-    .membre .who { font-family: var(--gu-font-display); font-size: 18px; }
-    .membre .role { color: #555; font-size: 13px; font-weight: 300; margin-top: 8px; }
-    .journal { max-width: 600px; margin: 0 auto; text-align: left; display: grid; gap: 0; }
-    .version { display: grid; grid-template-columns: 64px 1fr; gap: 18px; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.1); align-items: baseline; }
-    .version .v { font-family: var(--gu-font-display); font-style: italic; }
-    .version p { margin: 0; color: #555; font-size: 13.5px; font-weight: 300; }
+    /* --- Section: Le Bestiaire & Cabinet de Curiosités --- */
+    .section-curiosites {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(80px, 12vh, 140px) 24px;
+      border-top: 1px solid var(--gu-border-gold);
+    }
+    .curio-header {
+      text-align: center;
+      margin-bottom: clamp(48px, 8vh, 80px);
+    }
+    .curio-header h2 {
+      font-family: var(--gu-font-display);
+      font-size: clamp(32px, 4.5vw, 56px);
+      font-weight: 400;
+      margin: 0 0 12px;
+    }
+    .curio-header p {
+      font-family: var(--gu-font-display);
+      font-style: italic;
+      font-size: 17px;
+      color: var(--gu-green);
+      margin: 0;
+    }
 
-    .js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
-    .js [data-reveal].is-visible { opacity: 1; transform: none; }
-    footer { padding: 48px 24px; text-align: center; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gu-green); border-top: 1px solid rgba(0,0,0,0.1); }
+    .bestiaire-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    @media (min-width: 768px) {
+      .bestiaire-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1100px) {
+      .bestiaire-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .curio-frame {
+      background: #ffffff;
+      border: 1px solid var(--gu-border-gold);
+      padding: 32px 24px;
+      position: relative;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .curio-frame::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(0, 102, 55, 0.12);
+      pointer-events: none;
+    }
+    .curio-frame:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(185, 154, 69, 0.18);
+    }
+    .curio-latin {
+      font-family: var(--gu-font-display);
+      font-style: italic;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--gu-red);
+      display: block;
+      margin-bottom: 8px;
+    }
+    .curio-frame h3 {
+      font-family: var(--gu-font-display);
+      font-size: 21px;
+      font-weight: 500;
+      color: #111111;
+      margin: 0 0 14px;
+      line-height: 1.25;
+    }
+    .curio-frame p {
+      font-size: 13.5px;
+      line-height: 1.8;
+      color: #555555;
+      margin: 0;
+      font-weight: 300;
+    }
+    .curio-badge {
+      margin-top: 20px;
+      font-family: var(--gu-font-mono);
+      font-size: 11px;
+      color: var(--gu-gold);
+      letter-spacing: 0.1em;
+      border-top: 1px solid var(--gu-border-gold);
+      padding-top: 10px;
+    }
 
-    @media (prefers-reduced-motion: reduce) {
-      .js [data-reveal] { opacity: 1; transform: none; transition: none; }
-      .hero .mot { opacity: 1; transform: none; transition: none; }
-      .stripe { transform: none; }
-      #filaments { display: none; }
+    /* --- Section: Le Registre des Heures (Interactive Alchemy Ledger) --- */
+    .section-ledger {
+      background: var(--gu-dark);
+      color: #f7f7f7;
+      padding: clamp(80px, 12vh, 140px) 24px;
+      position: relative;
+    }
+    .ledger-container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .ledger-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .ledger-header h2 {
+      font-family: var(--gu-font-display);
+      font-size: clamp(30px, 4.2vw, 54px);
+      font-weight: 400;
+      color: var(--gu-gold);
+      margin: 0 0 12px;
+    }
+    .ledger-ribbon-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .ribbon-tab {
+      background: transparent;
+      border: 1px solid rgba(185, 154, 69, 0.4);
+      color: #cccccc;
+      padding: 10px 22px;
+      font-family: var(--gu-font-display);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .ribbon-tab.active, .ribbon-tab:hover {
+      background: var(--gu-green);
+      border-color: var(--gu-green);
+      color: #ffffff;
+    }
+    .ledger-folio {
+      border: 2px solid var(--gu-gold);
+      background: #0d120f;
+      padding: clamp(28px, 4.5vw, 48px);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+      font-family: var(--gu-font-mono);
+      font-size: 13.5px;
+      line-height: 2.1;
+      color: #d8dfdb;
+      min-height: 280px;
+      overflow-x: auto;
+    }
+    .ledger-folio pre { margin: 0; }
+    .gold-text { color: var(--gu-gold); font-weight: bold; }
+    .green-text { color: #4ade80; }
+    .red-text { color: #f87171; }
+
+    /* --- Section: Galerie Photographique Florentine --- */
+    .section-galerie-gucci {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(80px, 12vh, 140px) 24px;
+    }
+    .galerie-gucci-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    @media (min-width: 860px) {
+      .galerie-gucci-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .gucci-photo-card {
+      background: #ffffff;
+      border: 2px solid var(--gu-gold);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.08);
+      padding: 14px;
+      position: relative;
+    }
+    .gucci-photo-card img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .gucci-photo-card:hover img {
+      transform: scale(1.02);
+    }
+    .gucci-photo-cap {
+      padding: 18px 8px 6px;
+      text-align: center;
+    }
+    .gucci-photo-cap h4 {
+      font-family: var(--gu-font-display);
+      font-size: 18px;
+      margin: 0 0 6px;
+      color: #111111;
+    }
+    .gucci-photo-cap span {
+      font-family: var(--gu-font-display);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gu-green);
+    }
+
+    /* --- Section: Salone delle Feste (Patronage) --- */
+    .section-patronage {
+      background: #ffffff;
+      border-top: 1px solid var(--gu-border-gold);
+      border-bottom: 1px solid var(--gu-border-gold);
+      padding: clamp(80px, 12vh, 140px) 24px;
+    }
+    .patron-container {
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .patron-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      margin-top: 48px;
+    }
+    @media (min-width: 800px) {
+      .patron-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .patron-card {
+      border: 2px solid var(--gu-border-gold);
+      background: var(--gu-cream);
+      padding: clamp(36px, 5vw, 56px) 36px;
+      position: relative;
+      text-align: center;
+    }
+    .patron-card.reco {
+      border: 2px solid var(--gu-green);
+      background: #ffffff;
+      box-shadow: 0 16px 44px rgba(0, 102, 55, 0.1);
+    }
+    .patron-card .patron-title {
+      font-family: var(--gu-font-display);
+      font-size: 26px;
+      color: #111111;
+      margin-bottom: 8px;
+    }
+    .patron-card .patron-price {
+      font-family: var(--gu-font-display);
+      font-style: italic;
+      font-size: 46px;
+      color: var(--gu-red);
+      margin: 16px 0;
+    }
+    .patron-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 32px;
+      font-family: var(--gu-font-display);
+      font-size: 15px;
+      line-height: 2;
+      color: #444444;
+    }
+    .btn-gucci {
+      display: inline-block;
+      padding: 14px 38px;
+      background: var(--gu-green);
+      color: #ffffff;
+      text-decoration: none;
+      font-family: var(--gu-font-display);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-gucci:hover {
+      background: var(--gu-red);
+    }
+
+    /* --- Section: Le Codex des Énigmes (FAQ) --- */
+    .section-enigmes {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: clamp(80px, 12vh, 140px) 24px;
+    }
+    .enigme-item {
+      border-bottom: 1px solid var(--gu-border-gold);
+      padding: 22px 0;
+    }
+    .enigme-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-family: var(--gu-font-display);
+      font-size: 21px;
+      color: #111111;
+    }
+    .enigme-q:hover {
+      color: var(--gu-green);
+    }
+    .enigme-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      font-size: 14.5px;
+      line-height: 1.9;
+      color: #555555;
+    }
+    .enigme-item.active .enigme-a {
+      max-height: 260px;
+      padding-top: 14px;
+    }
+    .enigme-toggle {
+      font-family: var(--gu-font-display);
+      font-size: 24px;
+      color: var(--gu-gold);
+      transition: transform 0.3s;
+    }
+    .enigme-item.active .enigme-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* --- Footer Palazzo --- */
+    footer.palazzo-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--gu-border-gold);
+      padding: 60px 24px 48px;
+      text-align: center;
+    }
+    .footer-watermark {
+      font-family: var(--gu-font-heading);
+      font-size: clamp(36px, 8vw, 90px);
+      letter-spacing: 0.35em;
+      color: rgba(0, 102, 55, 0.05);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .footer-florentine-stamp {
+      font-family: var(--gu-font-display);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gu-green);
+      margin-bottom: 12px;
     }
   </style>
 </head>
-<body class="gu">
+<body class="gucci-palazzo">
 
-  <main>
-    <section class="hero" id="haut">
-      <canvas id="filaments" aria-hidden="true"></canvas>
-      <span class="label" data-reveal>Maison fondée sur le corbeau</span>
-      <h1 style="font-family: var(--gu-font-display); font-weight: 400; font-size: clamp(38px, 5.5vw, 76px); margin: 0 0 20px;">
-        <span class="mot">L'agent</span> <span class="mot italique">qui exécute</span> <span class="mot">tout.</span>
-      </h1>
-      <p class="lead" data-reveal>Il travaille quand tu dors. Il signe son travail. Chaque nuit, une pièce d'atelier : un rapport de trois lignes, coupé au cordeau.</p>
-      <a class="btn" href="#collections" data-reveal>Découvrir la collection</a>
-      <div id="scene-gucci" aria-hidden="true"></div>
-    </section>
+  <!-- Liseré Tripartite Signature Flottant -->
+  <div class="gucci-web-ribbon"></div>
 
-    <section id="manifeste">
-      <hr class="stripe" data-reveal>
-      <span class="label" data-reveal>Le manifeste</span>
-      <h2 data-reveal>Le repos est une <span class="italique">illusion</span>.</h2>
-      <p class="lead" data-reveal>Un agent n'est pas un assistant. Un assistant attend qu'on lui demande ; un agent sait déjà. Les disques se remplissent, les certificats expirent, les sauvegardes s'oublient. Ce travail invisible mérite un ouvrier invisible.</p>
-      <p class="lead" data-reveal>Nous l'avons bâti sur le corbeau : il se souvient des visages, cache pour l'hiver, et ne donne jamais l'alerte pour rien. Au matin, un rapport signé. Pas une notification : un rapport.</p>
-    </section>
+  <!-- Top Bar Florentine -->
+  <div class="top-bar-florentine">
+    <div>
+      <span class="gold-crest">⚜</span>
+      <span>FIRENZE — PALAZZO CORVUS // VIA DE' TORNABUONI</span>
+    </div>
+    <div id="gucci-clock">ORE 03:00 — VIGILANZA NOTTURNA</div>
+  </div>
 
-    <section id="capacites" class="plein" style="max-width: none;">
-      <span class="label" data-reveal>Capacités</span>
-      <h2 data-reveal>Huit savoir-faire</h2>
-      <div class="liste">
-        <div class="ligne-liste" data-reveal><div><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats : surveillés en continu, consignés au matin.</p></div><span class="n">i.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Zéro clic</h3><p>La tâche dictée en langage naturel, le script écrit, relu, lancé.</p></div><span class="n">ii.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Auto-curatif</h3><p>Un service tombe : il redémarre, applique le correctif, consigne l'incident.</p></div><span class="n">iii.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Langage naturel</h3><p>« Sauvegarde la base toutes les nuits à 3 h, garde sept copies. » Il l'écrit en cron mieux que toi.</p></div><span class="n">iv.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Rapports signés</h3><p>Chaque intervention produit une note datée, signée, relisible. Rien d'anonyme.</p></div><span class="n">v.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Mémoire de corvidé</h3><p>Il se souvient de la dernière panne, du dernier correctif, du dernier visage qui a validé.</p></div><span class="n">vi.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Escadrille</h3><p>Plusieurs machines, un seul regard : du portable au serveur de l'atelier.</p></div><span class="n">vii.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Silence respecté</h3><p>Tout tourne en local, permissions minimales, bac à sable pour tout essai.</p></div><span class="n">viii.</span></div>
+  <!-- Header Palazzo -->
+  <header class="palazzo-header">
+    <h1 class="palazzo-title">C O R V U S</h1>
+    <span class="palazzo-sub">L'Operaio Invisibile della Notte — Edizione Fiorentina</span>
+    <nav class="palazzo-nav">
+      <a href="#salone">Il Salone</a>
+      <a href="#bestiaire">Bestiario</a>
+      <a href="#registro">Registro Notturno</a>
+      <a href="#galleria">Galleria</a>
+      <a href="#feste">Mecenatismo</a>
+      <a href="#enigmi">Codex</a>
+    </nav>
+  </header>
+
+  <!-- Hero : Salone dei Cento -->
+  <section id="salone" class="hero-salone">
+    <div class="salone-tag">
+      <span>⚜</span>
+      <span>Automate Local en Pure Renaissance Numérique</span>
+      <span>⚜</span>
+    </div>
+    <h2 class="hero-h1-garamond">
+      L'Orchestration Nocturne dans le <span class="italic-red">Silence d'Italie</span>
+    </h2>
+    <p class="hero-lead-florence">
+      Quand Florence s'endort sur les rives de l'Arno, Corvus commence sa danse imperturbable.
+      Sauvegardes scellées à l'or fin, purge minutieuse des registres superflus et synthèse poétique
+      déposée à l'heure du café. Zéro réseau, zéro indiscrétion.
+    </p>
+
+    <div class="cli-gucci-box">
+      <span class="cli-gucci-code" id="gu-cli-code">curl -fsSL https://corvus.sh/firenze.sh | sh</span>
+      <button class="cli-gucci-btn" id="gu-copy-btn" onclick="copyGucciCli()">Acquérir</button>
+    </div>
+
+    <!-- Ruban 3D Florentin Three.js -->
+    <div id="ribbon-canvas-box"></div>
+    <div class="ribbon-caption">Scultura Tridimensionale — Nastro d'Oro e Smeraldo in Movimento Continuo</div>
+  </section>
+
+  <!-- Section: Le Bestiaire & Cabinet de Curiosités -->
+  <section id="bestiaire" class="section-curiosites">
+    <div class="curio-header">
+      <span style="font-family: var(--gu-font-display); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gu-gold); display: block; margin-bottom: 8px;">
+        Cabinet des Curiosités
+      </span>
+      <h2>Il Bestiario Notturno</h2>
+      <p>Huit vertus souveraines sculptées pour la garde pérenne de vos machines.</p>
+    </div>
+
+    <div class="bestiaire-grid">
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">I. Rotatio Librorum</span>
+          <h3>Le Dépouillement des Registres</h3>
+          <p>Compression méthodique de vos archives et élimination des journaux obsolètes sans altération historique.</p>
+        </div>
+        <div class="curio-badge">GZIP RATIO 85% // 14 GIORNI</div>
       </div>
-    </section>
 
-    <section id="chiffres">
-      <hr class="stripe" data-reveal>
-      <span class="label" data-reveal>Les chiffres</span>
-      <h2 data-reveal>Ce que les nuits ont compté</h2>
-      <div class="nombres">
-        <div class="nombre" data-reveal><span class="val" data-compte="2048">0</span><span class="cap">nuits sans incident majeur</span></div>
-        <div class="nombre" data-reveal><span class="val" data-compte="97.3" data-decimal="1">0</span><span class="cap">% avant le réveil</span></div>
-        <div class="nombre" data-reveal><span class="val" data-compte="41">0</span><span class="cap">machines en escadrille</span></div>
-        <div class="nombre" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdo</span></div>
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">II. Custos Fidei</span>
+          <h3>La Garde des Sauvegardes</h3>
+          <p>Instantanés différentiels chiffrés sous clef secrète avec scellement SHA-256 à triple contrôle.</p>
+        </div>
+        <div class="curio-badge">AES-256 // ZERO-LOSS</div>
       </div>
-    </section>
 
-    <section id="photos" class="plein" style="max-width: none;">
-      <span class="label" data-reveal>Tables de nuit</span>
-      <h2 data-reveal>Ce que tu ne vois jamais</h2>
-      <div class="mosaique">
-        <figure class="grande" data-reveal><img src="https://picsum.photos/seed/gu-table-nuit/1400/940" alt="La table de nuit, rapport papier de trois lignes" loading="lazy"><figcaption>La table de nuit</figcaption></figure>
-        <figure data-reveal><img src="https://picsum.photos/seed/gu-console/700/940" alt="La console nocturne" loading="lazy"><figcaption>La console nocturne</figcaption></figure>
-        <figure data-reveal><img src="https://picsum.photos/seed/gu-atelier/700/940" alt="L'atelier des nuits" loading="lazy"><figcaption>L'atelier</figcaption></figure>
-        <figure data-reveal><img src="https://picsum.photos/seed/gu-escadrille/700/940" alt="L'escadrille" loading="lazy"><figcaption>L'escadrille</figcaption></figure>
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">III. Sigillum Aureum</span>
+          <h3>Les Veilleurs Cryptographiques</h3>
+          <p>Audit des certificats TLS locaux et rotation autonome des secrets sans dépendance extérieure.</p>
+        </div>
+        <div class="curio-badge">LOCAL SECRETS ONLY</div>
       </div>
-    </section>
 
-    <section id="nuit" style="background: var(--gu-black); color: var(--gu-white); max-width: none;">
-      <span class="label" data-reveal>La nuit</span>
-      <h2 data-reveal>Une nuit, ligne par ligne</h2>
-      <div class="console" data-reveal>
-<pre><span class="t">$ corvus veille --nuit</span>
-<span class="t">23:41</span>  disque sauvegarde 94 % : compression des archives
-<span class="t">01:07</span>  service « photos » tombé ×1 : relance, correctif appliqué
-<span class="t">03:12</span>  purge doublons : 118 Go libérés
-<span class="t">04:55</span>  certificat atelier : J-72, renouvellement tenté (échec ×2)
-<span class="t">05:30</span>  rapport signé déposé : 3 lignes, 0 clic
-<span class="t">$ corvus bilan --matin</span>
-<span class="t">nuit #2048 · 2 interventions · 0 escalade</span></pre>
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">IV. Purgatio Memoriae</span>
+          <h3>L'Épuration Mémoire</h3>
+          <p>Balayage courtois des fuites mémoire et libération des ressources système en délicatesse.</p>
+        </div>
+        <div class="curio-badge">42 MB RAM PEAK</div>
       </div>
-    </section>
 
-    <section id="recits">
-      <span class="label" data-reveal>Récits</span>
-      <h2 data-reveal>Trois nuits <span class="italique">ordinaires</span></h2>
-      <div class="liste">
-        <div class="ligne-liste" data-reveal><div><h3>Mercredi, 3 h 12</h3><p>Le disque de sauvegarde atteint 94 %. CORVUS compresse, purge, re-classe. Au matin : 41 %, et une note de trois lignes.</p></div><span class="n">1.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>Février, silencieusement</h3><p>La sauvegarde ne tournait plus depuis la mise à jour. Personne n'avait vu. Lui si : il a relancé, vérifié, signé.</p></div><span class="n">2.</span></div>
-        <div class="ligne-liste" data-reveal><div><h3>72 heures avant l'échéance</h3><p>Le certificat expire, deux échecs. Il réessaie, échoue une troisième fois, et là seulement, il te réveille.</p></div><span class="n">3.</span></div>
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">V. Epistola Matutina</span>
+          <h3>La Lettre du Matin</h3>
+          <p>Un rapport d'aube limpide de trois lignes rédigé à 05h30 pour éclairer votre première heure.</p>
+        </div>
+        <div class="curio-badge">SYNTHÈSE À L'AUBE</div>
       </div>
-    </section>
 
-    <section id="temoignages">
-      <hr class="stripe" data-reveal>
-      <span class="label" data-reveal>Témoignages</span>
-      <h2 data-reveal>Ce qu'en disent les repos</h2>
-      <div class="paroles">
-        <blockquote class="parole" data-reveal><p>« Le matin, je lis trois lignes et je sais. Je n'ai plus ouvert un gestionnaire de tâches depuis mars. »</p><cite>Solène M., photographe, 2 machines</cite></blockquote>
-        <blockquote class="parole" data-reveal><p>« Il a relancé un service à 1 h du matin et je l'ai su en lisant le rapport. C'est ça, tenir une escadrille. »</p><cite>Karim B., indépendant, 4 machines</cite></blockquote>
-        <blockquote class="parole" data-reveal><p>« Mon ancien monitoring me criait dessus. Lui me parle quand il faut. Je dors. »</p><cite>Églantine R., dev backend, 3 machines</cite></blockquote>
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">VI. Harmonia Horarum</span>
+          <h3>L'Orchestration Parallèle</h3>
+          <p>Enchaînement soigné des tâches d'atelier bridé sous 15% de processeur pour un silence de crypte.</p>
+        </div>
+        <div class="curio-badge">15% CPU THROTTLE</div>
       </div>
-    </section>
 
-    <section id="collections">
-      <span class="label" data-reveal>Formules</span>
-      <h2 data-reveal>Prendre le perchoir</h2>
-      <div class="offres">
-        <div class="offre" data-reveal><span class="nom">Corneille</span><span class="prix">0 €</span>
-          <ul><li>1 agent, 1 machine</li><li>Missions illimitées</li><li>Rapports quotidiens</li><li>Communauté</li></ul>
-          <a class="btn" href="#contact">Choisir</a></div>
-        <div class="offre reco" data-reveal><span class="nom">Corbeau</span><span class="prix">9 €/mois</span>
-          <ul><li>Agents illimités, 3 machines</li><li>Missions programmées</li><li>Rapports signés et archivés</li><li>Auto-curatif avancé</li><li>Priorité correctifs</li></ul>
-          <a class="btn" href="#contact" style="background: var(--gu-green);">Choisir</a></div>
-        <div class="offre" data-reveal><span class="nom">Murmuration</span><span class="prix">Sur devis</span>
-          <ul><li>Parc d'agents illimité</li><li>Console d'escadrille</li><li>Intégrations atelier</li><li>Accompagnement</li></ul>
-          <a class="btn" href="#contact">Nous écrire</a></div>
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">VII. Murus Silentii</span>
+          <h3>La Sentinelle Réseau</h3>
+          <p>Vérification locale de vos frontières numériques sans émettre le moindre paquet indiscret.</p>
+        </div>
+        <div class="curio-badge">ZERO PACKET LEAK</div>
       </div>
-    </section>
 
-    <section id="questions">
-      <span class="label" data-reveal>FAQ</span>
-      <h2 data-reveal>Ce qu'on demande au perchoir</h2>
-      <div class="faq">
-        <details data-reveal><summary>Est-ce que ça tourne dans le cloud ?</summary><p>Non. Tout est local : scripts, journaux, rapports. Rien ne quitte la machine, sauf les mises à jour que tu acceptes.</p></details>
-        <details data-reveal><summary>Que se passe-t-il si je débranche la machine la nuit ?</summary><p>Il reprend au retour, là où le rituel s'était arrêté, et le rapport mentionne le trou.</p></details>
-        <details data-reveal><summary>Peut-il casser quelque chose ?</summary><p>Chaque essai passe au bac à sable ; chaque action est journalisée et réversible pendant 30 jours.</p></details>
-        <details data-reveal><summary>Faut-il savoir coder ?</summary><p>Non. On lui parle, il écrit le script et te le montre avant de l'adopter.</p></details>
-        <details data-reveal><summary>Différence avec un cron ?</summary><p>Le cron exécute. CORVUS constate, décide, répare, et rend compte. Le cron ne signe rien.</p></details>
-        <details data-reveal><summary>Et mon ancien monitoring ?</summary><p>Il peut le remplacer, ou simplement le surveiller. Les corbeaux observent, ils ne chassent pas.</p></details>
+      <div class="curio-frame">
+        <div>
+          <span class="curio-latin">VIII. Dormitio Aeterna</span>
+          <h3>Le Repos Végétal</h3>
+          <p>Endormissement instantané dès l'office achevé jusqu'à la prochaine nuit florentine.</p>
+        </div>
+        <div class="curio-badge">DEEP SLEEP 0.8% BATT</div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="maison">
-      <span class="label" data-reveal>L'atelier</span>
-      <h2 data-reveal>Quatre sur le fil</h2>
-      <div class="equipe">
-        <div class="membre" data-reveal><div class="who">anne.exe</div><div class="role">Fondatrice, mécanique du vol. Écrit les boucles qui dorment.</div></div>
-        <div class="membre" data-reveal><div class="who">corbin</div><div class="role">Scripts et langage naturel. Parle à la machine comme à un moineau.</div></div>
-        <div class="membre" data-reveal><div class="who">freya</div><div class="role">Console d'escadrille. Dessine les tableaux de bord de nuit.</div></div>
-        <div class="membre" data-reveal><div class="who">m. le hibou</div><div class="role">Revue de code nocturne. Ne fait pas de bruit, fait des remarques.</div></div>
+  <!-- Section: Le Registre des Heures (Interactive Alchemy Ledger) -->
+  <section id="registro" class="section-ledger">
+    <div class="ledger-container">
+      <div class="ledger-header">
+        <span style="font-family: var(--gu-font-display); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gu-red); display: block; margin-bottom: 8px;">
+          Télémétrie en Or et Velours
+        </span>
+        <h2>Il Registro delle Ore</h2>
+        <p style="font-family: var(--gu-font-display); font-style: italic; font-size: 16px; color: #a4b5aa;">
+          Les chroniques exactes des métamorphoses accomplies sous les étoiles toscanes.
+        </p>
       </div>
-      <div class="journal" style="margin-top: 56px;">
-        <div class="version" data-reveal><span class="v">v2.4</span><p>Mémoire de corvidé : rappel de la dernière panne dans le rapport du matin.</p></div>
-        <div class="version" data-reveal><span class="v">v2.3</span><p>Bac à sable étendu aux scripts réseau ; 30 jours de retour arrière.</p></div>
-        <div class="version" data-reveal><span class="v">v2.2</span><p>Escadrille : la console regroupe jusqu'à 9 machines.</p></div>
-        <div class="version" data-reveal><span class="v">v2.1</span><p>Rapports signés : chaque intervention porte date et empreinte.</p></div>
-        <div class="version" data-reveal><span class="v">v1.0</span><p>Il a veillé sa première nuit. Personne ne l'a remarqué. C'était voulu.</p></div>
+
+      <div class="ledger-ribbon-tabs">
+        <button class="ribbon-tab active" onclick="switchGucciLedger('transmutatio', this)">I. Transmutation des Fichiers</button>
+        <button class="ribbon-tab" onclick="switchGucciLedger('sigillum', this)">II. Sceau Cryptographique</button>
+        <button class="ribbon-tab" onclick="switchGucciLedger('dormitio', this)">III. Sommeil Végétal</button>
+        <button class="ribbon-tab" onclick="switchGucciLedger('aurora', this)">IV. Bilan de Florence</button>
       </div>
-    </section>
 
-    <section id="contact">
-      <hr class="stripe" data-reveal>
-      <h2 data-reveal>Et ta nuit, à toi&nbsp;?</h2>
-      <p class="lead" data-reveal>CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
-      <a class="btn" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller" data-reveal style="background: var(--gu-green);">Laisser CORVUS veiller</a>
-    </section>
-  </main>
+      <div class="ledger-folio" id="gucci-ledger-display">
+        <pre><span class="gold-text">[03:00:00] PALAZZO CORVUS // RISVEGLIO NOTTURNO AUTOMATIZZATO</span>
+[03:00:02] <span class="green-text">TRANSMUTATIO:</span> Analyse de 48 répertoires d'atelier sur volume local
+[03:00:04] Rotation de 18 journaux volumineux -> Réduction gzip : 1.94 Go -> 118 Mo
+[03:00:06] Caches de compilation élagués avec succès : 3.82 Go récupérés
+[03:00:08] <span class="gold-text">INTEGRITÀ:</span> 100% des hachages validés sans friction
+[03:00:09] CPU consommé : 2.4% // RAM allouée : 38.6 Mo // Température puce : 33.8°C</pre>
+      </div>
+    </div>
+  </section>
 
-  <footer>© 2026 Corvus. Style Gucci, filaments design-dna, ruban threejs. <a href="../index.html" style="color: inherit;">Galerie</a></footer>
+  <!-- Section: Galerie Photographique Florentine -->
+  <section id="galleria" class="section-galerie-gucci">
+    <div style="text-align: center; margin-bottom: 56px;">
+      <span style="font-family: var(--gu-font-display); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gu-green); display: block; margin-bottom: 8px;">
+        Triptyque d'Atelier
+      </span>
+      <h2 style="font-family: var(--gu-font-display); font-size: clamp(30px, 4vw, 50px); margin: 0 0 10px;">La Galerie des Maîtres</h2>
+      <p style="font-family: var(--gu-font-display); font-style: italic; color: #666666; font-size: 16px;">
+        Instants capturés lors du rituel de l'aube.
+      </p>
+    </div>
 
+    <div class="galerie-gucci-grid">
+      <div class="gucci-photo-card">
+        <img src="assets/table_de_nuit.jpg" alt="Table de nuit à l'aube">
+        <div class="gucci-photo-cap">
+          <h4>L'Aube de 05h30</h4>
+          <span>La première lueur sur le rapport achevé</span>
+        </div>
+      </div>
+
+      <div class="gucci-photo-card">
+        <img src="assets/console_nocturne.jpg" alt="Console nocturne">
+        <div class="gucci-photo-cap">
+          <h4>La Console Éteinte</h4>
+          <span>L'atelier en travail sous le voile du silence</span>
+        </div>
+      </div>
+
+      <div class="gucci-photo-card">
+        <img src="assets/escadrille_nocturne.jpg" alt="Escadrille micro-serveurs">
+        <div class="gucci-photo-cap">
+          <h4>L'Escadrille Parallèle</h4>
+          <span>Micro-nœuds synchronisés à la seconde</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Salone delle Feste (Patronage) -->
+  <section id="feste" class="section-patronage">
+    <div class="patron-container">
+      <span style="font-family: var(--gu-font-display); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gu-gold); display: block; margin-bottom: 8px;">
+        Mécénat & Concessions
+      </span>
+      <h2 style="font-family: var(--gu-font-display); font-size: clamp(32px, 4.5vw, 54px); margin: 0 0 12px;">Salone delle Feste</h2>
+      <p style="font-family: var(--gu-font-display); font-style: italic; font-size: 16.5px; color: var(--gu-green);">
+        Des concessions perpétuelles sans abonnement. Vos machines demeurent souveraines.
+      </p>
+
+      <div class="patron-grid">
+        <div class="patron-card">
+          <div class="patron-title">L'Accademia Particolare</div>
+          <div style="font-family: var(--gu-font-display); font-style: italic; font-size: 14px; color: #666;">Pour le créateur indépendant et sa machine d'élection.</div>
+          <div class="patron-price">Gratuit</div>
+          <div style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gu-green); font-weight: 600;">Licence Perpétuelle Open Source</div>
+          <ul class="patron-list">
+            <li>Moteur autonome en Rust binaire</li>
+            <li>Purge et rotation des journaux à 03h00</li>
+            <li>Sauvegardes incrémentales chiffrées</li>
+            <li>Billet de l'Aube déposé sur le bureau</li>
+          </ul>
+          <button class="btn-gucci" onclick="copyGucciCli()">Télécharger le Binaire</button>
+        </div>
+
+        <div class="patron-card reco">
+          <div class="patron-title" style="color: var(--gu-green);">Il Gran Duca</div>
+          <div style="font-family: var(--gu-font-display); font-style: italic; font-size: 14px; color: #666;">Pour les grandes maisons d'art, ateliers et flottes réparties.</div>
+          <div class="patron-price" style="color: var(--gu-green);">490 €</div>
+          <div style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gu-gold); font-weight: 600;">Paiement Unique Sans Rente</div>
+          <ul class="patron-list">
+            <li>Déploiement jusqu'à 12 machines en réseau local</li>
+            <li>Enclave cryptographique matérielle renforcée</li>
+            <li>Synthèse d'intelligence locale avancée</li>
+            <li>Assistance dédiée des orfèvres du code</li>
+          </ul>
+          <button class="btn-gucci" style="background: var(--gu-red);" onclick="alert('Concession Il Gran Duca accordée.')">Rejoindre la Confrérie</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Le Codex des Énigmes (FAQ) -->
+  <section id="enigmi" class="section-enigmes">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span style="font-family: var(--gu-font-display); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gu-red); display: block; margin-bottom: 8px;">
+        Questions aux Chanceliers
+      </span>
+      <h2 style="font-family: var(--gu-font-display); font-size: clamp(28px, 3.8vw, 46px); margin: 0;">Le Codex des Énigmes</h2>
+    </div>
+
+    <div class="enigme-item active">
+      <div class="enigme-q" onclick="toggleGucciFaq(this)">
+        <span>Comment Corvus respecte-t-il le secret de mes créations ?</span>
+        <span class="enigme-toggle">+</span>
+      </div>
+      <div class="enigme-a">
+        Corvus ne possède aucun lien avec un serveur distant quelconque. L'intégralité du traitement de vos données, des calculs de compression et du chiffrement a lieu au sein des circuits de votre propre processeur, sans passer par le moindre nuage commercial.
+      </div>
+    </div>
+
+    <div class="enigme-item">
+      <div class="enigme-q" onclick="toggleGucciFaq(this)">
+        <span>Peut-on modifier l'heure de réveil du démon ?</span>
+        <span class="enigme-toggle">+</span>
+      </div>
+      <div class="enigme-a">
+        Certainement. Bien que 03h00 soit l'heure toscane consacrée, un simple paramètre dans le fichier de configuration `~/.config/corvus.toml` permet d'ajuster l'office à l'instant précis de votre choix.
+      </div>
+    </div>
+
+    <div class="enigme-item">
+      <div class="enigme-q" onclick="toggleGucciFaq(this)">
+        <span>Comment restaurer un fichier scellé par Corvus ?</span>
+        <span class="enigme-toggle">+</span>
+      </div>
+      <div class="enigme-a">
+        Vos sauvegardes sont créées dans des formats universels et libres (`tar` compressé en `zstd`). Si Corvus venait à disparaître, vos fichiers resteraient accessibles avec n'importe quel terminal informatique standard.
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Palazzo -->
+  <footer class="palazzo-footer">
+    <div class="footer-watermark">G U C C I</div>
+    <div class="footer-florentine-stamp">CORVUS × GUCCI — VIA DE' TORNABUONI, FIRENZE</div>
+    <div style="font-family: var(--gu-font-display); font-size: 13px; color: #777777;">
+      © 2026 PALAZZO CORVUS. NESSUNA TELEMETRIA. SILENZIO ASSOLUTO.
+    </div>
+  </footer>
+
+  <!-- Scripts: Three.js Florentine Ribbon & Ledger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-  (function () {
-    "use strict";
-    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.documentElement.classList.add("js");
+    // --- Horloge de Florence ---
+    function updateGucciClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      const el = document.getElementById('gucci-clock');
+      if (el) el.textContent = `ORE ${h}:${m}:${s} — VIGILANZA NOTTURNA`;
+    }
+    setInterval(updateGucciClock, 1000);
+    updateGucciClock();
 
-    if (!reduire) {
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        document.querySelector(".hero").classList.add("pose");
-      }); });
-    } else { document.querySelector(".hero").classList.add("pose"); }
+    // --- Copie CLI ---
+    function copyGucciCli() {
+      const code = document.getElementById('gu-cli-code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('gu-copy-btn');
+        const old = btn.innerText;
+        btn.innerText = 'Acquisito ✓';
+        btn.style.background = '#b99a45';
+        setTimeout(() => {
+          btn.innerText = old;
+          btn.style.background = 'var(--gu-green)';
+        }, 2200);
+      });
+    }
 
-    var cibles = document.querySelectorAll("[data-reveal], .stripe");
-    if (!reduire && "IntersectionObserver" in window) {
-      cibles.forEach(function (el) {
-        var pere = el.parentElement;
-        if (pere && pere.querySelectorAll("[data-reveal]").length > 2) {
-          var freres = Array.prototype.slice.call(pere.querySelectorAll("[data-reveal]"));
-          el.style.transitionDelay = (freres.indexOf(el) * 80) + "ms";
+    // --- Switcher du Registre des Heures ---
+    const gucciLedgerData = {
+      transmutatio: `<pre><span class="gold-text">[03:00:00] PALAZZO CORVUS // RISVEGLIO NOTTURNO AUTOMATIZZATO</span>
+[03:00:02] <span class="green-text">TRANSMUTATIO:</span> Analyse de 48 répertoires d'atelier sur volume local
+[03:00:04] Rotation de 18 journaux volumineux -> Réduction gzip : 1.94 Go -> 118 Mo
+[03:00:06] Caches de compilation élagués avec succès : 3.82 Go récupérés
+[03:00:08] <span class="gold-text">INTEGRITÀ:</span> 100% des hachages validés sans friction
+[03:00:09] CPU consommé : 2.4% // RAM allouée : 38.6 Mo // Température puce : 33.8°C</pre>`,
+
+      sigillum: `<pre><span class="gold-text">[03:05:00] SIGILLO D'ORO // CHIFFREMENT DES ARCHIVES FLORENTINES</span>
+[03:05:02] <span class="red-text">ENCLAVE:</span> Dérivation de clé Argon2id sous mémoire sécurisée
+[03:05:04] Génération de l'instantané incrémental : archive-toscane-2026.tar.zst
+[03:05:06] Signature cryptographique apposée : <span class="gold-text">SHA256: 7b31e9c20a4f5...d98a</span>
+[03:05:07] <span class="green-text">STATUT:</span> Sauvegarde scellée sous /Volumes/Vault/Corvus/
+[03:05:08] Aucun paquet réseau transmis sur les interfaces externes.</pre>`,
+
+      dormitio: `<pre><span class="gold-text">[03:15:00] DORMITIO // RETOUR AU SILENCE DES CRYPTES</span>
+[03:15:01] Fin des opérations de maintenance programmées
+[03:15:02] Libération immédiate des descripteurs de fichiers système
+[03:15:03] Rétention d'énergie : commutation en veille profonde (< 0.1W)
+[03:15:04] <span class="green-text">ÉCOUTE:</span> Démon passif en attente de l'aube de 05h30
+[03:15:05] La nuit florentine se poursuit dans une quiétude intégrale.</pre>`,
+
+      aurora: `<pre><span class="gold-text">[05:30:00] BILLETTO DELL'AURORA // SYNTHÈSE DE 05H30</span>
+[05:30:01] Condensation matinale rédigée sur le bureau de l'artisan.
+---------------------------------------------------------------
+<span class="gold-text">IL VERBALE DI FIRENZE // 05H30</span>
+1. Espace disque libéré : +5.76 Go
+2. Sauvegarde de sécurité scellée et éprouvée
+3. Aucun incident ni processus orphelin détecté
+---------------------------------------------------------------
+[05:30:02] <span class="green-text">BUONGIORNO:</span> Votre atelier vous attend immaculé.</pre>`
+    };
+
+    function switchGucciLedger(key, btn) {
+      document.querySelectorAll('.ribbon-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('gucci-ledger-display').innerHTML = gucciLedgerData[key];
+    }
+
+    // --- FAQ Toggle ---
+    function toggleGucciFaq(el) {
+      const parent = el.parentElement;
+      parent.classList.toggle('active');
+    }
+
+    // --- Three.js Florentine Ribbon (Torus Knot en or et ruban) ---
+    (function initGucciRibbon() {
+      const container = document.getElementById('ribbon-canvas-box');
+      if (!container) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
+      camera.position.set(0, 0, 7.5);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.2;
+      container.appendChild(renderer.domElement);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Torus Knot en Laiton Doré Florentin
+      const geom = new THREE.TorusKnotGeometry(1.6, 0.38, 128, 32, 2, 3);
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: 0xb99a45,
+        metalness: 0.88,
+        roughness: 0.22,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.15,
+        reflectivity: 0.95
+      });
+      const knot = new THREE.Mesh(geom, mat);
+      group.add(knot);
+
+      // Éclairage Scénographique
+      const ambient = new THREE.AmbientLight(0xffffff, 0.9);
+      scene.add(ambient);
+
+      const greenSpot = new THREE.DirectionalLight(0x006637, 2.5);
+      greenSpot.position.set(5, 4, 3);
+      scene.add(greenSpot);
+
+      const goldSpot = new THREE.DirectionalLight(0xb99a45, 3.0);
+      goldSpot.position.set(-5, -3, 4);
+      scene.add(goldSpot);
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          mouseX = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+          mouseY = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
         }
       });
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
-      }, { threshold: 0.15 });
-      cibles.forEach(function (el) { io.observe(el); });
-    } else { cibles.forEach(function (el) { el.classList.add("is-visible"); }); }
 
-    function compte(el) {
-      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
-      var fmt = function (v) { return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR"); };
-      if (reduire) { el.textContent = fmt(fin); return; }
-      var t0 = null;
-      (function pas(t) { if (t0 === null) t0 = t;
-        var pr = Math.min((t - t0) / 1200, 1);
-        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
-        if (pr < 1) requestAnimationFrame(pas); })(performance.now());
-    }
-    document.querySelectorAll("[data-compte]").forEach(function (el) {
-      if (!("IntersectionObserver" in window)) { compte(el); return; }
-      var o = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { compte(el); o.unobserve(el); } });
-      }, { threshold: 0.4 });
-      o.observe(el);
-    });
+      window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
 
-    /* filaments vert-rouge discrets (design-dna) */
-    var fil = document.getElementById("filaments");
-    if (fil && fil.getContext && !reduire) {
-      var f = fil.getContext("2d"), fw = 0, fh = 0, dpr = Math.min(devicePixelRatio || 1, 1.5);
-      function tailler() { fw = fil.clientWidth; fh = fil.clientHeight;
-        fil.width = fw * dpr; fil.height = fh * dpr; f.setTransform(dpr, 0, 0, dpr, 0, 0); }
-      tailler(); addEventListener("resize", tailler);
-      var F = [];
-      for (var i = 0; i < 26; i++) F.push({ x: Math.random(), y: Math.random(), a: Math.random() * Math.PI * 2,
-        v: 0.2 + Math.random() * 0.4, l: 30 + Math.random() * 60, vert: Math.random() > 0.4 });
-      function tour() {
-        if (document.hidden) { requestAnimationFrame(tour); return; }
-        f.clearRect(0, 0, fw, fh);
-        F.forEach(function (p) {
-          p.a += (Math.random() - 0.5) * 0.06;
-          p.x += Math.cos(p.a) * p.v / fw; p.y += Math.sin(p.a) * p.v / fh;
-          if (p.x < -0.1) p.x = 1.1; if (p.x > 1.1) p.x = -0.1;
-          if (p.y < -0.1) p.y = 1.1; if (p.y > 1.1) p.y = -0.1;
-          f.strokeStyle = p.vert ? "rgba(0,102,55,0.28)" : "rgba(200,16,46,0.22)";
-          f.lineWidth = 1;
-          f.beginPath(); f.moveTo(p.x * fw, p.y * fh);
-          f.lineTo(p.x * fw + Math.cos(p.a) * p.l, p.y * fh + Math.sin(p.a) * p.l);
-          f.stroke();
-        });
-        requestAnimationFrame(tour);
+      function animate() {
+        requestAnimationFrame(animate);
+        knot.rotation.x += 0.006;
+        knot.rotation.y += 0.008;
+
+        group.rotation.y += (mouseX * 0.4 - group.rotation.y) * 0.05;
+        group.rotation.x += (mouseY * 0.3 - group.rotation.x) * 0.05;
+
+        renderer.render(scene, camera);
       }
-      requestAnimationFrame(tour);
-    }
-  })();
-  </script>
-
-  <script type="importmap">
-  { "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
-  } }
-  </script>
-  <script type="module">
-    const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const modeste = (navigator.hardwareConcurrency || 4) <= 2;
-    let webgl = false;
-    try { webgl = !!document.createElement("canvas").getContext("webgl2") || !!document.createElement("canvas").getContext("webgl"); } catch (e) {}
-    if (!reduire && !modeste && webgl) {
-      try {
-        const THREE = await import("three");
-        const hote = document.getElementById("scene-gucci");
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xfdfbf6);
-        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 50);
-        camera.position.set(0, 0.5, 5.6);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-        hote.appendChild(renderer.domElement);
-
-        const ruban = new THREE.Mesh(
-          new THREE.TorusKnotGeometry(1.25, 0.34, 220, 32),
-          new THREE.MeshStandardMaterial({ color: 0x006637, metalness: 0.65, roughness: 0.28 })
-        );
-        scene.add(ruban);
-        const anneau = new THREE.Mesh(
-          new THREE.TorusGeometry(2.1, 0.02, 12, 140),
-          new THREE.MeshStandardMaterial({ color: 0xc8102e, metalness: 0.5, roughness: 0.4 })
-        );
-        anneau.rotation.x = Math.PI / 2.2;
-        scene.add(anneau);
-
-        scene.add(new THREE.AmbientLight(0xfff6e8, 0.7));
-        const cle = new THREE.DirectionalLight(0xfff2dd, 2.2); cle.position.set(4, 6, 5); scene.add(cle);
-        const froide = new THREE.DirectionalLight(0xffffff, 0.6); froide.position.set(-5, -2, 3); scene.add(froide);
-
-        const souris = { x: 0, y: 0 };
-        addEventListener("pointermove", (e) => {
-          souris.x = (e.clientX / innerWidth) * 2 - 1;
-          souris.y = (e.clientY / innerHeight) * 2 - 1;
-        }, { passive: true });
-
-        const horloge = new THREE.Clock();
-        let vu = true, actif = true;
-        new IntersectionObserver((es) => { vu = es[0].isIntersecting; }, { threshold: 0.05 }).observe(hote);
-        document.addEventListener("visibilitychange", () => { actif = !document.hidden; });
-        function taille() { const w = hote.clientWidth, h = hote.clientHeight;
-          camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h); }
-        taille(); addEventListener("resize", taille);
-
-        (function boucle() {
-          requestAnimationFrame(boucle);
-          if (!vu || !actif) return;
-          const t = horloge.getElapsedTime();
-          ruban.rotation.y = t * 0.3; ruban.rotation.x = Math.sin(t * 0.25) * 0.15;
-          anneau.rotation.z = t * 0.2;
-          camera.position.x += (souris.x * 0.8 - camera.position.x) * 0.04;
-          camera.position.y += (0.5 - souris.y * 0.4 - camera.position.y) * 0.04;
-          camera.lookAt(0, 0, 0);
-          renderer.render(scene, camera);
-        })();
-      } catch (e) { /* la section reste ivoire */ }
-    }
+      animate();
+    })();
   </script>
 </body>
 </html>

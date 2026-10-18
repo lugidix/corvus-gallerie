@@ -3,96 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CORVUS × 13 — galerie de styles</title>
+  <title>CORVUS × 10 — Galerie d'Architectures Uniques (A à Z)</title>
   <style>
-    :root { --bg:#0e0e0e; --ink:#f2f2f2; --soft:rgba(242,242,242,.55); --line:rgba(242,242,242,.14); --acc:#8f8fff; }
+    :root {
+      --bg: #09090b;
+      --card-bg: #111113;
+      --card-border: rgba(255, 255, 255, 0.1);
+      --ink: #f4f4f5;
+      --soft: rgba(244, 244, 245, 0.6);
+      --acc: #8f8fff;
+      --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "JetBrains Mono", "Courier Prime", monospace;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Georgia, "Times New Roman", serif; }
-    header { text-align: center; padding: clamp(60px, 12vh, 140px) 24px 48px; }
-    h1 { font-size: clamp(28px, 4vw, 54px); font-weight: 400; text-transform: uppercase; letter-spacing: 0.3em; margin: 0 0 18px; }
-    header p { color: var(--soft); font-family: Arial, sans-serif; font-size: 14px; line-height: 1.8; max-width: 62ch; margin: 0 auto; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; padding: 24px; max-width: 1300px; margin: 0 auto 80px; }
-    a.card { display: grid; gap: 6px; padding: 26px 24px; border: 1px solid var(--line); text-decoration: none; color: var(--ink);
-             transition: border-color .3s ease, transform .3s ease, background .3s ease; }
-    a.card:hover { border-color: var(--acc); transform: translateY(-2px); background: rgba(255,255,255,.03); }
-    a.card .n { font-size: 19px; letter-spacing: 0.08em; }
-    a.card .d { font-family: Arial, sans-serif; font-size: 12.5px; color: var(--soft); line-height: 1.6; }
-    a.card .s { font-family: "Courier New", monospace; font-size: 11px; color: var(--acc); letter-spacing: 0.08em; }
-    .note { text-align: center; color: var(--soft); font-family: Arial, sans-serif; font-size: 12px; padding: 0 24px 60px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-display);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+    header {
+      text-align: center;
+      padding: clamp(60px, 10vh, 120px) 24px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .badge-hub {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--acc);
+      border: 1px solid rgba(143, 143, 255, 0.3);
+      padding: 6px 18px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+      background: rgba(143, 143, 255, 0.05);
+    }
+    h1 {
+      font-size: clamp(32px, 5.5vw, 68px);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      line-height: 1.05;
+    }
+    h1 span {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    header p {
+      color: var(--soft);
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 66ch;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+      padding: 24px;
+      max-width: 1360px;
+      margin: 0 auto 80px;
+    }
+    a.card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 32px 28px;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      background: var(--card-bg);
+      text-decoration: none;
+      color: var(--ink);
+      transition: border-color .3s ease, transform .3s ease, background .3s ease, box-shadow .3s ease;
+      position: relative;
+    }
+    a.card:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      background: #161619;
+    }
+    a.card .top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    a.card .n {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+    a.card .tag {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #cccccc;
+    }
+    a.card .arch {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--acc);
+      letter-spacing: 0.06em;
+    }
+    a.card .d {
+      font-size: 14px;
+      color: var(--soft);
+      line-height: 1.7;
+      margin: 0;
+      font-weight: 300;
+    }
+    a.card .cta-line {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #ffffff;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    a.card .cta-line span.arrow {
+      transition: transform 0.2s ease;
+    }
+    a.card:hover .cta-line span.arrow {
+      transform: translateX(4px);
+    }
+    footer.hub-footer {
+      text-align: center;
+      padding: 40px 24px 80px;
+      border-top: 1px solid var(--card-border);
+      color: var(--soft);
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>CORVUS × 15</h1>
-    <p>Le même agent, décliné en quinze pages : dix thèmes purs, trois moteurs d'effets
-    (genjutsu, design-dna, threejs) et deux stacks expérimentales (PixiJS, GLSL brut).
-    Les dix thèmes sont renforcés par les moteurs, jamais déguisés.</p>
+    <div class="badge-hub">10 Architectures Uniques de A à Z</div>
+    <h1>CORVUS <span>× 10</span></h1>
+    <p>
+      Le même agent nocturne décliné en dix expériences radicales et singulières.
+      Chaque marque incarne une architecture, une mise en page, une grammaire typographique,
+      une sculpture 3D Three.js et un modèle d'interaction entièrement conçus sur mesure.
+    </p>
   </header>
 
   <div class="grid">
-    <a class="card" href="Hermes Agent/index.html"><span class="n">Hermes Agent</span>
-      <span class="d">Bleu électrique #0000F2, boot terminal, console qui se tape, duotone, cercle rotatif, marquee.</span>
-      <span class="s">dossier : site-test — :8123</span></a>
+    <a class="card" href="Hermes Agent/index.html">
+      <div class="top-meta">
+        <span class="n">Hermes Agent</span>
+        <span class="tag">Cyber Daemon</span>
+      </div>
+      <div class="arch">Architecture : Machine Terminal & Tunnel 3D</div>
+      <p class="d">
+        Bleu électrique #0000F2, boot typewriter sous terminal UNIX, tunnel wireframe scroll-coupled,
+        pluie de caractères 2D, console multi-scénarios et télémétrie eBPF/crypto.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="Dior/index.html"><span class="n">Dior</span>
-      <span class="d">Noir & didone espacée 0,3em, voile serif, manifeste noir, photographie gris → couleur au survol.</span>
-      <span class="s">dossier : site-test-dior — :8124</span></a>
+    <a class="card" href="apple/index.html">
+      <div class="top-meta">
+        <span class="n">Apple</span>
+        <span class="tag">Keynote & Bento</span>
+      </div>
+      <div class="arch">Architecture : Keynote Reveal & Bento Grid 12-Col</div>
+      <p class="d">
+        Cupertino #F5F5F7 & verre givré, orbe physique Three.js avec tonemapping ACESFilmic,
+        Bento Grid Apple Silicon M3, tiroir technique des spécifications et cartes Apple Store.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="apple/index.html"><span class="n">Apple</span>
-      <span class="d">Blanc/gris #F5F5F7, SF-style, boutons pilule bleus, sections alternées, carte noire produit.</span>
-      <span class="s">tests/apple</span></a>
+    <a class="card" href="chanel/index.html">
+      <div class="top-meta">
+        <span class="n">Chanel</span>
+        <span class="tag">Haute Couture</span>
+      </div>
+      <div class="arch">Architecture : Lookbook Éditorial Asymétrique</div>
+      <p class="d">
+        Noir & blanc strict, tore de porcelaine Three.js, structure par chapitres (I à IV),
+        pleine page photographique 50/50, index vertical des savoir-faire et zéro boîte SaaS.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="chanel/index.html"><span class="n">Chanel</span>
-      <span class="d">Noir & blanc strict, capitales 0,7px, hero photo plein cadre avec voile, grille photo.</span>
-      <span class="s">tests/chanel</span></a>
+    <a class="card" href="hermes-maison/index.html">
+      <div class="top-meta">
+        <span class="n">Hermès (Maison)</span>
+        <span class="tag">Atelier Cuir</span>
+      </div>
+      <div class="arch">Architecture : Le Carnet d'Atelier & La Sellerie</div>
+      <p class="d">
+        Manuscrit sur double page parcheminée, ruban sellier Three.js avec coutures sellier,
+        Établi interactif avec sélection d'outils (Alêne, Fil poissé, Trusquin, Sceau de cire).
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="luxe-creme/index.html"><span class="n">Luxe crème</span>
-      <span class="d">Crème/olive, sérif Fraunces fin, smooth scroll Lenis 1,1s, parallaxe GSAP, zoom d'images.</span>
-      <span class="s">tests/luxe-creme</span></a>
+    <a class="card" href="Dior/index.html">
+      <div class="top-meta">
+        <span class="n">Dior</span>
+        <span class="tag">Pavillon & Défilé</span>
+      </div>
+      <div class="arch">Architecture : Pavillon Monumental & Catwalk Blueprint</div>
+      <p class="d">
+        Didone monumentale, grille architecturale 0.5px hairline, monolithe d'obsidienne 3D faceté,
+        défilé des huit lignes de coupe avec chiffres romains géants et chambre noire d'Avenue Montaigne.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="sombre-awwwards/index.html"><span class="n">Sombre Awwwards</span>
-      <span class="d">Noir #0F0F0F + grain, typo géante expo, marquee défilant, jaune accent, images en cascade.</span>
-      <span class="s">tests/sombre-awwwards</span></a>
+    <a class="card" href="gucci/index.html">
+      <div class="top-meta">
+        <span class="n">Gucci</span>
+        <span class="tag">Renaissance</span>
+      </div>
+      <div class="arch">Architecture : Il Palazzo Corvus & Bestiario Notturno</div>
+      <p class="d">
+        Vert et rouge signature tripartite, dorures #B99A45, tore laiton en ruban 3D,
+        cabinet de curiosités avec taxonomie latine, et registre alchimique interactif en velours.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="hermes-maison/index.html"><span class="n">Hermès (maison)</span>
-      <span class="d">Blanc + orange #F37021 en événement, sérif éditorial, sections kraft, lenteur artisanale.</span>
-      <span class="s">tests/hermes-maison</span></a>
+    <a class="card" href="louis-vuitton/index.html">
+      <div class="top-meta">
+        <span class="n">Louis Vuitton</span>
+        <span class="tag">Malle de Voyage</span>
+      </div>
+      <div class="arch">Architecture : La Malle d'Expédition & Tiroirs Interactifs</div>
+      <p class="d">
+        Brun toile #8B6337, doré monogramme, malle 3D Three.js avec ferrures en laiton,
+        tiroirs coulissants interactifs avec poignées laiton et journal de bord maritime des fuseaux horaires.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="louis-vuitton/index.html"><span class="n">Louis Vuitton</span>
-      <span class="d">Brun #8B6337 + or, Jost capitales espacées, filets dorés, grille rangée sur gris chaud.</span>
-      <span class="s">tests/louis-vuitton</span></a>
+    <a class="card" href="luxe-creme/index.html">
+      <div class="top-meta">
+        <span class="n">Luxe Crème</span>
+        <span class="tag">Zen Sanctuary</span>
+      </div>
+      <div class="arch">Architecture : Sanctuaire Végétal & Respirations Organiques</div>
+      <p class="d">
+        Fonds crème #F5EEE9, olive et sauge, Fraunces ultra-léger 110px, galets d'argile 3D en équilibre,
+        arches organiques, et commutateur de fréquences sonores nocturnes (432Hz, 528Hz, 639Hz).
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="gucci/index.html"><span class="n">Gucci</span>
-      <span class="d">Liseré vert/rouge, EB Garamond, italique campagne, maximalisme photo sur fond strict.</span>
-      <span class="s">tests/gucci</span></a>
+    <a class="card" href="sombre-awwwards/index.html">
+      <div class="top-meta">
+        <span class="n">Sombre Awwwards</span>
+        <span class="tag">Brutalisme</span>
+      </div>
+      <div class="arch">Architecture : Odyssée Brutaliste & Blackbox Deck</div>
+      <p class="d">
+        Noir chaud #0F0F0F, jaune acide #F6E016, grain SVG analogique 6%, tore wireframe géant et nuée
+        de particules Three.js, odyssée des 4 quarts de nuit, et console boîte noire temps réel.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
 
-    <a class="card" href="vercel/index.html"><span class="n">Vercel</span>
-      <span class="d">#0A0A0A + Geist, texte en dégradé, survols dim/bright/lift, border-trail, marquee mono.</span>
-      <span class="s">tests/vercel</span></a>
-
-  <!-- <a class="card" href="genjutsu/index.html"><span class="n">Genjutsu (paint)</span>
-      <span class="d">Plume de corbeau : bleu-noir #0F172A, accent teal iridescent, arêtes vives, filets 1px, horloge de veille, photos de nuit, page longue sur le corpus canonique.</span>
-      <span class="s">tests/genjutsu · pipeline paint · contenu : contenu-corvus.md</span></a>
-
-    <a class="card" href="design-dna/index.html"><span class="n">Design DNA</span>
-      <span class="d">Généré depuis dna-corvus.json (palette mesurée ΔE) : dust canvas, lucioles fuyant le curseur, spotlight, titre lettre à lettre, corbeau au trait, registre génératif.</span>
-      <span class="s">tests/design-dna · phases 2+3 + vérification ΔE</span></a>
-
-    <a class="card" href="threejs/index.html"><span class="n">Three.js</span>
-      <span class="d">Scène r169 : murmuration de 600 points attirés par le curseur (clic = dispersion), plume iridescente PBR, bloom, grille, brouillard, parallaxe caméra.</span>
-      <span class="s">tests/threejs · fundamentals+materials+interaction+postprocessing</span></a>
-
-    <a class="card" href="pixijs/index.html"><span class="n">PixiJS</span>
-      <span class="d">WebGL 2D v8 : 700 lucioles additives en murmuration, guidées au curseur, dispersées au clic, texture générée, pool sans allocation.</span>
-      <span class="s">tests/pixijs · sprites additifs GPU</span></a>
-
-    <a class="card" href="glsl/index.html"><span class="n">GLSL brut</span>
-      <span class="d">WebGL2 sans bibliothèque : un quad, un fragment shader fBm 5 octaves, fumée iridescente soufflée au curseur, repos GPU hors écran.</span>
-      <span class="s">tests/glsl · zéro dépendance</span></a>
+    <a class="card" href="vercel/index.html">
+      <div class="top-meta">
+        <span class="n">Vercel</span>
+        <span class="tag">Edge Platform</span>
+      </div>
+      <div class="arch">Architecture : Infrastructure Edge & Interactive CLI Runner</div>
+      <p class="d">
+        Noir pur #0A0A0A, typographie Geist, gradient cyan-bleu, prisme triangulé 3D lumineux,
+        terminal CLI interactif avec latence < 2ms et matrices de cartes avec border-trail.
+      </p>
+      <div class="cta-line">
+        <span>Ouvrir l'expérience</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
   </div>
--->
-  <p class="note">Même produit, 10 systèmes : dix thèmes purs + trois moteurs d'effets (genjutsu, design-dna, threejs)
-  qui soutiennent chaque thème sans jamais changer ses couleurs.<br>
- </p>
+
+  <footer class="hub-footer">
+    CORVUS — Galerie Multi-Systèmes d'Excellence. 10 projets, 10 architectures uniques de A à Z.
+  </footer>
 </body>
 </html>

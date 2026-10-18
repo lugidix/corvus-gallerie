@@ -2,457 +2,1008 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CORVUS — style Vercel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="CORVUS — Edge Infrastructure Locale. Déploiement nocturne instantané, micro-noyau sans latence et zéro télémétrie.">
+  <title>CORVUS × VERCEL — Edge Infrastructure Locale</title>
+
   <link rel="stylesheet" href="tokens.css">
-  <!-- Style : style-vercel (#0A0A0A, Geist, gradient-text, dim/bright/lift, border-trail) · Renforts : genjutsu (reveals swift), design-dna (grille réactive), threejs (prisme) · Contenu : ../contenu-corvus.md -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-    body { margin: 0; }
-    section { padding: clamp(72px, 11vh, 150px) clamp(20px, 4vw, 48px); position: relative; overflow: hidden; }
-    .wrap { max-width: 1200px; margin-inline: auto; }
-    .center { text-align: center; }
-    .label { font-family: var(--vc-font-mono); font-size: 14px; color: var(--vc-ink-3); display: block; margin-bottom: 24px; }
-    h2 { font-size: var(--vc-h2-size); margin: 0 0 48px; }
-    .gradient-text { background: linear-gradient(90deg, var(--vc-gradient-a), var(--vc-gradient-b));
-      -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .lead { max-width: 52ch; margin: 0 auto 44px; color: var(--vc-ink-3); font-size: var(--vc-body-size); font-weight: 400; }
-    .center .lead { margin-left: auto; margin-right: auto; }
-    .mono { font-family: var(--vc-font-mono); font-size: 14px; }
+    /* ============================================================
+       CORVUS × VERCEL — EDGE INFRASTRUCTURE LOCALE
+       Style : #0A0A0A, Geist, Geist Mono, dégradé Cyan-Bleu #007CF0 -> #00DFD8,
+       filets 0.8px, hover dim/bright/lift, interactive CLI runner.
+       ============================================================ */
 
-    /* héros : prisme 3D + grille réactive */
-    .hero { min-height: 100svh; display: grid; align-content: center; }
-    #grille-points { position: absolute; inset: 0; pointer-events: none; }
-    #scene-vc { width: min(760px, 90vw); aspect-ratio: 16 / 9; margin: 24px auto 0; position: relative; }
-    #scene-vc canvas { display: block; width: 100%; height: 100%; }
-    .hero h1 { font-size: clamp(40px, 6vw, 80px); margin: 0 0 20px; }
-    .hero h1 .mot { display: inline-block; opacity: 0; transform: translateY(14px); transition: opacity .4s var(--vc-ease-out), transform .4s var(--vc-ease-out); }
-    .pose .hero h1 .mot, .hero.pose .mot { opacity: 1; transform: none; }
+    :root {
+      --vc-bg: #0a0a0a;
+      --vc-bg-subtle: #111111;
+      --vc-bg-card: #141414;
+      --vc-ink: #ededed;
+      --vc-ink-soft: #888888;
+      --vc-blue: #0070f3;
+      --vc-cyan: #00dfd8;
+      --vc-border-hairline: rgba(255, 255, 255, 0.12);
+      --vc-font: "Geist", -apple-system, sans-serif;
+      --vc-mono: "Geist Mono", monospace;
+    }
 
-    /* marquee mono (marqueur du thème, gardé) */
-    .marquee { border-block: var(--vc-border); padding: 14px 0; overflow: hidden; white-space: nowrap; }
-    .marquee__track { display: inline-flex; gap: 4rem; padding-right: 4rem; animation: vc-marquee 30s linear infinite; }
-    .marquee .mot { font-family: var(--vc-font-mono); font-size: 14px; color: var(--vc-ink-3); }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body.vc-edge {
+      margin: 0;
+      background: var(--vc-bg);
+      color: var(--vc-ink);
+      font-family: var(--vc-font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      font-size: 15px;
+      line-height: 1.6;
+    }
 
-    /* cartes capacités : border-trail au survol */
-    .cartes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-    .card { position: relative; overflow: hidden; }
-    .card::before { content: ""; position: absolute; inset: 0; border-radius: var(--vc-radius-card);
-      padding: 1px; background: linear-gradient(120deg, rgba(255,255,255,0.4), transparent 30%, transparent 70%, rgba(255,255,255,0.4));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
-      opacity: 0; transition: opacity var(--vc-dur-ui) var(--vc-ease-out); pointer-events: none; }
-    .card:hover::before { opacity: 1; }
-    .card .n { font-family: var(--vc-font-mono); font-size: 13px; color: var(--vc-ink-5); }
-    .card h3 { font-size: 17px; font-weight: 500; margin: 12px 0 8px; }
-    .card p { margin: 0; color: var(--vc-ink-3); font-size: 14px; line-height: 1.7; }
+    /* --- Top Live Edge Bar --- */
+    .top-edge-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px clamp(20px, 4vw, 48px);
+      background: #000000;
+      border-bottom: 0.8px solid var(--vc-border-hairline);
+      font-family: var(--vc-mono);
+      font-size: 11.5px;
+      color: var(--vc-ink-soft);
+    }
+    .edge-live-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #50e3c2;
+      box-shadow: 0 0 10px #50e3c2;
+      margin-right: 8px;
+    }
 
-    /* transcript */
-    .console { background: var(--vc-bg-pure); border: var(--vc-border); border-radius: var(--vc-radius-card); padding: clamp(24px, 4vw, 44px);
-      max-width: 800px; margin: 0 auto; text-align: left; font-family: var(--vc-font-mono); font-size: 13.5px; line-height: 2.2; overflow-x: auto; }
-    .console .t { color: var(--vc-ink-5); }
-    .console .ko { color: #ff6b6b; } .console .ok { color: #50e3c2; }
+    /* --- Header Vercel --- */
+    header.vc-header {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 0.8px solid var(--vc-border-hairline);
+      padding: 16px clamp(20px, 4vw, 48px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .vc-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #ffffff;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .vc-triangle-icon {
+      width: 16px;
+      height: 14px;
+      fill: #ffffff;
+    }
+    .vc-nav {
+      display: flex;
+      gap: clamp(14px, 3vw, 28px);
+      font-size: 13.5px;
+    }
+    .vc-nav a {
+      color: var(--vc-ink-soft);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .vc-nav a:hover {
+      color: #ffffff;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn-header {
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-header-white {
+      background: #ffffff;
+      color: #000000;
+    }
+    .btn-header-white:hover {
+      background: #cccccc;
+    }
 
-    /* chiffres */
-    .nombres { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    @media (min-width: 860px) { .nombres { grid-template-columns: repeat(4, 1fr); } }
-    .nombre { border: var(--vc-border); border-radius: var(--vc-radius-card); padding: clamp(24px, 3.5vw, 40px) 20px; transition: transform var(--vc-dur-ui) var(--vc-ease-out), box-shadow var(--vc-dur-ui) var(--vc-ease-out); }
-    .nombre:hover { transform: translateY(-1px); box-shadow: var(--vc-shadow-hover); }
-    .nombre .val { display: block; font-family: var(--vc-font-mono); font-size: clamp(32px, 4vw, 48px); font-weight: 500; font-variant-numeric: tabular-nums; }
-    .nombre .cap { display: block; color: var(--vc-ink-3); font-size: 14px; margin-top: 10px; }
+    /* --- Hero Section --- */
+    .hero-vc {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: clamp(70px, 11vh, 130px) 24px 60px;
+      text-align: center;
+      position: relative;
+    }
+    .hero-badge-vc {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 0.8px solid var(--vc-border-hairline);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-family: var(--vc-mono);
+      font-size: 12px;
+      color: var(--vc-ink-soft);
+      margin-bottom: 28px;
+    }
+    .hero-h1-vc {
+      font-size: clamp(38px, 6.2vw, 84px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin: 0 auto 24px;
+      max-width: 17ch;
+    }
+    .gradient-hero-text {
+      background: linear-gradient(90deg, #007cf0 0%, #00dfd8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-lead-vc {
+      font-size: clamp(16px, 1.3vw, 19px);
+      color: var(--vc-ink-soft);
+      font-weight: 400;
+      line-height: 1.75;
+      max-width: 58ch;
+      margin: 0 auto 36px;
+    }
 
-    /* témoignages */
-    .paroles { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
-    .parole { text-align: left; }
-    .parole p { font-size: 15.5px; line-height: 1.8; margin: 0 0 16px; color: var(--vc-ink-2); }
-    .parole cite { font-family: var(--vc-font-mono); font-style: normal; font-size: 13px; color: var(--vc-ink-5); }
+    /* --- CLI Copy Strip --- */
+    .cli-vc-box {
+      display: inline-flex;
+      border: 0.8px solid var(--vc-border-hairline);
+      border-radius: 999px;
+      background: #000000;
+      box-shadow: 0 0 30px rgba(0, 112, 243, 0.15);
+      padding: 4px 6px 4px 22px;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .cli-vc-code {
+      font-family: var(--vc-mono);
+      font-size: 13px;
+      color: #ffffff;
+      margin-right: 16px;
+    }
+    .cli-vc-btn {
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 999px;
+      padding: 9px 20px;
+      font-family: var(--vc-font);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cli-vc-btn:hover {
+      background: #d4d4d4;
+    }
 
-    /* formules */
-    .offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
-    .offre { border: var(--vc-border); border-radius: var(--vc-radius-card); padding: clamp(30px, 4vw, 44px) 26px; text-align: left; display: grid; gap: 14px; align-content: start; transition: transform var(--vc-dur-ui) var(--vc-ease-out), box-shadow var(--vc-dur-ui) var(--vc-ease-out); }
-    .offre:hover { transform: translateY(-1px); box-shadow: var(--vc-shadow-hover); }
-    .offre.reco { border-color: var(--vc-blue); }
-    .offre .nom { font-family: var(--vc-font-mono); font-size: 13px; color: var(--vc-ink-3); }
-    .offre.reco .nom { color: var(--vc-blue); }
-    .offre .prix { font-size: 34px; font-weight: 600; letter-spacing: -0.02em; }
-    .offre ul { list-style: none; margin: 0; padding: 0; color: var(--vc-ink-3); font-size: 14px; display: grid; gap: 9px; }
-    .offre .btn { justify-self: start; margin-top: 8px; }
+    /* --- Three.js Prism & Edge Nodes Box --- */
+    #prism-canvas-box {
+      width: min(860px, 94vw);
+      height: clamp(340px, 46vh, 460px);
+      margin: 0 auto;
+      border: 0.8px solid var(--vc-border-hairline);
+      border-radius: 16px;
+      background: radial-gradient(circle at center, #111625 0%, #080a0f 100%);
+      box-shadow: 0 16px 50px rgba(0, 112, 243, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+    #prism-canvas-box canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .prism-caption {
+      font-family: var(--vc-mono);
+      font-size: 11.5px;
+      color: var(--vc-ink-soft);
+      margin-top: 14px;
+    }
 
-    /* faq, équipe, journal */
-    .faq { max-width: 640px; margin: 0 auto; text-align: left; }
-    .faq details { border-bottom: var(--vc-border); }
-    .faq summary { cursor: pointer; list-style: none; padding: 18px 0; font-size: 16px; font-weight: 500; display: flex; justify-content: space-between; gap: 16px; transition: color var(--vc-dur-fast) ease; }
-    .faq summary:hover { color: var(--vc-ink-3); }
-    .faq summary::-webkit-details-marker { display: none; }
-    .faq summary::after { content: "+"; color: var(--vc-ink-5); transition: transform .2s var(--vc-ease-out); }
-    .faq details[open] summary::after { transform: rotate(45deg); }
-    .faq details p { margin: 0 0 20px; color: var(--vc-ink-3); font-size: 15px; }
-    .equipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
-    .membre { border: var(--vc-border); border-radius: var(--vc-radius-card); padding: 24px; text-align: left; }
-    .membre .who { font-family: var(--vc-font-mono); font-size: 14px; }
-    .membre .role { color: var(--vc-ink-3); font-size: 13.5px; margin-top: 8px; }
-    .journal { max-width: 620px; margin: 0 auto; text-align: left; display: grid; gap: 0; }
-    .version { display: grid; grid-template-columns: 72px 1fr; gap: 20px; padding: 14px 0; border-bottom: var(--vc-border); align-items: baseline; }
-    .version .v { font-family: var(--vc-font-mono); font-size: 13px; color: var(--vc-blue); }
-    .version p { margin: 0; color: var(--vc-ink-3); font-size: 14px; }
+    /* --- Section: Interactive Live CLI Runner --- */
+    .section-cli-runner {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: clamp(70px, 11vh, 140px) 24px;
+      border-top: 0.8px solid var(--vc-border-hairline);
+    }
+    .runner-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .runner-header h2 {
+      font-size: clamp(28px, 4vw, 52px);
+      letter-spacing: -0.03em;
+      margin: 0 0 12px;
+    }
+    .runner-terminal {
+      background: #000000;
+      border: 0.8px solid var(--vc-border-hairline);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+    .runner-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: #111111;
+      border-bottom: 0.8px solid var(--vc-border-hairline);
+    }
+    .runner-cmds {
+      display: flex;
+      gap: 10px;
+      padding: 14px 20px;
+      background: #080808;
+      border-bottom: 0.8px solid var(--vc-border-hairline);
+      overflow-x: auto;
+    }
+    .cmd-pill-btn {
+      background: #181818;
+      border: 0.8px solid var(--vc-border-hairline);
+      color: var(--vc-ink-soft);
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-family: var(--vc-mono);
+      font-size: 11.5px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .cmd-pill-btn.active, .cmd-pill-btn:hover {
+      background: var(--vc-blue);
+      color: #ffffff;
+      border-color: var(--vc-blue);
+    }
+    .runner-viewport {
+      padding: clamp(24px, 4vw, 44px);
+      font-family: var(--vc-mono);
+      font-size: 13.5px;
+      line-height: 2.1;
+      color: #eaeaea;
+      min-height: 260px;
+      overflow-x: auto;
+    }
+    .runner-viewport pre { margin: 0; }
+    .cyan-text { color: var(--vc-cyan); }
+    .blue-text { color: #3b82f6; }
+    .gray-text { color: #666666; }
+    .green-text { color: #50e3c2; }
 
-    .js [data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity .45s var(--vc-ease-smooth), transform .45s var(--vc-ease-smooth); }
-    .js [data-reveal].is-visible { opacity: 1; transform: none; }
-    footer { border-top: var(--vc-border); padding: 44px clamp(20px, 4vw, 48px); text-align: center; font-family: var(--vc-font-mono); font-size: 13px; color: var(--vc-ink-5); }
+    /* --- Section: Edge Feature Matrix (Bento Cards with Border-Trail) --- */
+    .section-matrix {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: clamp(70px, 11vh, 140px) 24px;
+      border-top: 0.8px solid var(--vc-border-hairline);
+    }
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .matrix-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1100px) {
+      .matrix-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .edge-card {
+      background: var(--vc-bg-card);
+      border: 0.8px solid var(--vc-border-hairline);
+      border-radius: 12px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.25s var(--vc-ease-out), box-shadow 0.25s var(--vc-ease-out), border-color 0.25s;
+      position: relative;
+    }
+    .edge-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 112, 243, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .edge-card-num {
+      font-family: var(--vc-mono);
+      font-size: 12px;
+      color: var(--vc-blue);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .edge-card h3 {
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin: 0 0 10px;
+    }
+    .edge-card p {
+      font-size: 14px;
+      color: var(--vc-ink-soft);
+      line-height: 1.75;
+      margin: 0;
+      font-weight: 300;
+    }
+    .edge-card-foot {
+      margin-top: 24px;
+      font-family: var(--vc-mono);
+      font-size: 11px;
+      color: var(--vc-cyan);
+      border-top: 0.8px solid var(--vc-border-hairline);
+      padding-top: 10px;
+    }
 
-    @media (prefers-reduced-motion: reduce) {
-      .js [data-reveal] { opacity: 1; transform: none; transition: none; }
-      .hero h1 .mot { opacity: 1; transform: none; transition: none; }
-      .marquee__track { animation: none; }
-      #grille-points { display: none; }
+    /* --- Section: Photographies Haute Résolution en Fenêtres Chrome --- */
+    .section-photos-vc {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: clamp(70px, 11vh, 140px) 24px;
+      border-top: 0.8px solid var(--vc-border-hairline);
+    }
+    .photos-vc-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    @media (min-width: 860px) {
+      .photos-vc-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .vc-photo-window {
+      background: #000000;
+      border: 0.8px solid var(--vc-border-hairline);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    }
+    .vc-photo-bar {
+      padding: 10px 16px;
+      background: #111111;
+      border-bottom: 0.8px solid var(--vc-border-hairline);
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--vc-mono);
+      font-size: 11px;
+      color: var(--vc-ink-soft);
+    }
+    .vc-photo-window img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .vc-photo-window:hover img {
+      transform: scale(1.02);
+    }
+    .vc-photo-cap {
+      padding: 16px 20px;
+      background: #0a0a0a;
+    }
+    .vc-photo-cap h4 {
+      font-size: 14.5px;
+      font-weight: 500;
+      margin: 0 0 4px;
+      color: #ffffff;
+    }
+    .vc-photo-cap span {
+      font-family: var(--vc-mono);
+      font-size: 11.5px;
+      color: var(--vc-blue);
+    }
+
+    /* --- Section: Developer Plans (Pricing) --- */
+    .section-plans {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: clamp(70px, 11vh, 140px) 24px;
+      border-top: 0.8px solid var(--vc-border-hairline);
+    }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      margin-top: 48px;
+    }
+    @media (min-width: 800px) {
+      .plans-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .plan-card {
+      background: var(--vc-bg-card);
+      border: 0.8px solid var(--vc-border-hairline);
+      border-radius: 14px;
+      padding: clamp(36px, 5vw, 54px) 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .plan-card.featured {
+      border-color: var(--vc-blue);
+      box-shadow: 0 0 35px rgba(0, 112, 243, 0.15);
+    }
+    .plan-tier-name {
+      font-family: var(--vc-mono);
+      font-size: 13px;
+      color: var(--vc-ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .plan-card.featured .plan-tier-name {
+      color: var(--vc-blue);
+    }
+    .plan-price-num {
+      font-size: 44px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin: 16px 0 8px;
+      color: #ffffff;
+    }
+    .plan-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 32px;
+      font-size: 14px;
+      line-height: 2;
+      color: var(--vc-ink-soft);
+    }
+    .btn-plan {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #000000;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+    .btn-plan:hover {
+      background: #cccccc;
+    }
+
+    /* --- Section: FAQ Accordion --- */
+    .section-vc-faq {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: clamp(70px, 11vh, 140px) 24px;
+      border-top: 0.8px solid var(--vc-border-hairline);
+    }
+    .faq-row {
+      border-bottom: 0.8px solid var(--vc-border-hairline);
+      padding: 20px 0;
+    }
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .faq-q:hover {
+      color: var(--vc-blue);
+    }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      font-size: 14.5px;
+      line-height: 1.8;
+      color: var(--vc-ink-soft);
+    }
+    .faq-row.active .faq-a {
+      max-height: 260px;
+      padding-top: 12px;
+    }
+    .faq-cross {
+      font-family: var(--vc-mono);
+      font-size: 18px;
+      color: var(--vc-ink-soft);
+      transition: transform 0.25s;
+    }
+    .faq-row.active .faq-cross {
+      transform: rotate(45deg);
+      color: var(--vc-blue);
+    }
+
+    /* --- Footer Vercel --- */
+    footer.vc-footer {
+      border-top: 0.8px solid var(--vc-border-hairline);
+      padding: 50px 24px;
+      text-align: center;
+      font-family: var(--vc-mono);
+      font-size: 12.5px;
+      color: var(--vc-ink-soft);
     }
   </style>
 </head>
-<body class="vc">
+<body class="vc-edge">
 
-  <main>
-    <section class="hero" id="haut">
-      <canvas id="grille-points" aria-hidden="true"></canvas>
-      <div class="wrap center" style="position: relative; z-index: 1;">
-        <span class="label" data-reveal>Corvus × Vercel : déployé la nuit</span>
-        <h1>
-          <span class="mot">L'agent,</span>
-          <span class="mot gradient-text">sans un clic.</span>
-        </h1>
-        <p class="lead" data-reveal>Il travaille quand tu dors. Il signe son travail. Déploiement local, zéro configuration, rapports signés au matin.</p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;" data-reveal>
-          <a class="btn" href="#offres">Laisser CORVUS veiller</a>
-          <a class="btn btn--ghost" href="#nuit">Voir la nuit</a>
+  <!-- Top Live Edge Bar -->
+  <div class="top-edge-bar">
+    <div>
+      <span class="edge-live-dot"></span>
+      <span>CORVUS EDGE // LOCAL HOST NODE — 0.4 MS LATENCY</span>
+    </div>
+    <div id="vc-clock">03:00:00 — LOCAL RUNTIME ACTIVE</div>
+  </div>
+
+  <!-- Header Vercel -->
+  <header class="vc-header">
+    <a href="#hero" class="vc-brand">
+      <svg class="vc-triangle-icon" viewBox="0 0 76 65" fill="none">
+        <path d="M38 0L76 65H0L38 0Z" fill="currentColor"/>
+      </svg>
+      <span>CORVUS</span>
+    </a>
+    <nav class="vc-nav">
+      <a href="#runner">CLI Runner</a>
+      <a href="#matrix">Architecture</a>
+      <a href="#photos">Système</a>
+      <a href="#plans">Tarifs</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="header-actions">
+      <a href="#runner" class="btn-header btn-header-white">Déployer</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero-vc">
+    <div class="hero-badge-vc">
+      <span>✦</span>
+      <span>Micro-Noyau Sans Cloud — Exécution 100% Locale</span>
+    </div>
+    <h1 class="hero-h1-vc">
+      L'Infrastructure Edge <span class="gradient-hero-text">au Cœur de la Nuit</span>
+    </h1>
+    <p class="hero-lead-vc">
+      Déploiement instantané, sandboxing local de niveau noyau et maintenance autonome.
+      Corvus s'active à 03h00 pour compresser vos registres et sceller vos sauvegardes
+      sans le moindre aller-retour externe.
+    </p>
+
+    <div class="cli-vc-box">
+      <span class="cli-vc-code" id="vc-cli-cmd">npx @corvus/cli@latest deploy --night</span>
+      <button class="cli-vc-btn" id="vc-cli-btn" onclick="copyVcCli()">Copier</button>
+    </div>
+
+    <!-- Three.js Prism 3D Box -->
+    <div id="prism-canvas-box"></div>
+    <div class="prism-caption">Topologie Edge 3D — Prisme Réactif & Paquets de Télémétrie Interne</div>
+  </section>
+
+  <!-- Section: Interactive Live CLI Runner -->
+  <section id="runner" class="section-cli-runner">
+    <div class="runner-header">
+      <span style="font-family: var(--vc-mono); font-size: 12.5px; color: var(--vc-blue); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">
+        Exécution Directe
+      </span>
+      <h2>Terminal Interactif Corvus</h2>
+      <p style="color: var(--vc-ink-soft); font-size: 15px; max-width: 54ch; margin: 0 auto;">
+        Testez les commandes clés du démon et observez le temps de réponse déterministe.
+      </p>
+    </div>
+
+    <div class="runner-terminal">
+      <div class="runner-bar">
+        <div style="font-family: var(--vc-mono); font-size: 12px; color: var(--vc-ink-soft);">
+          bash // corvus-daemon v2.4.0 (x86_64-apple-darwin / x86_64-unknown-linux)
         </div>
-        <div id="scene-vc" aria-hidden="true"></div>
+        <div style="font-family: var(--vc-mono); font-size: 11px; color: #50e3c2;">● CONNECTÉ</div>
       </div>
-    </section>
 
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee__track">
-        <span class="mot">veille 24/7</span><span class="mot">·</span><span class="mot">zéro clic</span><span class="mot">·</span>
-        <span class="mot">2048 nuits</span><span class="mot">·</span><span class="mot">auto-curatif</span><span class="mot">·</span>
-        <span class="mot">97,3 % avant le réveil</span><span class="mot">·</span><span class="mot">escadrille</span><span class="mot">·</span>
-        <span class="mot">veille 24/7</span><span class="mot">·</span><span class="mot">zéro clic</span><span class="mot">·</span>
-        <span class="mot">2048 nuits</span><span class="mot">·</span><span class="mot">auto-curatif</span><span class="mot">·</span>
-        <span class="mot">97,3 % avant le réveil</span><span class="mot">·</span><span class="mot">escadrille</span><span class="mot">·</span>
+      <div class="runner-cmds">
+        <button class="cmd-pill-btn active" onclick="execCmd('deploy', this)">corvus deploy --local-edge</button>
+        <button class="cmd-pill-btn" onclick="execCmd('tail', this)">corvus tail --daemon</button>
+        <button class="cmd-pill-btn" onclick="execCmd('audit', this)">corvus audit --zero-leak</button>
+        <button class="cmd-pill-btn" onclick="execCmd('bench', this)">corvus bench --battery</button>
+      </div>
+
+      <div class="runner-viewport" id="runner-screen">
+        <pre><span class="cyan-text">$ corvus deploy --local-edge</span>
+<span class="gray-text">[03:00:00.012]</span> Validating local hardware enclave... <span class="green-text">OK (SecureEnclave v2)</span>
+<span class="gray-text">[03:00:00.040]</span> Initializing 8 maintenance routines...
+<span class="gray-text">[03:00:00.110]</span> Rotating 14 day log files: 1.84 GB -> 118 MB (gzip -9)
+<span class="gray-text">[03:00:00.250]</span> Generating Merkle tree differential snapshot...
+<span class="blue-text">[DEPLOYED]</span> <span class="green-text">Local daemon deployed in 348 ms. Zero cloud endpoints invoked.</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Edge Feature Matrix -->
+  <section id="matrix" class="section-matrix">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span style="font-family: var(--vc-mono); font-size: 12.5px; color: var(--vc-cyan); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">
+        Spécifications Techniques
+      </span>
+      <h2 style="font-size: clamp(28px, 4vw, 50px); letter-spacing: -0.03em; margin: 0;">L'Architecture du Noyau</h2>
+    </div>
+
+    <div class="matrix-grid">
+      <div class="edge-card">
+        <div>
+          <span class="edge-card-num">01 // ROTATION</span>
+          <h3>Dépouillement des Logs</h3>
+          <p>Compression gzip de haute densité des journaux applicatifs dépassant 14 jours de rétention.</p>
+        </div>
+        <div class="edge-card-foot">GZIP RATIO 88%</div>
+      </div>
+
+      <div class="edge-card">
+        <div>
+          <span class="edge-card-num">02 // SÉCURITÉ</span>
+          <h3>Garde des Sauvegardes</h3>
+          <p>Instantanés différentiels chiffrés AES-256 avec arbre de Merkle pour validation d'intégrité.</p>
+        </div>
+        <div class="edge-card-foot">SHA-256 VERIFIED</div>
+      </div>
+
+      <div class="edge-card">
+        <div>
+          <span class="edge-card-num">03 // CONFIDENTIALITÉ</span>
+          <h3>Sentinelle Réseau</h3>
+          <p>Blocage total des sockets sortantes au niveau du noyau. Aucune télémétrie distante émise.</p>
+        </div>
+        <div class="edge-card-foot">ZERO NETWORK HOPS</div>
+      </div>
+
+      <div class="edge-card">
+        <div>
+          <span class="edge-card-num">04 // DISCRÉTION</span>
+          <h3>Sommeil Déterministe</h3>
+          <p>Rétention de veille profonde dès que l'office est achevé. Consommation quasi nulle.</p>
+        </div>
+        <div class="edge-card-foot">&lt; 0.04 WH PAR CYCLE</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Photographies en Fenêtres Chrome -->
+  <section id="photos" class="section-photos-vc">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span style="font-family: var(--vc-mono); font-size: 12.5px; color: var(--vc-blue); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">
+        Environnements Opérationnels
+      </span>
+      <h2 style="font-size: clamp(28px, 4vw, 48px); letter-spacing: -0.03em; margin: 0;">Observabilité Visuelle</h2>
+    </div>
+
+    <div class="photos-vc-grid">
+      <div class="vc-photo-window">
+        <div class="vc-photo-bar">
+          <span>station-01.local</span>
+          <span>05:30:00</span>
+        </div>
+        <img src="assets/table_de_nuit.jpg" alt="Table de nuit à l'aube">
+        <div class="vc-photo-cap">
+          <h4>Bilan de l'Aube Déposé</h4>
+          <span>~/Desktop/morning-summary.txt</span>
+        </div>
+      </div>
+
+      <div class="vc-photo-window">
+        <div class="vc-photo-bar">
+          <span>station-02.local</span>
+          <span>03:00:00</span>
+        </div>
+        <img src="assets/console_nocturne.jpg" alt="Atelier nocturne">
+        <div class="vc-photo-cap">
+          <h4>Atelier en Veille</h4>
+          <span>Traitement discret sous écran éteint</span>
+        </div>
+      </div>
+
+      <div class="vc-photo-window">
+        <div class="vc-photo-bar">
+          <span>cluster-nodes.local</span>
+          <span>04:15:00</span>
+        </div>
+        <img src="assets/escadrille_nocturne.jpg" alt="Serveurs synchronisés">
+        <div class="vc-photo-cap">
+          <h4>Micro-Cluster Local</h4>
+          <span>Synchronisation sans cloud</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Plans Développeurs (Pricing) -->
+  <section id="plans" class="section-plans">
+    <div style="text-align: center;">
+      <span style="font-family: var(--vc-mono); font-size: 12.5px; color: var(--vc-blue); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">
+        Licences Claires
+      </span>
+      <h2 style="font-size: clamp(30px, 4.5vw, 54px); letter-spacing: -0.03em; margin: 0;">Tarification Perpétuelle</h2>
+      <p style="color: var(--vc-ink-soft); font-size: 15px; margin-top: 10px;">
+        Pas d'abonnement mensuel. Vous hébergez et possédez l'intégralité du binaire.
+      </p>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div>
+          <div class="plan-tier-name">Hobby // Développeur</div>
+          <div style="font-size: 14px; color: var(--vc-ink-soft);">Pour machine personnelle et projets indépendants.</div>
+          <div class="plan-price-num">0 €</div>
+          <div style="font-family: var(--vc-mono); font-size: 11px; text-transform: uppercase; color: var(--vc-ink-soft);">
+            Licence Libre MIT
+          </div>
+          <ul class="plan-list">
+            <li>Moteur Rust sans runtime NodeJS requis</li>
+            <li>Cycle nocturne automatisé à 03h00</li>
+            <li>Rotation et compression des journaux</li>
+            <li>Bilan synthétique matinal à 05h30</li>
+          </ul>
+        </div>
+        <button class="btn-plan" onclick="copyVcCli()">Déployer Gratuitement</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div>
+          <div class="plan-tier-name">Pro // Flotte Locale</div>
+          <div style="font-size: 14px; color: var(--vc-ink-soft);">Pour studios de dev, clusters et agences numériques.</div>
+          <div class="plan-price-num" style="color: #ffffff;">490 €</div>
+          <div style="font-family: var(--vc-mono); font-size: 11px; text-transform: uppercase; color: var(--vc-blue);">
+            Paiement Unique Sans Rente
+          </div>
+          <ul class="plan-list">
+            <li>Jusqu'à 15 machines synchronisées en LAN privé</li>
+            <li>Isolation par enclave matérielle dédiée</li>
+            <li>Modèle de synthèse IA locale sans API cloud</li>
+            <li>Support technique direct par les créateurs</li>
+          </ul>
+        </div>
+        <button class="btn-plan" style="background: var(--vc-blue); color: #ffffff;" onclick="alert('Licence Pro enregistrée.')">Acquérir la Licence Pro</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: FAQ Accordion -->
+  <section id="faq" class="section-vc-faq">
+    <div style="text-align: center; margin-bottom: 48px;">
+      <span style="font-family: var(--vc-mono); font-size: 12.5px; color: var(--vc-blue); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">
+        Support Développeur
+      </span>
+      <h2 style="font-size: clamp(26px, 3.8vw, 44px); letter-spacing: -0.02em; margin: 0;">Foire aux Questions</h2>
+    </div>
+
+    <div class="faq-row active">
+      <div class="faq-q" onclick="toggleVcFaq(this)">
+        <span>Corvus nécessite-t-il Node.js ou Docker ?</span>
+        <span class="faq-cross">+</span>
+      </div>
+      <div class="faq-a">
+        Non. Corvus est compilé en binaire machine natif (Rust). Il ne pèse que 8.4 Mo et s'exécute directement sur le système sans nécessiter de conteneur, d'interpréteur Python ou de machine virtuelle JavaScript.
       </div>
     </div>
 
-    <section id="manifeste">
-      <div class="wrap center">
-        <span class="label" data-reveal>Manifeste</span>
-        <h2 data-reveal>Le repos est <span class="gradient-text">une illusion.</span></h2>
-        <p class="lead" data-reveal>Un agent n'est pas un assistant. Un assistant attend qu'on lui demande ; un agent sait déjà. Les disques se remplissent, les certificats expirent, les sauvegardes s'oublient. Ce travail invisible mérite un ouvrier invisible.</p>
-        <p class="lead" data-reveal>Nous l'avons bâti sur le corbeau : il se souvient des visages, cache pour l'hiver, et ne donne jamais l'alerte pour rien. Au matin, un rapport signé. Pas une notification : un rapport.</p>
+    <div class="faq-row">
+      <div class="faq-q" onclick="toggleVcFaq(this)">
+        <span>Comment configurer les chemins de sauvegarde ?</span>
+        <span class="faq-cross">+</span>
       </div>
-    </section>
-
-    <section id="capacites">
-      <div class="wrap">
-        <span class="label" data-reveal>Capacités</span>
-        <h2 data-reveal>Huit savoir-faire</h2>
-        <div class="cartes">
-          <div class="card" data-reveal><span class="n">CAP_01</span><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats : surveillés en continu, consignés au matin.</p></div>
-          <div class="card" data-reveal><span class="n">CAP_02</span><h3>Zéro clic</h3><p>La tâche dictée en langage naturel, le script écrit, relu, lancé.</p></div>
-          <div class="card" data-reveal><span class="n">CAP_03</span><h3>Auto-curatif</h3><p>Un service tombe : il redémarre, applique le correctif, consigne l'incident.</p></div>
-          <div class="card" data-reveal><span class="n">CAP_04</span><h3>Langage naturel</h3><p>« Sauvegarde la base toutes les nuits à 3 h, garde sept copies. »</p></div>
-          <div class="card" data-reveal><span class="n">CAP_05</span><h3>Rapports signés</h3><p>Chaque intervention produit une note datée, signée, relisible. Rien d'anonyme.</p></div>
-          <div class="card" data-reveal><span class="n">CAP_06</span><h3>Mémoire de corvidé</h3><p>Il se souvient de la dernière panne, du dernier correctif, du dernier visage.</p></div>
-          <div class="card" data-reveal><span class="n">CAP_07</span><h3>Escadrille</h3><p>Plusieurs machines, un seul regard : du portable au serveur de l'atelier.</p></div>
-          <div class="card" data-reveal><span class="n">CAP_08</span><h3>Silence respecté</h3><p>Tout tourne en local, permissions minimales, bac à sable pour tout essai.</p></div>
-        </div>
+      <div class="faq-a">
+        Un fichier de configuration standard `~/.config/corvus.toml` permet de déclarer les répertoires à sauvegarder, la politique de rotation des journaux et les heures d'engagement nocturne.
       </div>
-    </section>
+    </div>
 
-    <section id="chiffres" class="center">
-      <div class="wrap">
-        <span class="label" data-reveal>Chiffres</span>
-        <h2 data-reveal>Ce que les nuits ont <span class="gradient-text">compté.</span></h2>
-        <div class="nombres">
-          <div class="nombre" data-reveal><span class="val" data-compte="2048">0</span><span class="cap">nuits sans incident majeur</span></div>
-          <div class="nombre" data-reveal><span class="val" data-compte="97.3" data-decimal="1">0</span><span class="cap">% avant le réveil</span></div>
-          <div class="nombre" data-reveal><span class="val" data-compte="41">0</span><span class="cap">machines en escadrille</span></div>
-          <div class="nombre" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdo</span></div>
-        </div>
+    <div class="faq-row">
+      <div class="faq-q" onclick="toggleVcFaq(this)">
+        <span>Y a-t-il un risque d'interférence avec les tâches CI/CD locales ?</span>
+        <span class="faq-cross">+</span>
       </div>
-    </section>
-
-    <section id="nuit">
-      <div class="wrap center">
-        <span class="label" data-reveal>La nuit</span>
-        <h2 data-reveal>Une nuit, ligne par ligne</h2>
-        <div class="console" data-reveal>
-<pre><span class="t">$ corvus veille --nuit</span>
-<span class="t">23:41</span>  disque sauvegarde 94 % : compression des archives
-<span class="t">01:07</span>  service « photos » tombé ×1 : relance, correctif appliqué
-<span class="t">03:12</span>  purge doublons : 118 Go libérés
-<span class="t">04:55</span>  certificat atelier : J-72, renouvellement tenté (<span class="ko">échec ×2</span>)
-<span class="t">05:30</span>  <span class="ok">rapport signé déposé</span> : 3 lignes, 0 clic
-<span class="t">$ corvus bilan --matin</span>
-<span class="t">nuit #2048 · 2 interventions · 0 escalade</span></pre>
-        </div>
+      <div class="faq-a">
+        Corvus vérifie la charge processeur avant chaque étape. Si un build ou un job de compilation est détecté, Corvus décale son exécution pour ne jamais monopoliser vos cœurs de calcul.
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="photos">
-      <div class="wrap">
-        <div class="center">
-          <span class="label" data-reveal>Tables de nuit</span>
-          <h2 data-reveal>Ce que tu ne vois jamais</h2>
-        </div>
-        <div class="cartes" style="grid-template-columns: 1.5fr 1fr;">
-          <figure style="margin:0;" data-reveal>
-            <div class="card" style="padding: 0; overflow: hidden;"><img src="https://picsum.photos/seed/ve-table-nuit/1600/900" alt="La table de nuit, rapport de trois lignes" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover; filter:grayscale(0.3); transition: filter .3s ease;" loading="lazy"></div>
-            <p class="mono" style="color: var(--vc-ink-5); margin-top: 12px;">la table de nuit : le rapport de trois lignes</p>
-          </figure>
-          <figure style="margin:0;" data-reveal>
-            <div class="card" style="padding: 0; overflow: hidden;"><img src="https://picsum.photos/seed/ve-console/1200/900" alt="La console nocturne" style="display:block; width:100%; aspect-ratio:16/9; object-fit:cover; filter:grayscale(0.3); transition: filter .3s ease;" loading="lazy"></div>
-            <p class="mono" style="color: var(--vc-ink-5); margin-top: 12px;">la console nocturne : 5 h 30</p>
-          </figure>
-        </div>
-      </div>
-    </section>
+  <!-- Footer Vercel -->
+  <footer class="vc-footer">
+    <div style="margin-bottom: 12px;">
+      CORVUS × VERCEL — DÉPLOIEMENT EDGE LOCAL // ZERO CLOUD DEPENDENCY
+    </div>
+    <div style="color: #555555; font-size: 11px;">
+      © 2026 CORVUS EDGE RUNTIME. AUCUN TRACEUR DÉPOSÉ.
+    </div>
+  </footer>
 
-    <section id="recits">
-      <div class="wrap">
-        <span class="label" data-reveal>Récits</span>
-        <h2 data-reveal>Trois nuits ordinaires</h2>
-        <div class="cartes" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
-          <div class="card" data-reveal><span class="n">NUIT_A</span><h3>Mercredi, 3 h 12</h3><p>Le disque de sauvegarde atteint 94 %. CORVUS compresse, purge, re-classe. Au matin : 41 %, et une note de trois lignes.</p></div>
-          <div class="card" data-reveal><span class="n">NUIT_B</span><h3>Février, silencieusement</h3><p>La sauvegarde ne tournait plus depuis la mise à jour. Personne n'avait vu. Lui si : il a relancé, vérifié, signé.</p></div>
-          <div class="card" data-reveal><span class="n">NUIT_C</span><h3>72 heures avant l'échéance</h3><p>Le certificat expire, deux échecs. Il réessaie, échoue une troisième fois, et là seulement, il te réveille.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="temoignages" class="center">
-      <div class="wrap">
-        <span class="label" data-reveal>Témoignages</span>
-        <h2 data-reveal>Ce qu'en disent les <span class="gradient-text">repos.</span></h2>
-        <div class="paroles">
-          <blockquote class="parole" data-reveal><p>« Le matin, je lis trois lignes et je sais. Je n'ai plus ouvert un gestionnaire de tâches depuis mars. »</p><cite>Solène M., photographe, 2 machines</cite></blockquote>
-          <blockquote class="parole" data-reveal><p>« Il a relancé un service à 1 h du matin et je l'ai su en lisant le rapport. C'est ça, tenir une escadrille. »</p><cite>Karim B., indépendant, 4 machines</cite></blockquote>
-          <blockquote class="parole" data-reveal><p>« Mon ancien monitoring me criait dessus. Lui me parle quand il faut. Je dors. »</p><cite>Églantine R., dev backend, 3 machines</cite></blockquote>
-        </div>
-      </div>
-    </section>
-
-    <section id="offres">
-      <div class="wrap">
-        <div class="center">
-          <span class="label" data-reveal>Formules</span>
-          <h2 data-reveal>Prendre le perchoir</h2>
-        </div>
-        <div class="offres">
-          <div class="offre" data-reveal><span class="nom">corneille</span><span class="prix">0 €</span>
-            <ul><li>1 agent, 1 machine</li><li>Missions illimitées</li><li>Rapports quotidiens</li><li>Communauté</li></ul>
-            <a class="btn" href="#contact">Choisir</a></div>
-          <div class="offre reco" data-reveal><span class="nom">corbeau · recommandé</span><span class="prix">9 €/mois</span>
-            <ul><li>Agents illimités, 3 machines</li><li>Missions programmées</li><li>Rapports signés et archivés</li><li>Auto-curatif avancé</li><li>Priorité correctifs</li></ul>
-            <a class="btn" href="#contact">Choisir</a></div>
-          <div class="offre" data-reveal><span class="nom">murmuration</span><span class="prix">Sur devis</span>
-            <ul><li>Parc d'agents illimité</li><li>Console d'escadrille</li><li>Intégrations atelier</li><li>Accompagnement</li></ul>
-            <a class="btn btn--ghost" href="#contact">Nous écrire</a></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="questions" class="center">
-      <div class="wrap">
-        <span class="label" data-reveal>FAQ</span>
-        <h2 data-reveal>Ce qu'on demande au perchoir</h2>
-        <div class="faq">
-          <details data-reveal><summary>Est-ce que ça tourne dans le cloud ?</summary><p>Non. Tout est local : scripts, journaux, rapports. Rien ne quitte la machine, sauf les mises à jour que tu acceptes.</p></details>
-          <details data-reveal><summary>Que se passe-t-il si je débranche la machine la nuit ?</summary><p>Il reprend au retour, là où le rituel s'était arrêté, et le rapport mentionne le trou.</p></details>
-          <details data-reveal><summary>Peut-il casser quelque chose ?</summary><p>Chaque essai passe au bac à sable ; chaque action est journalisée et réversible pendant 30 jours.</p></details>
-          <details data-reveal><summary>Faut-il savoir coder ?</summary><p>Non. On lui parle, il écrit le script et te le montre avant de l'adopter.</p></details>
-          <details data-reveal><summary>Différence avec un cron ?</summary><p>Le cron exécute. CORVUS constate, décide, répare, et rend compte. Le cron ne signe rien.</p></details>
-          <details data-reveal><summary>Et mon ancien monitoring ?</summary><p>Il peut le remplacer, ou simplement le surveiller. Les corbeaux observent, ils ne chassent pas.</p></details>
-        </div>
-      </div>
-    </section>
-
-    <section id="equipe">
-      <div class="wrap">
-        <div class="center">
-          <span class="label" data-reveal>L'équipe</span>
-          <h2 data-reveal>Quatre sur le fil</h2>
-        </div>
-        <div class="equipe">
-          <div class="membre" data-reveal><div class="who">anne.exe</div><div class="role">Fondatrice, mécanique du vol. Écrit les boucles qui dorment.</div></div>
-          <div class="membre" data-reveal><div class="who">corbin</div><div class="role">Scripts et langage naturel. Parle à la machine comme à un moineau.</div></div>
-          <div class="membre" data-reveal><div class="who">freya</div><div class="role">Console d'escadrille. Dessine les tableaux de bord de nuit.</div></div>
-          <div class="membre" data-reveal><div class="who">m. le hibou</div><div class="role">Revue de code nocturne. Ne fait pas de bruit, fait des remarques.</div></div>
-        </div>
-        <div class="journal" style="margin-top: 56px;">
-          <div class="version" data-reveal><span class="v">v2.4</span><p>Mémoire de corvidé : rappel de la dernière panne dans le rapport du matin.</p></div>
-          <div class="version" data-reveal><span class="v">v2.3</span><p>Bac à sable étendu aux scripts réseau ; 30 jours de retour arrière.</p></div>
-          <div class="version" data-reveal><span class="v">v2.2</span><p>Escadrille : la console regroupe jusqu'à 9 machines.</p></div>
-          <div class="version" data-reveal><span class="v">v2.1</span><p>Rapports signés : chaque intervention porte date et empreinte.</p></div>
-          <div class="version" data-reveal><span class="v">v1.0</span><p>Il a veillé sa première nuit. Personne ne l'a remarqué. C'était voulu.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="center">
-      <div class="wrap">
-        <span class="label" data-reveal>Prendre contact</span>
-        <h2 data-reveal>Et ta nuit, <span class="gradient-text">à toi ?</span></h2>
-        <p class="lead" data-reveal>CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
-        <a class="btn" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller" data-reveal>Laisser CORVUS veiller</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>© 2026 Corvus. Style Vercel, grille réactive design-dna, prisme threejs. <a href="../index.html" style="color: var(--vc-ink-3);">Galerie</a></footer>
-
+  <!-- Scripts: Three.js Prism & Interactive CLI Runner -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-  (function () {
-    "use strict";
-    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.documentElement.classList.add("js");
+    // --- Horloge Locale ---
+    function updateVcClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      const el = document.getElementById('vc-clock');
+      if (el) el.textContent = `${h}:${m}:${s} — LOCAL RUNTIME ACTIVE`;
+    }
+    setInterval(updateVcClock, 1000);
+    updateVcClock();
 
-    if (!reduire) {
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        document.querySelector(".hero").classList.add("pose");
-      }); });
-    } else { document.querySelector(".hero").classList.add("pose"); }
+    // --- Copie CLI ---
+    function copyVcCli() {
+      const cmd = document.getElementById('vc-cli-cmd').innerText;
+      navigator.clipboard.writeText(cmd).then(() => {
+        const btn = document.getElementById('vc-cli-btn');
+        const old = btn.innerText;
+        btn.innerText = 'Copié ✓';
+        btn.style.background = 'var(--vc-cyan)';
+        setTimeout(() => {
+          btn.innerText = old;
+          btn.style.background = '#ffffff';
+        }, 2200);
+      });
+    }
 
-    var cibles = document.querySelectorAll("[data-reveal]");
-    if (!reduire && "IntersectionObserver" in window) {
-      cibles.forEach(function (el) {
-        var pere = el.parentElement;
-        if (pere && pere.querySelectorAll("[data-reveal]").length > 2) {
-          var freres = Array.prototype.slice.call(pere.querySelectorAll("[data-reveal]"));
-          el.style.transitionDelay = (freres.indexOf(el) * 50) + "ms";
+    // --- Interactive CLI Runner ---
+    const cliOutputs = {
+      deploy: `<pre><span class="cyan-text">$ corvus deploy --local-edge</span>
+<span class="gray-text">[03:00:00.012]</span> Validating local hardware enclave... <span class="green-text">OK (SecureEnclave v2)</span>
+<span class="gray-text">[03:00:00.040]</span> Initializing 8 maintenance routines...
+<span class="gray-text">[03:00:00.110]</span> Rotating 14 day log files: 1.84 GB -> 118 MB (gzip -9)
+<span class="gray-text">[03:00:00.250]</span> Generating Merkle tree differential snapshot...
+<span class="blue-text">[DEPLOYED]</span> <span class="green-text">Local daemon deployed in 348 ms. Zero cloud endpoints invoked.</span></pre>`,
+
+      tail: `<pre><span class="cyan-text">$ corvus tail --daemon</span>
+<span class="gray-text">[03:00:01]</span> PID: 8492 // Status: ACTIVE // Memory: 24.2 MB
+<span class="gray-text">[03:00:02]</span> Scanning /var/log, /tmp, ~/.cache...
+<span class="gray-text">[03:00:04]</span> Reclaimed 3.82 GB unreferenced disk blocks.
+<span class="gray-text">[03:00:06]</span> Snapshot archive created: /vault/corvus-2026-10-18.tar.zst
+<span class="cyan-text">[STREAM]</span> <span class="green-text">Watching event ring buffer... Ready for next wake cycle.</span></pre>`,
+
+      audit: `<pre><span class="cyan-text">$ corvus audit --zero-leak</span>
+<span class="gray-text">[AUDIT]</span> Inspecting socket descriptors...
+<span class="gray-text">[AUDIT]</span> INET: 0 open // INET6: 0 open // RAW: 0 open
+<span class="gray-text">[AUDIT]</span> Kernel sandbox: pledge('stdio rpath wpath cpath') enforced.
+<span class="blue-text">[INTEGRITY]</span> <span class="green-text">Pass. No outbound packets transmitted over interface en0/eth0.</span></pre>`,
+
+      bench: `<pre><span class="cyan-text">$ corvus bench --battery</span>
+<span class="gray-text">[BENCHMARK]</span> Night run power audit on Apple Silicon M3 / Linux AMD64:
+<span class="gray-text">- Total execution duration:</span> 14 minutes 12 seconds
+<span class="gray-text">- Average CPU throttle:</span> 2.4% (max allowed: 15%)
+<span class="gray-text">- Energy consumed:</span> 0.038 Wh (approx 0.72% of total battery)
+<span class="blue-text">[VERDICT]</span> <span class="green-text">Complies with strict overnight quiet compute standards.</span></pre>`
+    };
+
+    function execCmd(cmdKey, btn) {
+      document.querySelectorAll('.cmd-pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('runner-screen').innerHTML = cliOutputs[cmdKey];
+    }
+
+    // --- FAQ Toggle ---
+    function toggleVcFaq(el) {
+      const parent = el.parentElement;
+      parent.classList.toggle('active');
+    }
+
+    // --- Three.js Glowing Prism & Edge Topology ---
+    (function initVcPrism() {
+      const container = document.getElementById('prism-canvas-box');
+      if (!container) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
+      camera.position.set(0, 0, 7.5);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Prisme Triangulaire Edge (Inspiré du triangle Vercel)
+      const prismGeom = new THREE.CylinderGeometry(1.8, 1.8, 2.4, 3, 1);
+      const prismMat = new THREE.MeshPhysicalMaterial({
+        color: 0x0070f3,
+        roughness: 0.2,
+        metalness: 0.8,
+        clearcoat: 1.0,
+        transparent: true,
+        opacity: 0.85
+      });
+      const prism = new THREE.Mesh(prismGeom, prismMat);
+      group.add(prism);
+
+      // Filets Lumineux (Wireframe Cyan)
+      const edgesGeom = new THREE.EdgesGeometry(prismGeom);
+      const edgesMat = new THREE.LineBasicMaterial({ color: 0x00dfd8, linewidth: 2 });
+      const wire = new THREE.LineSegments(edgesGeom, edgesMat);
+      prism.add(wire);
+
+      // Anneau Orbital de Paquets Edge
+      const ringGeom = new THREE.RingGeometry(2.6, 2.62, 64);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x007cf0, side: THREE.DoubleSide, transparent: true, opacity: 0.4 });
+      const ring = new THREE.Mesh(ringGeom, ringMat);
+      ring.rotation.x = Math.PI / 2.2;
+      group.add(ring);
+
+      // Lumières
+      const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+      scene.add(ambient);
+
+      const blueSpot = new THREE.PointLight(0x0070f3, 3.5, 50);
+      blueSpot.position.set(4, 5, 4);
+      scene.add(blueSpot);
+
+      const cyanSpot = new THREE.PointLight(0x00dfd8, 2.5, 50);
+      cyanSpot.position.set(-4, -3, -3);
+      scene.add(cyanSpot);
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          mouseX = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+          mouseY = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
         }
       });
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
-      }, { threshold: 0.12 });
-      cibles.forEach(function (el) { io.observe(el); });
-    } else { cibles.forEach(function (el) { el.classList.add("is-visible"); }); }
 
-    function compte(el) {
-      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
-      var fmt = function (v) { return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR"); };
-      if (reduire) { el.textContent = fmt(fin); return; }
-      var t0 = null;
-      (function pas(t) { if (t0 === null) t0 = t;
-        var pr = Math.min((t - t0) / 900, 1);
-        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
-        if (pr < 1) requestAnimationFrame(pas); })(performance.now());
-    }
-    document.querySelectorAll("[data-compte]").forEach(function (el) {
-      if (!("IntersectionObserver" in window)) { compte(el); return; }
-      var o = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { compte(el); o.unobserve(el); } });
-      }, { threshold: 0.4 });
-      o.observe(el);
-    });
+      window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
 
-    /* grille de points qui s'illumine près du curseur (design-dna) */
-    var gp = document.getElementById("grille-points");
-    if (gp && gp.getContext && !reduire && window.matchMedia("(hover: hover)").matches) {
-      var g = gp.getContext("2d"), gw = 0, gh = 0, dpr = Math.min(devicePixelRatio || 1, 1.5);
-      var souris = { x: -9999, y: -9999 };
-      function tailler() { gw = gp.clientWidth; gh = gp.clientHeight;
-        gp.width = gw * dpr; gp.height = gh * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); }
-      tailler(); addEventListener("resize", tailler);
-      addEventListener("pointermove", function (e) {
-        var r = gp.getBoundingClientRect();
-        souris.x = e.clientX - r.left; souris.y = e.clientY - r.top;
-      }, { passive: true });
-      var PAS = 34;
-      function tour() {
-        if (document.hidden) { requestAnimationFrame(tour); return; }
-        g.clearRect(0, 0, gw, gh);
-        for (var x = PAS / 2; x < gw; x += PAS) {
-          for (var y = PAS / 2; y < gh; y += PAS) {
-            var dx = x - souris.x, dy = y - souris.y, d = Math.sqrt(dx * dx + dy * dy);
-            var proche = Math.max(0, 1 - d / 140);
-            var alpha = 0.14 + proche * 0.6;
-            var teinte = proche > 0.05 ? "142,205,247" : "255,255,255";
-            g.fillStyle = "rgba(" + teinte + "," + alpha + ")";
-            var r2 = 1 + proche * 1.4;
-            g.beginPath(); g.arc(x, y, r2, 0, Math.PI * 2); g.fill();
-          }
-        }
-        requestAnimationFrame(tour);
+      function animate() {
+        requestAnimationFrame(animate);
+        prism.rotation.y += 0.008;
+        ring.rotation.z += 0.003;
+
+        group.rotation.y += (mouseX * 0.4 - group.rotation.y) * 0.05;
+        group.rotation.x += (mouseY * 0.25 - group.rotation.x) * 0.05;
+
+        renderer.render(scene, camera);
       }
-      requestAnimationFrame(tour);
-    }
-  })();
-  </script>
-
-  <script type="importmap">
-  { "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
-  } }
-  </script>
-  <script type="module">
-    const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const modeste = (navigator.hardwareConcurrency || 4) <= 2;
-    let webgl = false;
-    try { webgl = !!document.createElement("canvas").getContext("webgl2") || !!document.createElement("canvas").getContext("webgl"); } catch (e) {}
-    if (!reduire && !modeste && webgl) {
-      try {
-        const THREE = await import("three");
-        const hote = document.getElementById("scene-vc");
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a0a);
-        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 50);
-        camera.position.set(0, 0.6, 6.4);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-        hote.appendChild(renderer.domElement);
-
-        /* prisme triangulaire graphite (le triangle Vercel) */
-        const prisme = new THREE.Mesh(
-          new THREE.CylinderGeometry(1.5, 1.5, 2.8, 3, 1),
-          new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.85, roughness: 0.28, flatShading: true })
-        );
-        prisme.rotation.z = Math.PI;
-        scene.add(prisme);
-        const anneau = new THREE.Mesh(
-          new THREE.TorusGeometry(2.3, 0.015, 10, 140),
-          new THREE.MeshBasicMaterial({ color: 0x0070f3, transparent: true, opacity: 0.7 })
-        );
-        anneau.rotation.x = Math.PI / 2;
-        scene.add(anneau);
-        scene.add(new THREE.AmbientLight(0xffffff, 0.25));
-        const rim = new THREE.DirectionalLight(0xffffff, 2.6); rim.position.set(-4, 3, 4); scene.add(rim);
-        const bleu = new THREE.PointLight(0x0070f3, 8, 12); bleu.position.set(3, -2, 3); scene.add(bleu);
-
-        const souris = { x: 0, y: 0 };
-        addEventListener("pointermove", (e) => {
-          souris.x = (e.clientX / innerWidth) * 2 - 1;
-          souris.y = (e.clientY / innerHeight) * 2 - 1;
-        }, { passive: true });
-
-        const horloge = new THREE.Clock();
-        let vu = true, actif = true;
-        new IntersectionObserver((es) => { vu = es[0].isIntersecting; }, { threshold: 0.05 }).observe(hote);
-        document.addEventListener("visibilitychange", () => { actif = !document.hidden; });
-        function taille() { const w = hote.clientWidth, h = hote.clientHeight;
-          camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h); }
-        taille(); addEventListener("resize", taille);
-
-        (function boucle() {
-          requestAnimationFrame(boucle);
-          if (!vu || !actif) return;
-          const t = horloge.getElapsedTime();
-          prisme.rotation.y = t * 0.35;
-          prisme.rotation.x = Math.sin(t * 0.4) * 0.08;
-          anneau.rotation.z = t * 0.5;
-          camera.position.x += (souris.x * 0.9 - camera.position.x) * 0.04;
-          camera.position.y += (0.6 - souris.y * 0.5 - camera.position.y) * 0.04;
-          camera.lookAt(0, 0, 0);
-          renderer.render(scene, camera);
-        })();
-      } catch (e) { /* la section reste noire, le gradient porte */ }
-    }
+      animate();
+    })();
   </script>
 </body>
 </html>

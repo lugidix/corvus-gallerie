@@ -3,1843 +3,907 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="CORVUS — L'agent d'automatisation nocturne qui vit dans votre terminal. Local d'abord, zéro clic, zéro cloud.">
-  <title>CORVUS — L'agent qui vit dans votre terminal</title>
+  <meta name="description" content="CORVUS — Daemon nocturne autonome sous terminal. Zéro cloud, enclave locale étanche, exécution déterministe.">
+  <title>CORVUS × HERMES AGENT — L'Ouvrier du Terminal</title>
   
   <link rel="stylesheet" href="tokens.css">
-  
-  <!-- CDNs GSAP & Plugins (ScrollTrigger, ScrambleText) -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;700&family=Courier+Prime:wght@400;700&family=Oswald:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* --- Mise en page & Grille machine --- */
-    .wrap {
-      max-width: 1440px;
-      margin-inline: auto;
-      padding-inline: clamp(20px, 4vw, 64px);
-    }
-    section {
-      position: relative;
-      padding-block: clamp(72px, 12vh, 160px);
-      border-bottom: var(--ha-border-soft);
-    }
-    .band--deep { background: var(--ha-bg-deep); }
-    .band--night { background: var(--ha-bg-night); }
-    .center { text-align: center; }
-    
-    h2 {
-      font-size: var(--ha-size-h2);
-      margin-bottom: clamp(28px, 5vh, 60px);
-      letter-spacing: -0.02em;
-    }
-    .lead {
-      max-width: 62ch;
-      margin-inline: auto;
-      font-weight: 300;
-      line-height: 1.85;
-      color: var(--ha-ink-soft);
-      font-size: 17px;
+    /* ============================================================
+       CORVUS × HERMES AGENT — FULL-SCREEN CYBER DAEMON HUD
+       Inspiré de Nous Research & Terminal Operating System.
+       Bleu électrique #0000F2, arêtes vives, scanlines CRT,
+       surveillance intercepts 50/50, zéro template générique.
+       ============================================================ */
+
+    :root {
+      --ha-bg: #0000f2;
+      --ha-bg-deep: #000088;
+      --ha-bg-night: #030324;
+      --ha-ink: #f2f2f2;
+      --ha-ink-soft: rgba(242, 242, 242, 0.75);
+      --ha-accent-cyan: #3ed3bc;
+      --ha-font-h: "Oswald", "Archivo", sans-serif;
+      --ha-font-mono: "Courier Prime", monospace;
+      --ha-font-body: "Archivo", sans-serif;
     }
 
-    /* --- En-tête machine (Règle 6 Hermes Agent : logo central coupant la nav) --- */
-    header.ha-header {
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body.ha-cyber-os {
+      margin: 0;
+      background: var(--ha-bg-night);
+      color: var(--ha-ink);
+      font-family: var(--ha-font-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* --- Canvas Three.js Plein Écran d'Arrière-Plan --- */
+    #cyber-bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    /* --- CRT Scanlines Effect --- */
+    .crt-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      pointer-events: none;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 3px, 6px 100%;
+      opacity: 0.6;
+    }
+
+    /* --- HUD Framing Lines --- */
+    .hud-line-top {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--ha-accent-cyan);
+      z-index: 101;
+    }
+
+    /* --- En-tête Machine Central (Nous Research Style) --- */
+    header.ha-split-header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(0, 0, 242, 0.94);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: var(--ha-border);
-    }
-    .nav-bar {
+      background: rgba(0, 0, 145, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 14px clamp(20px, 4vw, 54px);
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 16px;
-      padding-block: 14px;
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      letter-spacing: 1px;
     }
-    .nav-left, .nav-right {
-      display: flex;
-      align-items: center;
-      gap: clamp(14px, 2vw, 28px);
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-right {
-      justify-content: flex-end;
-    }
-    .nav-link {
-      color: var(--ha-ink-soft);
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: color var(--ha-dur-fast) var(--ha-ease-standard);
-    }
-    .nav-link:hover {
-      color: var(--ha-ink);
-    }
-    .logo-center {
-      font-family: var(--ha-font-h);
-      font-size: 19px;
-      font-weight: 400;
-      letter-spacing: 2.5px;
-      color: var(--ha-ink);
-      text-decoration: none;
-      padding: 4px 14px;
-      border: var(--ha-border);
-      background: var(--ha-bg-deep);
-      white-space: nowrap;
-    }
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .hud-telemetry-left {
       font-family: var(--ha-font-mono);
       font-size: 11px;
-      color: var(--ha-accent-cyan);
+      letter-spacing: 1px;
+      color: var(--ha-ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .status-dot {
-      width: 7px;
-      height: 7px;
+    .hud-telemetry-left .pulse-led {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
       background: var(--ha-accent-cyan);
-      box-shadow: 0 0 8px var(--ha-accent-cyan);
-      display: inline-block;
-      animation: ha-blink 1.8s infinite;
+      box-shadow: 0 0 10px var(--ha-accent-cyan);
     }
-    @media (max-width: 900px) {
-      .nav-bar {
-        grid-template-columns: 1fr auto;
-      }
-      .nav-left { display: none; }
-    }
-
-    /* --- Héros & Scène 3D Interactive --- */
-    .hero {
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding-block: clamp(90px, 15vh, 170px);
-    }
-    #tunnel {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      opacity: 0.9;
-      pointer-events: none;
-    }
-    #pluie {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.35;
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 860px;
-    }
-    .hero .boot {
-      font-family: var(--ha-font-mono);
-      font-size: 13.5px;
-      color: var(--ha-ink-soft);
-      white-space: pre-wrap;
-      line-height: 1.8;
-      display: block;
-      margin-bottom: 24px;
-      padding: 14px 18px;
-      background: rgba(0, 0, 90, 0.65);
-      border: var(--ha-border-soft);
-      max-width: 640px;
-    }
-    .hero .curseur {
-      display: inline-block;
-      width: 0.6em;
-      height: 1.1em;
-      background: var(--ha-ink);
-      vertical-align: -0.2em;
-      animation: ha-blink 1s step-end infinite;
-    }
-    .hero h1 {
-      font-size: var(--ha-size-h1);
-      line-height: 0.96;
-      margin: 0 0 28px;
-    }
-    .hero h1 .mot {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(0.4em);
-      transition: opacity 0.5s var(--ha-ease-out), transform 0.5s var(--ha-ease-out);
-    }
-    .hero.pose h1 .mot {
-      opacity: 1;
-      transform: none;
-    }
-    .hero-pills {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 32px;
-    }
-    .pill {
-      font-family: var(--ha-font-mono);
-      font-size: 11px;
-      padding: 5px 12px;
-      border: var(--ha-border-soft);
-      color: var(--ha-ink-soft);
-      background: rgba(0, 0, 145, 0.4);
-      letter-spacing: 1px;
-    }
-
-    /* CLI Quick-Copy Box */
-    .cli-box {
-      display: flex;
-      align-items: stretch;
-      background: var(--ha-bg-night);
-      border: var(--ha-border);
-      max-width: 580px;
-      margin: 32px 0;
-      font-family: var(--ha-font-mono);
-      font-size: 13.5px;
-    }
-    .cli-input {
-      padding: 14px 18px;
-      color: var(--ha-ink);
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      user-select: all;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-    .cli-btn {
-      background: var(--ha-ink);
-      color: var(--ha-bg);
-      border: none;
-      padding: 0 20px;
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background var(--ha-dur-fast) var(--ha-ease-standard);
-      white-space: nowrap;
-    }
-    .cli-btn:hover {
-      background: #ffffff;
-      color: var(--ha-bg-deep);
-    }
-
-    /* Mot géant */
-    .geant {
+    .hud-brand-center {
       font-family: var(--ha-font-h);
-      font-size: var(--ha-size-giant);
-      line-height: 0.8;
-      text-transform: uppercase;
-      color: transparent;
-      -webkit-text-stroke: 1px var(--ha-line);
-      letter-spacing: -0.02em;
-      user-select: none;
-      margin-top: clamp(40px, 8vh, 100px);
-    }
-
-    /* --- Grille Machine des Capacités --- */
-    .caps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      border-top: var(--ha-border);
-      border-left: var(--ha-border);
-    }
-    .cap-cell {
-      border-right: var(--ha-border);
-      border-bottom: var(--ha-border);
-      padding: clamp(28px, 4vw, 44px);
-      text-align: left;
-      position: relative;
-      background: transparent;
-      transition: background var(--ha-dur-fast) var(--ha-ease-standard);
-    }
-    .cap-cell:hover {
-      background: rgba(0, 0, 145, 0.45);
-    }
-    .cap-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .cap-code {
-      font-family: var(--ha-font-mono);
-      font-size: 11px;
-      color: var(--ha-accent-cyan);
-      letter-spacing: 1.4px;
-    }
-    .cap-cell h3 {
       font-size: 22px;
-      margin: 0 0 12px;
-      color: var(--ha-ink);
-    }
-    .cap-cell p {
-      margin: 0;
-      color: var(--ha-ink-soft);
-      font-size: 15px;
-      line-height: 1.75;
-      font-weight: 300;
-    }
-
-    /* --- Console Nocturne Interactive & Onglets --- */
-    .console-wrapper {
-      max-width: 960px;
-      margin-inline: auto;
-      border: var(--ha-border);
-      background: var(--ha-bg-night);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    }
-    .console-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      background: rgba(0, 0, 90, 0.85);
-      border-bottom: var(--ha-border);
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      color: var(--ha-ink-soft);
-    }
-    .console-tabs {
-      display: flex;
-      gap: 2px;
-      border-bottom: var(--ha-border-soft);
-      overflow-x: auto;
-      background: rgba(0, 0, 50, 0.5);
-    }
-    .console-tab {
-      background: transparent;
-      border: none;
-      border-right: var(--ha-border-soft);
-      padding: 10px 18px;
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      color: var(--ha-ink-soft);
-      cursor: pointer;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      transition: background var(--ha-dur-fast) var(--ha-ease-standard), color var(--ha-dur-fast) var(--ha-ease-standard);
-      white-space: nowrap;
+      color: #ffffff;
+      padding: 4px 18px;
+      background: var(--ha-bg);
+      border: 1px solid #ffffff;
+      text-decoration: none;
     }
-    .console-tab.active, .console-tab:hover {
-      background: var(--ha-bg-deep);
-      color: var(--ha-ink);
-    }
-    .console-body {
-      padding: clamp(24px, 4vw, 44px);
-      text-align: left;
+    .hud-nav-right {
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
       font-family: var(--ha-font-mono);
-      font-size: 13.5px;
-      line-height: 2.2;
-      overflow-x: auto;
-      min-height: 260px;
+      font-size: 11.5px;
+      text-transform: uppercase;
     }
-    .console-body pre {
-      margin: 0;
-    }
-    .console .t { color: var(--ha-ink-soft); }
-    .console .ko { color: var(--ha-ko); }
-    .console .ok { color: var(--ha-ok); }
-    .console .cyan { color: var(--ha-accent-cyan); }
-
-    /* --- Architecture Technique (Piliers) --- */
-    .arch-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      border-top: var(--ha-border);
-      border-left: var(--ha-border);
-      max-width: 1280px;
-      margin-inline: auto;
-    }
-    .arch-cell {
-      border-right: var(--ha-border);
-      border-bottom: var(--ha-border);
-      padding: clamp(32px, 4vw, 52px);
-      text-align: left;
-    }
-    .arch-num {
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      color: var(--ha-accent-cyan);
-      display: block;
-      margin-bottom: 16px;
-      letter-spacing: 1.5px;
-    }
-    .arch-cell h3 {
-      font-size: 24px;
-      margin: 0 0 16px;
-    }
-    .arch-cell p {
+    .hud-nav-right a {
       color: var(--ha-ink-soft);
-      font-size: 15px;
-      line-height: 1.8;
-      font-weight: 300;
-      margin-bottom: 20px;
+      text-decoration: none;
+      transition: color 0.2s;
     }
-    .spec-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      font-family: var(--ha-font-mono);
-      font-size: 12.5px;
-      color: var(--ha-ink);
-      border-top: var(--ha-border-soft);
-      padding-top: 14px;
-      display: grid;
-      gap: 8px;
-    }
-    .spec-list li::before {
-      content: "↳ ";
+    .hud-nav-right a:hover {
       color: var(--ha-accent-cyan);
     }
 
-    /* --- Chiffres --- */
-    .nombres {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      border-top: var(--ha-border);
-      border-left: var(--ha-border);
-      max-width: 1100px;
-      margin-inline: auto;
-    }
-    @media (min-width: 800px) {
-      .nombres { grid-template-columns: repeat(4, 1fr); }
-    }
-    .nombre {
-      border-right: var(--ha-border);
-      border-bottom: var(--ha-border);
-      padding: clamp(28px, 4vw, 56px) 20px;
-      text-align: center;
-    }
-    .nombre .val {
-      font-family: var(--ha-font-h);
-      font-size: clamp(48px, 6vw, 88px);
-      font-weight: 200;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
-    }
-    .nombre .cap {
-      display: block;
-      font-family: var(--ha-font-mono);
-      font-size: 11px;
-      color: var(--ha-ink-soft);
-      margin-top: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    /* --- Galerie Documentaire & Photographies Authentiques --- */
-    .galerie-grid {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: clamp(24px, 4vw, 48px);
-      max-width: 1300px;
-      margin-inline: auto;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .galerie-grid { grid-template-columns: 1fr; }
-    }
-    .fig-block {
-      margin: 0 0 32px;
-    }
-    .fig-block:last-child { margin-bottom: 0; }
-    .fig-caption {
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      color: var(--ha-ink-soft);
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      letter-spacing: 1px;
-    }
-    .fig-caption b {
-      color: var(--ha-ink);
-    }
-
-    /* --- Matrice Comparative (Sans Concession) --- */
-    .table-container {
-      max-width: 1100px;
-      margin-inline: auto;
-      overflow-x: auto;
-      border: var(--ha-border);
-    }
-    .table-comp {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 14.5px;
-    }
-    .table-comp th, .table-comp td {
-      padding: 18px 24px;
-      border-right: var(--ha-border-soft);
-      border-bottom: var(--ha-border-soft);
-    }
-    .table-comp th {
-      background: var(--ha-bg-deep);
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1.4px;
-      color: var(--ha-ink);
-    }
-    .table-comp td:first-child {
-      font-family: var(--ha-font-mono);
-      color: var(--ha-ink-soft);
-      font-size: 13px;
-    }
-    .table-comp tr.highlight td {
-      background: rgba(0, 0, 90, 0.4);
-      color: var(--ha-ink);
-      font-weight: 500;
-    }
-
-    /* --- Récits & Témoignages --- */
-    .recits-grid, .paroles-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      border-top: var(--ha-border);
-      border-left: var(--ha-border);
-    }
-    .recit-cell, .parole-cell {
-      border-right: var(--ha-border);
-      border-bottom: var(--ha-border);
-      padding: clamp(28px, 4vw, 48px);
-      text-align: left;
-    }
-    .parole-cell p {
-      font-size: 16.5px;
-      line-height: 1.85;
-      font-weight: 300;
-      margin: 0 0 20px;
-    }
-    .parole-cell cite {
-      font-family: var(--ha-font-mono);
-      font-style: normal;
-      font-size: 12px;
-      color: var(--ha-ink-soft);
-      display: block;
-      letter-spacing: 0.5px;
-    }
-
-    /* --- Formules d'Escadrille --- */
-    .offres-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      border-top: var(--ha-border);
-      border-left: var(--ha-border);
-      max-width: 1200px;
-      margin-inline: auto;
-    }
-    .offre-cell {
-      border-right: var(--ha-border);
-      border-bottom: var(--ha-border);
-      padding: clamp(32px, 4vw, 56px) 32px;
-      text-align: left;
+    /* --- STAGE 1 : FULL-SCREEN CYBER HERO (100svh) --- */
+    .stage-hero-fullscreen {
+      min-height: calc(100svh - 60px);
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      background: transparent;
-      transition: background var(--ha-dur-fast) var(--ha-ease-standard);
+      justify-content: center;
+      padding: clamp(40px, 8vh, 100px) clamp(20px, 5vw, 64px);
+      position: relative;
+      z-index: 2;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     }
-    .offre-cell.offre--active {
-      background: rgba(0, 0, 145, 0.5);
+    .hero-hud-panel {
+      max-width: 1000px;
     }
-    .offre-tag {
+    .hero-meta-badge {
       font-family: var(--ha-font-mono);
-      font-size: 11px;
-      color: var(--ha-ink-soft);
-      text-transform: uppercase;
-      letter-spacing: 1.4px;
-    }
-    .offre--active .offre-tag {
+      font-size: 12px;
       color: var(--ha-accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .offre-prix {
+    .hero-giant-title {
       font-family: var(--ha-font-h);
-      font-size: 44px;
-      font-weight: 200;
-      line-height: 1;
-    }
-    .offre-cell ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 10px;
-      color: var(--ha-ink-soft);
-      font-size: 14px;
+      font-size: clamp(46px, 8vw, 110px);
       font-weight: 300;
-      flex: 1;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin: 0 0 28px;
     }
-    .offre-cell ul li::before {
-      content: "■ ";
-      font-size: 9px;
-      color: var(--ha-ink);
-      vertical-align: 1px;
+    .hero-giant-title span.cyan-highlight {
+      color: var(--ha-accent-cyan);
+      font-weight: 600;
+    }
+    .hero-terminal-lead {
+      font-size: clamp(16px, 1.35vw, 20px);
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--ha-ink-soft);
+      max-width: 64ch;
+      margin: 0 0 36px;
+    }
+    .cli-install-dock {
+      display: inline-flex;
+      background: #000000;
+      border: 1px solid var(--ha-accent-cyan);
+      box-shadow: 0 0 30px rgba(62, 211, 188, 0.2);
+      padding: 6px 8px 6px 24px;
+      align-items: center;
+    }
+    .cli-install-code {
+      font-family: var(--ha-font-mono);
+      font-size: 13.5px;
+      color: #ffffff;
+      margin-right: 20px;
+    }
+    .cli-install-btn {
+      background: var(--ha-accent-cyan);
+      color: #000000;
+      border: none;
+      padding: 12px 26px;
+      font-family: var(--ha-font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cli-install-btn:hover {
+      background: #ffffff;
     }
 
-    /* --- FAQ & Accordéon --- */
-    .faq-container {
-      max-width: 780px;
-      margin-inline: auto;
-      text-align: left;
-      border-top: var(--ha-border);
+    /* --- STAGE 2 : SURVEILLANCE INTERCEPT I (50/50 Full-Bleed Split) --- */
+    .stage-intercept-split {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      min-height: 85svh;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative;
+      z-index: 2;
+      background: rgba(0, 0, 100, 0.35);
     }
-    .faq-item {
-      border-bottom: var(--ha-border-dotted);
+    @media (max-width: 900px) {
+      .stage-intercept-split { grid-template-columns: 1fr; }
     }
-    .faq-item summary {
-      cursor: pointer;
-      list-style: none;
-      padding: 24px 0;
-      font-family: var(--ha-font-h);
+    .intercept-visual-feed {
+      position: relative;
+      overflow: hidden;
+      min-height: 480px;
+      background: #000033;
+    }
+    .intercept-visual-feed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(100%) brightness(0.8) contrast(120%);
+      mix-blend-mode: luminosity;
+      transition: filter 0.8s ease, transform 0.8s ease;
+    }
+    .intercept-visual-feed:hover img {
+      filter: grayscale(20%) brightness(1) contrast(100%);
+      transform: scale(1.02);
+    }
+    .feed-hud-overlay {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--ha-font-mono);
+      font-size: 11px;
+      color: var(--ha-accent-cyan);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 16px;
+      border: 1px solid var(--ha-accent-cyan);
+      letter-spacing: 1px;
+    }
+    .intercept-info-panel {
+      padding: clamp(48px, 7vw, 100px) clamp(24px, 5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(0, 0, 145, 0.4);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .intercept-stamp {
+      font-family: var(--ha-font-mono);
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--ha-accent-cyan);
       text-transform: uppercase;
-      font-size: 19px;
+      margin-bottom: 16px;
+    }
+    .intercept-info-panel h2 {
+      font-family: var(--ha-font-h);
+      font-size: clamp(32px, 4.5vw, 62px);
+      font-weight: 300;
+      line-height: 1.05;
+      text-transform: uppercase;
+      margin: 0 0 24px;
+    }
+    .intercept-info-panel p {
+      font-size: 15.5px;
+      line-height: 1.9;
+      color: var(--ha-ink-soft);
+      font-weight: 300;
+      margin: 0 0 32px;
+      max-width: 52ch;
+    }
+    .hud-caps-stream {
+      display: grid;
+      gap: 12px;
+      font-family: var(--ha-font-mono);
+      font-size: 12.5px;
+    }
+    .hud-cap-row {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 18px;
+      background: rgba(0, 0, 0, 0.4);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 20px;
-      color: var(--ha-ink);
     }
-    .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-item summary::after {
-      content: "+";
-      font-family: var(--ha-font-mono);
-      font-size: 20px;
-      transition: transform var(--ha-dur-ui) var(--ha-ease-standard);
-    }
-    .faq-item[open] summary::after {
-      transform: rotate(45deg);
-    }
-    .faq-item p {
-      margin: 0 0 24px;
-      color: var(--ha-ink-soft);
-      font-size: 15.5px;
-      line-height: 1.8;
-      font-weight: 300;
+    .hud-cap-row span.stat-ok {
+      color: #7ce3b0;
     }
 
-    /* --- Équipe & Journal --- */
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      border-top: var(--ha-border);
-      border-left: var(--ha-border);
+    /* --- STAGE 3 : THE LIVE FULL-SCREEN CYBER DECK TERMINAL --- */
+    .stage-cyber-deck {
+      padding: clamp(70px, 11vh, 140px) clamp(20px, 5vw, 64px);
+      position: relative;
+      z-index: 2;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      background: #020212;
+    }
+    .deck-container {
       max-width: 1200px;
-      margin-inline: auto;
+      margin: 0 auto;
     }
-    .team-cell {
-      border-right: var(--ha-border);
-      border-bottom: var(--ha-border);
-      padding: clamp(24px, 3vw, 40px);
-      text-align: left;
+    .deck-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
-    .team-who {
-      font-family: var(--ha-font-mono);
-      font-size: 16px;
-      color: var(--ha-ink);
-    }
-    .team-role {
-      color: var(--ha-ink-soft);
-      font-size: 13.5px;
-      line-height: 1.75;
-      font-weight: 300;
-      margin-top: 10px;
-    }
-    .journal-box {
-      max-width: 780px;
-      margin: 64px auto 0;
-      border-left: var(--ha-border);
-      padding-left: clamp(20px, 4vw, 40px);
-      text-align: left;
-      display: grid;
-      gap: 20px;
-    }
-    .version-row {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 20px;
-      align-items: baseline;
-    }
-    .version-tag {
-      font-family: var(--ha-font-mono);
-      font-size: 13px;
-      color: var(--ha-accent-cyan);
-    }
-    .version-desc {
-      color: var(--ha-ink-soft);
-      font-size: 14.5px;
-      font-weight: 300;
-      margin: 0;
-    }
-
-    /* --- Pied de page à Mot Géant Translucide --- */
-    footer.ha-footer {
-      position: relative;
-      overflow: hidden;
-      border-top: var(--ha-border);
-      padding-block: 80px 48px;
-      background: var(--ha-bg-night);
-      text-align: center;
-    }
-    .footer-giant {
-      position: absolute;
-      bottom: -15%;
-      left: 50%;
-      transform: translateX(-50%);
+    .deck-title-hud {
       font-family: var(--ha-font-h);
-      font-size: clamp(140px, 28vw, 440px);
-      color: transparent;
-      -webkit-text-stroke: 1.5px rgba(242, 242, 242, 0.12);
-      letter-spacing: -0.04em;
-      pointer-events: none;
-      user-select: none;
-      white-space: nowrap;
-      z-index: 0;
-    }
-    .footer-content {
-      position: relative;
-      z-index: 1;
-      font-family: var(--ha-font-mono);
-      font-size: 12px;
-      color: var(--ha-ink-soft);
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 300;
+      text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .footer-links {
+    .deck-scenarios-nav {
       display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-top: 16px;
-      flex-wrap: wrap;
+      gap: 10px;
     }
-    .footer-links a {
-      color: var(--ha-ink);
-      text-decoration: underline;
-      text-underline-offset: 4px;
+    .scenario-btn {
+      background: #080826;
+      border: 1px solid var(--ha-accent-cyan);
+      color: #ffffff;
+      padding: 8px 18px;
+      font-family: var(--ha-font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .scenario-btn.active, .scenario-btn:hover {
+      background: var(--ha-accent-cyan);
+      color: #000000;
+      font-weight: 700;
+    }
+    .deck-screen {
+      background: #000000;
+      border: 1px solid var(--ha-accent-cyan);
+      box-shadow: 0 0 50px rgba(0, 0, 242, 0.4);
+      padding: clamp(28px, 4vw, 54px);
+      font-family: var(--ha-font-mono);
+      font-size: 13.5px;
+      line-height: 2.1;
+      color: #d1d5db;
+      min-height: 320px;
+      overflow-x: auto;
+    }
+    .deck-screen pre { margin: 0; }
+    .t-cyan { color: var(--ha-accent-cyan); font-weight: bold; }
+    .t-dim { color: #555588; }
+    .t-green { color: #7ce3b0; }
+
+    /* --- STAGE 4 : SURVEILLANCE INTERCEPT II (05H30 DAWN DESPATCH) --- */
+    .stage-dawn-intercept {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      min-height: 85svh;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative;
+      z-index: 2;
+      background: rgba(0, 0, 80, 0.35);
+    }
+    @media (max-width: 900px) {
+      .stage-dawn-intercept { grid-template-columns: 1fr; }
+    }
+    .dawn-doc-panel {
+      padding: clamp(48px, 7vw, 100px) clamp(24px, 5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(0, 0, 120, 0.4);
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .dawn-doc-panel h2 {
+      font-family: var(--ha-font-h);
+      font-size: clamp(32px, 4.5vw, 60px);
+      font-weight: 300;
+      line-height: 1.05;
+      text-transform: uppercase;
+      margin: 0 0 24px;
+    }
+    .dawn-letter-box {
+      background: #000000;
+      border: 1px solid #ffffff;
+      padding: 28px;
+      font-family: var(--ha-font-mono);
+      font-size: 13px;
+      line-height: 2;
+      color: #ffffff;
+      margin-top: 20px;
+    }
+    .dawn-visual-feed {
+      position: relative;
+      overflow: hidden;
+      min-height: 480px;
+      background: #000033;
+    }
+    .dawn-visual-feed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(100%) brightness(0.85) contrast(115%);
+      mix-blend-mode: luminosity;
+      transition: filter 0.8s ease, transform 0.8s ease;
+    }
+    .dawn-visual-feed:hover img {
+      filter: grayscale(10%) brightness(1) contrast(100%);
+      transform: scale(1.02);
     }
 
-    /* Toast notification */
-    #toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--ha-ink);
-      color: var(--ha-bg);
+    /* --- STAGE 5 : LICENSE PROTOCOLS (Terminal Passes) --- */
+    .stage-passes-terminal {
+      padding: clamp(70px, 11vh, 140px) clamp(20px, 5vw, 64px);
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .passes-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .passes-header h2 {
+      font-family: var(--ha-font-h);
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+    .passes-flex {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    @media (min-width: 800px) {
+      .passes-flex {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .terminal-pass-card {
+      background: #04041a;
+      border: 1px solid var(--ha-accent-cyan);
+      padding: clamp(36px, 5vw, 56px) 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .terminal-pass-card.highlight {
+      background: var(--ha-bg);
+      border-color: #ffffff;
+      box-shadow: 0 0 40px rgba(0, 0, 242, 0.6);
+    }
+    .pass-num-tag {
       font-family: var(--ha-font-mono);
       font-size: 12px;
-      padding: 10px 18px;
-      border: 1px solid var(--ha-ink);
-      z-index: 1000;
-      opacity: 0;
-      transform: translateY(12px);
-      pointer-events: none;
-      transition: opacity 0.25s var(--ha-ease-standard), transform 0.25s var(--ha-ease-standard);
+      color: var(--ha-accent-cyan);
+      margin-bottom: 12px;
+      display: block;
     }
-    #toast.show {
-      opacity: 1;
-      transform: none;
+    .terminal-pass-card.highlight .pass-num-tag {
+      color: #ffffff;
+    }
+    .pass-title-lg {
+      font-family: var(--ha-font-h);
+      font-size: 28px;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+    }
+    .pass-price-num {
+      font-family: var(--ha-font-h);
+      font-size: 54px;
+      margin: 18px 0;
+      color: #ffffff;
+    }
+    .pass-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 32px;
+      font-family: var(--ha-font-mono);
+      font-size: 13px;
+      line-height: 2.1;
+      color: var(--ha-ink-soft);
+    }
+    .terminal-pass-card.highlight .pass-bullets {
+      color: #ffffff;
+    }
+    .btn-terminal-pass {
+      padding: 14px 28px;
+      background: #ffffff;
+      color: #000000;
+      font-family: var(--ha-font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-terminal-pass:hover {
+      background: var(--ha-accent-cyan);
+    }
+
+    /* --- Watermark Footer --- */
+    footer.ha-cyber-footer {
+      padding: clamp(80px, 12vh, 160px) 24px 48px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      background: #000000;
+    }
+    .giant-watermark-hermes {
+      font-family: var(--ha-font-h);
+      font-size: clamp(60px, 14vw, 220px);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.04);
+      line-height: 0.85;
+      user-select: none;
+      pointer-events: none;
+      margin-bottom: 36px;
+    }
+    .footer-stamp-mono {
+      font-family: var(--ha-font-mono);
+      font-size: 11.5px;
+      letter-spacing: 2px;
+      color: var(--ha-ink-soft);
+      text-transform: uppercase;
     }
   </style>
 </head>
-<body class="ha">
+<body class="ha-cyber-os">
 
-  <!-- En-tête machine à logo central coupant la nav en deux -->
-  <header class="ha-header">
-    <div class="wrap nav-bar">
-      <ul class="nav-left" aria-label="Navigation principale gauche">
-        <li><a class="nav-link" href="#manifeste">[01] Manifeste</a></li>
-        <li><a class="nav-link" href="#caps">[02] Capacités</a></li>
-        <li><a class="nav-link" href="#nuit">[03] La Nuit</a></li>
-      </ul>
+  <!-- CRT Scanlines & HUD Top Line -->
+  <div class="crt-overlay"></div>
+  <div class="hud-line-top"></div>
 
-      <a class="logo-center" href="#haut" title="Retour haut de page">
-        CORVUS <span style="opacity:0.6;font-size:14px;">// 2.4</span>
-      </a>
+  <!-- Three.js Canvas Plein Écran -->
+  <div id="cyber-bg-canvas"></div>
 
-      <div class="nav-right">
-        <div class="status-badge">
-          <span class="status-dot"></span>
-          <span id="horloge-header">VEILLE ACTIVE · --:--:--</span>
-        </div>
-        <ul style="display:flex;gap:18px;list-style:none;margin:0;padding:0;">
-          <li><a class="nav-link" href="#architecture">[04] Specs</a></li>
-          <li><a class="nav-link" href="#offres">[05] Tarifs</a></li>
-          <li><a class="nav-link" href="../index.html" style="color:var(--ha-ink);font-weight:600;">[← Galerie]</a></li>
-        </ul>
-      </div>
+  <!-- Header Machine Central -->
+  <header class="ha-split-header">
+    <div class="hud-telemetry-left">
+      <span class="pulse-led"></span>
+      <span id="ha-live-clock">03:00:00 UTC // LOCAL HOST ACTIVE</span>
     </div>
+    <a href="#hero" class="hud-brand-center">C O R V U S</a>
+    <nav class="hud-nav-right">
+      <a href="#intercept-1">Intercept 01</a>
+      <a href="#cyberdeck">Cyberdeck</a>
+      <a href="#intercept-2">Bilan 05h30</a>
+      <a href="#passes">Protocoles</a>
+    </nav>
   </header>
 
-  <main>
-    <!-- Section Héros : Scène 3D + Pluie de caractères + Boot Terminal -->
-    <section class="hero" id="haut">
-      <div id="tunnel" aria-hidden="true"></div>
-      <canvas id="pluie" aria-hidden="true"></canvas>
-
-      <div class="wrap hero-content">
-        <div class="hero-pills">
-          <span class="pill">AUTONOMIE LOCALE</span>
-          <span class="pill">ZÉRO CLOUD</span>
-          <span class="pill">MÉMOIRE DE CORVIDÉ</span>
-          <span class="pill">eBPF SANDBOX</span>
-        </div>
-
-        <span class="boot" id="boot"><span class="curseur"></span></span>
-
-        <h1>
-          <span class="mot">L'agent</span>
-          <span class="mot">qui</span>
-          <span class="mot">vit</span>
-          <span class="mot">dans</span>
-          <span class="mot">ton</span>
-          <span class="mot">terminal.</span>
-        </h1>
-
-        <p class="lead" style="margin:0 0 24px;">
-          Il patrouille quand tu dors. Il répare, consigne et signe son travail. Tes scripts, tes journaux, ta machine. Aucun octet ne quitte le perchoir.
-        </p>
-
-        <!-- Module interactif de commande CLI prête à copier -->
-        <div class="cli-box">
-          <div class="cli-input">
-            <span style="color:var(--ha-accent-cyan);">$</span>
-            <span id="cli-cmd">curl -fsSL https://corvus.sh/install | sh</span>
-          </div>
-          <button class="cli-btn" id="btn-copy" onclick="copierCommande()">Copier</button>
-        </div>
-
-        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
-          <a class="btn btn--fill btn-sweep" href="#caps">Explorer les 8 capacités</a>
-          <a class="btn" href="#nuit">Voir la nuit en direct</a>
-        </div>
-
-        <p class="geant" aria-hidden="true">CORVUS</p>
+  <!-- STAGE 1 : FULL-SCREEN CYBER HERO -->
+  <section id="hero" class="stage-hero-fullscreen">
+    <div class="hero-hud-panel">
+      <div class="hero-meta-badge">
+        <span>[SYS.EXEC // NOUS RESEARCH ARCHITECTURE]</span>
+        <span>ETANCHE 100%</span>
       </div>
-    </section>
-
-    <!-- Manifeste : La philosophie du veilleur corvide -->
-    <section id="manifeste" class="center band--deep">
-      <div class="wrap">
-        <span class="label" data-reveal>Manifeste Fondateur</span>
-        <h2 data-reveal>Le repos est une illusion.</h2>
-        <p class="lead" data-reveal>
-          Un assistant attend passivement qu'on lui donne un ordre. Un agent sait déjà. Les disques se saturent, les certificats SSL expirent, les sauvegardes tombent en panne silencieuse après une mise à jour d'OS. Ce labeur invisible exige un ouvrier invisible.
-        </p>
-        <p class="lead" data-reveal style="margin-top:24px;">
-          Nous l'avons pensé à l'image du corvidé : il mémorise les visages, cache pour l'hiver, reconnaît les outils du système et ne sonne jamais l'alerte pour rien. Au matin, un rapport signé de trois lignes sur la table de nuit. Pas une notification assourdissante : un rapport.
-        </p>
-        <div style="margin-top:40px;" data-reveal>
-          <a class="btn" href="#recits">Lire les récits d'intervention</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Les 8 Capacités Machine -->
-    <section id="caps">
-      <div class="wrap">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;margin-bottom:32px;">
-          <div>
-            <span class="label" data-reveal>Capacités Système</span>
-            <h2 data-reveal style="margin:0;">Huit Savoir-Faire Éprouvés</h2>
-          </div>
-          <span class="label" data-reveal style="color:var(--ha-ink-soft);">MODE HORS-LIGNE PAR DÉFAUT</span>
-        </div>
-
-        <div class="caps-grid">
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_01</span><span class="pill" style="padding:2px 8px;">DAEMON</span></div>
-            <h3>Veille 24/7 Continue</h3>
-            <p>Surveillance temps réel des processus, flux I/O, seuils de saturation disque et validité des certificats réseau. Zéro fuite mémoire constatée.</p>
-          </div>
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_02</span><span class="pill" style="padding:2px 8px;">PROMPT</span></div>
-            <h3>Zéro Clic Humain</h3>
-            <p>La mission est dictée en langage naturel. Le script bash/python est rédigé, éprouvé en bac à sable, relu et exécuté sans assistance.</p>
-          </div>
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_03</span><span class="pill" style="padding:2px 8px;">HEAL</span></div>
-            <h3>Auto-Guérison Active</h3>
-            <p>Un démon ou conteneur s'effondre à 2 h du matin : CORVUS isole le thread fautif, applique la purge, relance et consigne l'incident.</p>
-          </div>
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_04</span><span class="pill" style="padding:2px 8px;">SYNTAX</span></div>
-            <h3>Langage Naturel Vivant</h3>
-            <p>« Sauvegarde les bases Postgres chaque nuit à 3 h, compresse et garde 7 roulements. » Il génère le cron et l'optimise mieux qu'une doc manuelle.</p>
-          </div>
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_05</span><span class="pill" style="padding:2px 8px;">CRYPTO</span></div>
-            <h3>Rapports Signés Ed25519</h3>
-            <p>Chaque action produit une note datée, chiffrée et scellée avec empreinte locale. Aucune intervention anonyme, traçabilité absolue.</p>
-          </div>
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_06</span><span class="pill" style="padding:2px 8px;">MEMORY</span></div>
-            <h3>Mémoire de Corvidé</h3>
-            <p>Il conserve l'historique des 2 048 dernières pannes, identifie les récurrences et adapte ses procédures sans réinterroger l'humain.</p>
-          </div>
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_07</span><span class="pill" style="padding:2px 8px;">MESH</span></div>
-            <h3>Vol en Escadrille</h3>
-            <p>Du portable de développement au serveur rack d'atelier : vue unifiée du parc sans ouvrir un seul port entrant vers l'extérieur.</p>
-          </div>
-          <div class="cap-cell" data-reveal>
-            <div class="cap-header"><span class="cap-code">CAP_08</span><span class="pill" style="padding:2px 8px;">SILENCE</span></div>
-            <h3>Silence Respecté</h3>
-            <p>Exécution à permissions strictes et minimales. Aucune alerte superflue : il ne te réveille que si l'intervention physique est impérative.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Console Nocturne Interactive Scrubbée -->
-    <section id="nuit" class="band--deep">
-      <div class="wrap">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-          <span class="label scramble" data-scramble="console: corvus.veille --inspect">console: corvus.veille --inspect</span>
-          <h2 data-reveal>Une Nuit Ordinaire, Ligne par Ligne</h2>
-          <p class="lead" data-reveal>
-            Le scrub du scroll déroule les horodatages de la nuit. Cliquez sur les onglets pour simuler les différents scénarios de patrouille.
-          </p>
-        </div>
-
-        <div class="console-wrapper" data-reveal>
-          <div class="console-header">
-            <span>● ● ● &nbsp; corvus@nocturne-perchoir:~</span>
-            <span id="console-timer">05:30:00 · CYCLE TERMINÉ</span>
-          </div>
-
-          <div class="console-tabs">
-            <button class="console-tab active" onclick="changerScenario('nuit', this)">[01] Patrouille de Nuit</button>
-            <button class="console-tab" onclick="changerScenario('disque', this)">[02] Purge Disque 94%</button>
-            <button class="console-tab" onclick="changerScenario('certificat', this)">[03] Escalade Certificat</button>
-            <button class="console-tab" onclick="changerScenario('rapport', this)">[04] Rapport Matin Ed25519</button>
-          </div>
-
-          <div class="console-body" id="console-flux">
-            <pre><span class="ligne-c"><span class="cyan">$ corvus veille --nuit --live</span></span>
-<span class="ligne-c"><span class="t">23:41:04</span>  [DISQUE] sauvegarde volume /mnt/storage atteint 94 % : compression lz4 enclenchée</span>
-<span class="ligne-c"><span class="t">01:07:22</span>  [DAEMON] service « photos-worker » tombé (code 137 OOM) : redémarrage isolé, limite mémoire relevée</span>
-<span class="ligne-c"><span class="t">03:12:49</span>  [PURGE] scan doublons binaires achevé : <span class="ok">118 Go libérés</span> sur partition NVMe</span>
-<span class="ligne-c"><span class="t">04:55:10</span>  [RÉSEAU] certificat TLS atelier : échéance J-72, tentative de renouvellement ACME (<span class="ko">échec ×2 dns</span>)</span>
-<span class="ligne-c"><span class="t">05:30:00</span>  [SCELLEMENT] <span class="ok">rapport signé Ed25519 déposé</span> : 3 lignes rédigées, 0 clic requis</span>
-<span class="ligne-c"><span class="cyan">$ corvus bilan --matin</span></span>
-<span class="ligne-c"><span class="t">bilan #2048 · 2 réparations autonomes · 0 escalade requise · intégrité 100%</span></span></pre>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Architecture & Spécifications Techniques -->
-    <section id="architecture">
-      <div class="wrap">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-          <span class="label" data-reveal>Spécifications Techniques</span>
-          <h2 data-reveal>L'Ingénierie sous la Plume</h2>
-          <p class="lead" data-reveal>
-            Trois fondations techniques garantissent l'autonomie, l'isolation et la souveraineté complète de vos données.
-          </p>
-        </div>
-
-        <div class="arch-grid">
-          <div class="arch-cell" data-reveal>
-            <span class="arch-num">[SP_01] ISOLATION</span>
-            <h3>Bac à sable eBPF & Namespaces</h3>
-            <p>
-              Chaque script formulé en langage naturel est exécuté dans une cellule éphémère sans accès root arbitraire. Aucun test ne peut impacter l'arborescence système non autorisée.
-            </p>
-            <ul class="spec-list">
-              <li>Namespaces PID, NET et MOUNT isolés</li>
-              <li>Filtrage d'appels système seccomp-bpf</li>
-              <li>Retour arrière garanti pendant 30 jours</li>
-            </ul>
-          </div>
-
-          <div class="arch-cell" data-reveal>
-            <span class="arch-num">[SP_02] CRYPTOGRAPHIE</span>
-            <h3>Empreinte Locale Ed25519</h3>
-            <p>
-              Chaque modification de fichier, redémarrage de service ou note de synthèse est signée cryptographiquement avec une paire de clés locale générée au premier boot.
-            </p>
-            <ul class="spec-list">
-              <li>Signature cryptographique Ed25519</li>
-              <li>Journal append-only SHA-256 infalsifiable</li>
-              <li>Zéro télémétrie, zéro ping externe</li>
-            </ul>
-          </div>
-
-          <div class="arch-cell" data-reveal>
-            <span class="arch-num">[SP_03] MAILLAGE</span>
-            <h3>Protocole Escadrille P2P</h3>
-            <p>
-              Les machines d'un atelier ou d'un cluster local communiquent en réseau maillé chiffré. Si un nœud s'arrête, les nœuds frères prennent le relais d'observation sans serveur central.
-            </p>
-            <ul class="spec-list">
-              <li>Découverte mDNS / WireGuard local</li>
-              <li>Tolérance aux pannes réseau partielles</li>
-              <li>Supervision synchrone jusqu'à 41 machines</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Chiffres Vérifiés -->
-    <section id="chiffres" class="band--deep">
-      <div class="wrap">
-        <span class="label center" data-reveal style="display:block;">Registre d'Activité</span>
-        <h2 class="center" data-reveal>Ce que les Nuits ont Compté</h2>
-        
-        <div class="nombres">
-          <div class="nombre" data-reveal>
-            <span class="val" data-compte="2048">0</span>
-            <span class="cap">Nuits sans panne majeure</span>
-          </div>
-          <div class="nombre" data-reveal>
-            <span class="val" data-compte="97.3" data-decimal="1">0</span>
-            <span class="cap">% Résolus avant l'aube</span>
-          </div>
-          <div class="nombre" data-reveal>
-            <span class="val" data-compte="41">0</span>
-            <span class="cap">Machines moyennes en escadrille</span>
-          </div>
-          <div class="nombre" data-reveal>
-            <span class="val">0</span>
-            <span class="cap">Clic, médiane hebdomadaire</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Galerie Photographique & Visuels Authentiques -->
-    <section id="photos">
-      <div class="wrap">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-          <span class="label" data-reveal>Documentation Visuelle</span>
-          <h2 data-reveal>Ce que Tu ne Vois Jamais</h2>
-          <p class="lead" data-reveal>
-            Trois instantanés du calme nocturne : la table de nuit au réveil, le moniteur d'escadrille et les unités matérielles silencieuses.
-          </p>
-        </div>
-
-        <div class="galerie-grid">
-          <div>
-            <figure class="fig-block" data-reveal>
-              <div class="media" style="aspect-ratio: 16 / 10;">
-                <img src="assets/table_de_nuit.jpg" alt="La table de nuit, rapport papier de trois lignes au réveil" loading="lazy">
-              </div>
-              <figcaption class="fig-caption">
-                <span><b>FIG.1</b> : LA TABLE DE NUIT</span>
-                <span>05:30 MATIN · RAPPORT IMPRIMÉ</span>
-              </figcaption>
-            </figure>
-
-            <figure class="fig-block" data-reveal>
-              <div class="media" style="aspect-ratio: 16 / 9;">
-                <img src="assets/escadrille_nocturne.jpg" alt="L'escadrille matérielle, cluster de serveurs compacts en atelier" loading="lazy">
-              </div>
-              <figcaption class="fig-caption">
-                <span><b>FIG.3</b> : L'ESCADRILLE EN ATELIER</span>
-                <span>RÉSEAU MAILLÉ LOCAL · VEILLEUSES ACTIVES</span>
-              </figcaption>
-            </figure>
-          </div>
-
-          <div>
-            <figure class="fig-block" data-reveal>
-              <div class="media" style="aspect-ratio: 16 / 11;">
-                <img src="assets/console_nocturne.jpg" alt="La console de monitoring nocturne dans la pénombre" loading="lazy">
-              </div>
-              <figcaption class="fig-caption">
-                <span><b>FIG.2</b> : LA CONSOLE D'ATELIER</span>
-                <span>03:12 NUIT · MONITORING SANS INTERNET</span>
-              </figcaption>
-            </figure>
-
-            <div style="padding:28px;border:var(--ha-border-soft);background:var(--ha-bg-deep);margin-top:24px;" data-reveal>
-              <span class="label" style="color:var(--ha-accent-cyan);">RÈGLE D'OPACITÉ VISUELLE</span>
-              <p style="margin:12px 0 0;font-size:14.5px;color:var(--ha-ink-soft);line-height:1.75;font-weight:300;">
-                Les images de CORVUS sont traitées par désaturation et trame matricielle duotone pour se fondre dans le bleu nuit de l'atelier. Aucune illustration décorative générique.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Récits d'Usage Réels -->
-    <section id="recits" class="band--deep">
-      <div class="wrap">
-        <span class="label center" data-reveal style="display:block;">Carnets de Bord</span>
-        <h2 class="center" data-reveal>Trois Nuits Ordinaires</h2>
-
-        <div class="recits-grid">
-          <div class="recit-cell" data-reveal>
-            <span class="label" style="color:var(--ha-accent-cyan);">NUIT_A // DISQUE SATURÉ</span>
-            <h3 style="font-size:20px;margin:14px 0 12px;">Mercredi, 03 h 12</h3>
-            <p style="color:var(--ha-ink-soft);font-size:15px;line-height:1.8;font-weight:300;margin:0;">
-              Le disque de sauvegarde atteint 94 %. CORVUS compresse les archives de la semaine en LZ4, purge les artefacts temporaires et réordonne les répertoires. Au réveil : 41 % d'espace disponible, et une note sobre de trois lignes.
-            </p>
-          </div>
-
-          <div class="recit-cell" data-reveal>
-            <span class="label" style="color:var(--ha-accent-cyan);">NUIT_B // SAUVEGARDE MUETTE</span>
-            <h3 style="font-size:20px;margin:14px 0 12px;">Février, Silencieusement</h3>
-            <p style="color:var(--ha-ink-soft);font-size:15px;line-height:1.8;font-weight:300;margin:0;">
-              Le script de backup ne tournait plus depuis une mise à jour d'OpenSSH. Aucun monitoring traditionnel n'avait levé d'alerte. CORVUS a constaté le trou dans le rituel, réparé la configuration d'authentification et signé son rapport.
-            </p>
-          </div>
-
-          <div class="recit-cell" data-reveal>
-            <span class="label" style="color:var(--ha-accent-cyan);">NUIT_C // EXPIRATION CERTIFICAT</span>
-            <h3 style="font-size:20px;margin:14px 0 12px;">72 h avant l'Échéance</h3>
-            <p style="color:var(--ha-ink-soft);font-size:15px;line-height:1.8;font-weight:300;margin:0;">
-              Le certificat SSL expire, deux tentatives échouent suite à un blocage chez l'opérateur DNS. Il retente selon la procédure de secours, échoue une troisième fois, et là seulement, il te réveille. Une alerte justifiée vaut dix alarmes ignorées.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Matrice Comparative : Cron vs SaaS vs CORVUS -->
-    <section id="comparatif">
-      <div class="wrap">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-          <span class="label" data-reveal>Rigueur & Analyse</span>
-          <h2 data-reveal>Comparatif sans Concession</h2>
-          <p class="lead" data-reveal>
-            Pourquoi un agent autonome local surpasse les vieux crons aveugles et les plateformes SaaS invasives.
-          </p>
-        </div>
-
-        <div class="table-container" data-reveal>
-          <table class="table-comp">
-            <thead>
-              <tr>
-                <th>Critère</th>
-                <th>Cron Classique</th>
-                <th>Assistant Cloud SaaS</th>
-                <th style="background:var(--ha-bg-night);color:var(--ha-accent-cyan);">CORVUS (Local)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Exécution des tâches</td>
-                <td>Aveugle (sans constat)</td>
-                <td>Dépendante du réseau externe</td>
-                <td style="color:var(--ha-accent-cyan);">Autonome & auto-curative</td>
-              </tr>
-              <tr>
-                <td>Hébergement des données</td>
-                <td>Local</td>
-                <td>Serveurs tiers / Cloud public</td>
-                <td style="color:var(--ha-accent-cyan);">100% sur votre machine</td>
-              </tr>
-              <tr>
-                <td>Gestion des erreurs</td>
-                <td>Crash silencieux ou spam mail</td>
-                <td>Alertes bruyantes par SMS/Slack</td>
-                <td style="color:var(--ha-accent-cyan);">Réparation en bac à sable</td>
-              </tr>
-              <tr>
-                <td>Traçabilité des actions</td>
-                <td>Logs système illisibles</td>
-                <td>Dashboard opaque hébergé</td>
-                <td style="color:var(--ha-accent-cyan);">Rapports signés Ed25519</td>
-              </tr>
-              <tr class="highlight">
-                <td>Intervention requise</td>
-                <td>Manuelle à chaque panne</td>
-                <td>Validation permanente requise</td>
-                <td style="color:var(--ha-ok);font-weight:600;">0 clic (médiane constatée)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Témoignages -->
-    <section id="temoignages" class="band--deep">
-      <div class="wrap">
-        <span class="label center" data-reveal style="display:block;">Retours d'Expérience</span>
-        <h2 class="center" data-reveal>Ce qu'en Disent les Repos</h2>
-
-        <div class="paroles-grid">
-          <blockquote class="parole-cell" data-reveal>
-            <p>« Le matin au café, je lis trois lignes concises et je sais que mon atelier photo est sécurisé. Je n'ai plus ouvert un panneau de configuration système depuis six mois. »</p>
-            <cite>Solène M. — Photographe d'art, 2 postes de travail</cite>
-          </blockquote>
-
-          <blockquote class="parole-cell" data-reveal>
-            <p>« Il a relancé mon cluster de bases de données à 1 h 40 du matin sans faire vibrer mon téléphone, et j'ai eu l'explication complète au réveil. C'est ça, une vraie escadrille. »</p>
-            <cite>Karim B. — Développeur indépendant, 4 machines</cite>
-          </blockquote>
-
-          <blockquote class="parole-cell" data-reveal>
-            <p>« Mes anciennes alertes cloud hurlaient pour des pings manqués de 10 secondes. CORVUS résout, attend le moment juste et ne parle que s'il le faut. Je dors enfin. »</p>
-            <cite>Églantine R. — Ingénieure Infrastructure, 3 serveurs</cite>
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <!-- Formules & Tarifs -->
-    <section id="offres">
-      <div class="wrap">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-          <span class="label" data-reveal>Tarification Machine</span>
-          <h2 data-reveal>Choisir Son Perchoir</h2>
-          <p class="lead" data-reveal>
-            Code source ouvert et licences perpétuelles pour maîtriser votre infrastructure sans abonnement captif.
-          </p>
-        </div>
-
-        <div class="offres-grid">
-          <div class="offre-cell" data-reveal>
-            <span class="offre-tag">CORNEILLE // INDIVIDUEL</span>
-            <div class="offre-prix">0 €</div>
-            <p style="font-size:13.5px;color:var(--ha-ink-soft);margin:0;">Pour dompter une première machine locale en toute autonomie.</p>
-            <ul>
-              <li>1 agent local, 1 poste</li>
-              <li>Missions système illimitées</li>
-              <li>Rapports quotidiens synthétiques</li>
-              <li>Communauté & code ouvert</li>
-            </ul>
-            <a class="btn" href="#haut" onclick="copierCommande()">Installer</a>
-          </div>
-
-          <div class="offre-cell offre--active" data-reveal>
-            <span class="offre-tag">CORBEAU // RECOMMANDÉ</span>
-            <div class="offre-prix">9 €<span style="font-size:18px;font-family:var(--ha-font-mono);">/mois</span></div>
-            <p style="font-size:13.5px;color:var(--ha-accent-cyan);margin:0;">L'escadrille complète avec mémoire longue et auto-guérison avancée.</p>
-            <ul>
-              <li>Agents illimités, jusqu'à 3 postes</li>
-              <li>Missions planifiées et correctifs automatiques</li>
-              <li>Rapports signés et archivés (Ed25519)</li>
-              <li>Sandbox réseau étendu</li>
-              <li>Mises à jour prioritaires</li>
-            </ul>
-            <a class="btn btn--fill" href="mailto:bonjour@corvus.dev?subject=Option%20Corbeau%209€">Choisir Corbeau</a>
-          </div>
-
-          <div class="offre-cell" data-reveal>
-            <span class="offre-tag">MURMURATION // PARCS</span>
-            <div class="offre-prix">Sur devis</div>
-            <p style="font-size:13.5px;color:var(--ha-ink-soft);margin:0;">Pour les ateliers, studios et parcs de machines interconnectés.</p>
-            <ul>
-              <li>Parc de machines illimité</li>
-              <li>Console d'escadrille globale en temps réel</li>
-              <li>Intégrations matérielles sur-mesure</li>
-              <li>Support d'architecture dédié</li>
-            </ul>
-            <a class="btn" href="mailto:bonjour@corvus.dev?subject=Demande%20Murmuration%20Escadrille">Nous écrire</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="questions" class="band--deep">
-      <div class="wrap">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-          <span class="label" data-reveal>Interrogations Fréquentes</span>
-          <h2 data-reveal>Ce qu'on Demande au Perchoir</h2>
-        </div>
-
-        <div class="faq-container">
-          <details class="faq-item" data-reveal>
-            <summary>Est-ce que mes données ou mes scripts transitent par le cloud ?</summary>
-            <p>Non, catégoriquement. CORVUS est conçu selon le principe « Local-First ». Le binaire, l'interpréteur de commandes, les fichiers de logs et les clés cryptographiques résident exclusivement sur votre disque dur. Rien ne transite par un serveur externe.</p>
-          </details>
-
-          <details class="faq-item" data-reveal>
-            <summary>Que se passe-t-il si mon ordinateur est éteint ou débranché pendant la nuit ?</summary>
-            <p>Dès le prochain démarrage de la machine, CORVUS détecte l'interruption temporelle, reprend le rituel de vérification là où il s'était arrêté, et consigne l'heure de coupure dans son rapport de synthèse.</p>
-          </details>
-
-          <details class="faq-item" data-reveal>
-            <summary>L'agent peut-il endommager un fichier ou supprimer des données par erreur ?</summary>
-            <p>Non. Chaque action potentiellement destructrice (nettoyage de disque, purge de cache, recompilation) passe obligatoirement par un bac à sable temporaire (sandbox). Toutes les actions sont réversibles pendant un délai de 30 jours grâce au journal d'états.</p>
-          </details>
-
-          <details class="faq-item" data-reveal>
-            <summary>Faut-il être développeur ou expert en terminal pour l'utiliser ?</summary>
-            <p>Non. Vous pouvez lui adresser des instructions en français simple (« Fais une sauvegarde des photos chaque soir à 23h et supprime les doublons »). CORVUS rédige lui-même les scripts, les teste et vous les présente avant la première exécution.</p>
-          </details>
-
-          <details class="faq-item" data-reveal>
-            <summary>Quelle est la différence fondamentale avec un simple cron job ?</summary>
-            <p>Un cron exécute bêtement une commande sans analyser le résultat ni vérifier si la machine est en souffrance. CORVUS observe l'état du système, diagnostique, corrige les imprévus, consigne les métriques et signe ses bilans.</p>
-          </details>
-
-          <details class="faq-item" data-reveal>
-            <summary>Puis-je l'associer à mon système de monitoring existant ?</summary>
-            <p>Oui. CORVUS peut exporter ses métriques au format standard Prometheus/OpenTelemetry ou générer des webhooks locaux, mais il fonctionne en totale autosuffisance.</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <!-- Équipe & Journal des versions -->
-    <section id="equipe">
-      <div class="wrap">
-        <div style="text-align:center;max-width:760px;margin:0 auto 48px;">
-          <span class="label" data-reveal>L'Atelier Corvus</span>
-          <h2 data-reveal>Quatre sur le Fil</h2>
-          <p class="lead" data-reveal>
-            Ceux qui conçoivent les boucles de veille et affûtent le regard du corbeau.
-          </p>
-        </div>
-
-        <div class="team-grid">
-          <div class="team-cell" data-reveal>
-            <div class="team-who">anne.exe</div>
-            <div class="team-role">Fondatrice & mécanique du vol. Conçoit les algorithmes de sommeil et l'ordonnancement sans réveil.</div>
-          </div>
-          <div class="team-cell" data-reveal>
-            <div class="team-who">corbin</div>
-            <div class="team-role">Compilateur & langage naturel. Traduit le langage humain en syntaxe système rigoureuse.</div>
-          </div>
-          <div class="team-cell" data-reveal>
-            <div class="team-who">freya</div>
-            <div class="team-role">Console d'escadrille. Dessine les interfaces terminales et supervise le maillage réseau local.</div>
-          </div>
-          <div class="team-cell" data-reveal>
-            <div class="team-who">m. le hibou</div>
-            <div class="team-role">Revue de code nocturne et sécurité eBPF. Ne fait aucun bruit, mais ne tolère aucune régression.</div>
-          </div>
-        </div>
-
-        <div class="journal-box" data-reveal>
-          <div class="version-row">
-            <span class="version-tag">v2.4</span>
-            <p class="version-desc">Mémoire de corvidé : historique d'incidents croisé et rappel contextualisé dans le rapport matinal.</p>
-          </div>
-          <div class="version-row">
-            <span class="version-tag">v2.3</span>
-            <p class="version-desc">Sandbox eBPF étendu aux protocoles réseau locaux ; retour arrière instantané sur 30 jours.</p>
-          </div>
-          <div class="version-row">
-            <span class="version-tag">v2.2</span>
-            <p class="version-desc">Escadrille locale : synchronisation pair-à-pair jusqu'à 41 machines sans passerelle cloud.</p>
-          </div>
-          <div class="version-row">
-            <span class="version-tag">v2.1</span>
-            <p class="version-desc">Rapports signés cryptographiquement par clé asymétrique Ed25519 locale.</p>
-          </div>
-          <div class="version-row">
-            <span class="version-tag">v1.0</span>
-            <p class="version-desc">Première nuit de veille silencieuse. Personne ne l'a remarquée. C'était exactement le but.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Prise de contact finale -->
-    <section id="contact" class="center band--deep">
-      <div class="wrap">
-        <span class="label scramble" data-scramble="canal: bonjour@corvus.dev">canal: bonjour@corvus.dev</span>
-        <h2 data-reveal>Et ta nuit, à toi&nbsp;?</h2>
-        <p class="lead" data-reveal>
-          CORVUS s'installe en dix secondes sur Linux et macOS. Zéro configuration cloud, zéro compte obligatoire.
-        </p>
-        <div style="display:flex;gap:16px;justify-content:center;margin-top:32px;flex-wrap:wrap;" data-reveal>
-          <a class="btn btn--fill btn-sweep" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller">Laisser CORVUS veiller</a>
-          <button class="btn" onclick="copierCommande()">Copier la commande</button>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Pied de page avec mot géant translucide (Règle 6 Hermes Agent) -->
-  <footer class="ha-footer">
-    <div class="footer-giant" aria-hidden="true">CORVUS</div>
-    <div class="wrap footer-content">
-      <p style="margin:0 0 10px;">
-        © 2026 CORVUS · Système mesuré sur <i>hermes-agent.nousresearch.com</i> (bleu électrique #0000F2, arêtes 0px).
+      <h1 class="hero-giant-title">
+        L'Agent qui vit dans <span class="cyan-highlight">votre terminal</span>
+      </h1>
+      <p class="hero-terminal-lead">
+        Corvus ne possède aucune interface graphique commerciale, aucun traceur cloud et aucune dépendance distante.
+        À 03h00 précises, son binaire autonome s'engage pour dégraisser vos registres, sceller vos sauvegardes sous
+        enclave sécurisée et déposer votre synthèse avant le réveil.
       </p>
-      <p style="margin:0;color:rgba(242,242,242,0.65);">
-        Renforcé par les 4 bases genjutsu (peinture, timing, typographie, canvas) et threejs-skills (shaders, tunnel wireframe, parallaxe).
-      </p>
-      <div class="footer-links">
-        <a href="#haut">Haut de page</a>
-        <a href="#manifeste">Manifeste</a>
-        <a href="#caps">Capacités</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#nuit">La Nuit</a>
-        <a href="../index.html">← Retour à la Galerie des 13 Styles</a>
+
+      <div class="cli-install-dock">
+        <span class="cli-install-code" id="ha-cli-code">curl -fsSL https://corvus.sh/hermes.sh | sh</span>
+        <button class="cli-install-btn" id="ha-copy-btn" onclick="copyHaCli()">Initialiser</button>
       </div>
+    </div>
+  </section>
+
+  <!-- STAGE 2 : SURVEILLANCE INTERCEPT I (50/50 Full-Bleed Split) -->
+  <section id="intercept-1" class="stage-intercept-split">
+    <div class="intercept-visual-feed">
+      <div class="feed-hud-overlay">
+        <span>CAM_01 // ATELIER_NOCTURNE</span>
+        <span>REC: 03:00:14.280</span>
+      </div>
+      <img src="assets/console_nocturne.jpg" alt="Console nocturne sous écran noir">
+    </div>
+
+    <div class="intercept-info-panel">
+      <span class="intercept-stamp">INTERCEPT 01 // LE SILENCE OPÉRANT</span>
+      <h2>L'Exécution à Écran Éteint</h2>
+      <p>
+        Pendant que vous dormez, Corvus prend possession des processus d'entretien.
+        Sans émettre le moindre paquet réseau ni allumer votre moniteur, il purge les caches obsolètes
+        et encapsule vos environnements de développement.
+      </p>
+
+      <div class="hud-caps-stream">
+        <div class="hud-cap-row">
+          <span>01. Rotation des journaux (> 14 jours)</span>
+          <span class="stat-ok">GZIP -9 // PASS</span>
+        </div>
+        <div class="hud-cap-row">
+          <span>02. Sauvegarde incrémentale différentielle</span>
+          <span class="stat-ok">AES-256 // SCELLÉ</span>
+        </div>
+        <div class="hud-cap-row">
+          <span>03. Collecte des sockets orphelins</span>
+          <span class="stat-ok">KERNEL SECCOMP // ETANCHE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3 : THE LIVE FULL-SCREEN CYBER DECK TERMINAL -->
+  <section id="cyberdeck" class="stage-cyber-deck">
+    <div class="deck-container">
+      <div class="deck-top-bar">
+        <div>
+          <span style="font-family: var(--ha-font-mono); font-size: 11px; color: var(--ha-accent-cyan); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 4px;">
+            Télémétrie Déterministe
+          </span>
+          <h2 class="deck-title-hud">Le Cyberdeck de Contrôle</h2>
+        </div>
+        <div class="deck-scenarios-nav">
+          <button class="scenario-btn active" onclick="switchHaDeck('rotation', this)">01 / Rotation</button>
+          <button class="scenario-btn" onclick="switchHaDeck('crypto', this)">02 / Crypto Vault</button>
+          <button class="scenario-btn" onclick="switchHaDeck('dormancy', this)">03 / Veille Profonde</button>
+          <button class="scenario-btn" onclick="switchHaDeck('dawn', this)">04 / Bilan Aube</button>
+        </div>
+      </div>
+
+      <div class="deck-screen" id="ha-deck-output">
+        <pre><span class="t-dim">[03:00:00.002]</span> <span class="t-cyan">CORVUS_DAEMON // ROTATION_CYCLE_ENGAGED</span>
+<span class="t-dim">[03:00:00.040]</span> Mapping inode table on local volume /dev/disk1s1...
+<span class="t-dim">[03:00:01.120]</span> Scanning 48 application directories for unrotated logs (> 14 days)
+<span class="t-dim">[03:00:02.480]</span> <span class="t-green">COMPACTION:</span> 1.84 GB compacted to 118 MB (gzip algorithm level 9)
+<span class="t-dim">[03:00:03.110]</span> Memory freed: 3,820 MB disk blocks returned to filesystem
+<span class="t-dim">[03:00:03.950]</span> Peak RAM allocated: 42.1 MB // CPU Core throttle: 2.1% (active limit: 15%)
+<span class="t-dim">[03:00:04.000]</span> <span class="t-cyan">STATUS:</span> Task 01 accomplished without warning. Next queue: Crypto Vault.</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 4 : SURVEILLANCE INTERCEPT II (05H30 DAWN DESPATCH) -->
+  <section id="intercept-2" class="stage-dawn-intercept">
+    <div class="dawn-doc-panel">
+      <span class="intercept-stamp">INTERCEPT 02 // 05H30 UTC</span>
+      <h2>Le Bilan Posé à l'Aube</h2>
+      <p>
+        Lorsque l'aube se lève, le travail nocturne a disparu.
+        Seule subsiste la note concise de trois lignes rédigée à 05h30,
+        déposée directement sur votre bureau sans passer par un serveur intermédiaire.
+      </p>
+
+      <div class="dawn-letter-box">
+        <span class="t-cyan">// CORVUS NIGHT DISPATCH — 05:30:00</span><br>
+        1. Nettoyage : 4.92 Go récupérés sur le volume principal.<br>
+        2. Sauvegarde : Snapshot différentiel scellé avec hachage SHA-256 certifié.<br>
+        3. Énergie : Cycle exécuté en 14 min, sommeil profond maintenu jusqu'à l'éveil.<br>
+        <span class="t-dim">Empreinte : 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b</span>
+      </div>
+    </div>
+
+    <div class="dawn-visual-feed">
+      <div class="feed-hud-overlay">
+        <span>CAM_02 // TABLE_DE_NUIT</span>
+        <span>REC: 05:30:00.012</span>
+      </div>
+      <img src="assets/table_de_nuit.jpg" alt="Table de nuit à l'aube">
+    </div>
+  </section>
+
+  <!-- STAGE 5 : LICENSE PROTOCOLS (Terminal Passes) -->
+  <section id="passes" class="stage-passes-terminal">
+    <div class="passes-header">
+      <span style="font-family: var(--ha-font-mono); font-size: 11.5px; letter-spacing: 2px; color: var(--ha-accent-cyan); text-transform: uppercase; display: block; margin-bottom: 8px;">
+        Acquisition Sans Rente
+      </span>
+      <h2>Protocoles d'Accès</h2>
+      <p style="color: var(--ha-ink-soft); font-family: var(--ha-font-mono); font-size: 14px;">
+        Licences perpétuelles. Zéro abonnement cloud. Le binaire est vôtre pour l'éternité.
+      </p>
+    </div>
+
+    <div class="passes-flex">
+      <div class="terminal-pass-card">
+        <div>
+          <span class="pass-num-tag">PROTOCOLE // 01</span>
+          <div class="pass-title-lg">Atelier Machine Solo</div>
+          <div style="font-family: var(--ha-font-mono); font-size: 13px; color: var(--ha-ink-soft);">Pour machine individuelle et hacker indépendant.</div>
+          <div class="pass-price-num">0 €</div>
+          <div style="font-family: var(--ha-font-mono); font-size: 11px; text-transform: uppercase; color: var(--ha-accent-cyan);">
+            Licence Libre MIT
+          </div>
+          <ul class="pass-bullets">
+            <li>Binaire autonome en Rust sans runtime lourd</li>
+            <li>Cycle nocturne automatisé à 03h00</li>
+            <li>Rotation et compression des journaux</li>
+            <li>Billet de l'aube déposé à 05h30</li>
+          </ul>
+        </div>
+        <button class="btn-terminal-pass" onclick="copyHaCli()">Installer le Binaire</button>
+      </div>
+
+      <div class="terminal-pass-card highlight">
+        <div>
+          <span class="pass-num-tag" style="color: #ffffff;">PROTOCOLE // 02</span>
+          <div class="pass-title-lg">Studio & Flotte Enclave</div>
+          <div style="font-family: var(--ha-font-mono); font-size: 13px; color: rgba(255,255,255,0.8);">Pour studios de dev, flottes et nœuds distribués.</div>
+          <div class="pass-price-num">490 €</div>
+          <div style="font-family: var(--ha-font-mono); font-size: 11px; text-transform: uppercase; color: var(--ha-accent-cyan);">
+            Acquisition Perpétuelle Unique
+          </div>
+          <ul class="pass-bullets">
+            <li>Jusqu'à 15 machines synchronisées en LAN privé</li>
+            <li>Gestion des secrets sous enclave matérielle T2/TPM</li>
+            <li>Synthèse IA locale embarquée sans appel réseau</li>
+            <li>Assistance dédiée directe par les créateurs</li>
+          </ul>
+        </div>
+        <button class="btn-terminal-pass" style="background: var(--ha-accent-cyan); color: #000000;" onclick="alert('Protocole Flotte Enclave activé.')">Déployer la Flotte</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Watermark Footer -->
+  <footer class="ha-cyber-footer">
+    <div class="giant-watermark-hermes">H E R M E S</div>
+    <div class="footer-stamp-mono">
+      CORVUS × HERMES AGENT // NOUS RESEARCH ARCHITECTURE — ZERO CLOUD DEPENDENCY
+    </div>
+    <div style="margin-top: 18px; font-family: var(--ha-font-mono); font-size: 11px; color: #555588;">
+      AUCUN TRACEUR COMMERCIAL DÉPOSÉ. SYSTÈME LOCAL STRICT.
     </div>
   </footer>
 
-  <!-- Toast de notification copie -->
-  <div id="toast">✓ Commande copiée dans le presse-papier</div>
-
-  <!-- SCRIPT LOGIQUE & INTERACTIVITÉ -->
+  <!-- Scripts: Three.js Fullscreen Kinetic Cyber Tunnel & Deck -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-  (function () {
-    "use strict";
-    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.documentElement.classList.add("js");
-
-    /* 1. Horloge Machine en direct */
-    var elHorloge = document.getElementById("horloge-header");
-    function majHorloge() {
-      var d = new Date();
-      var h = String(d.getHours()).padStart(2, '0');
-      var m = String(d.getMinutes()).padStart(2, '0');
-      var s = String(d.getSeconds()).padStart(2, '0');
-      if (elHorloge) elHorloge.textContent = "VEILLE ACTIVE · " + h + ":" + m + ":" + s + " LOCAL";
+    // --- Horloge Temps Réel ---
+    function updateHaClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      const el = document.getElementById('ha-live-clock');
+      if (el) el.textContent = `${h}:${m}:${s} UTC // LOCAL HOST ACTIVE`;
     }
-    majHorloge();
-    setInterval(majHorloge, 1000);
+    setInterval(updateHaClock, 1000);
+    updateHaClock();
 
-    /* 2. Typewriter Boot Terminal dans le Hero */
-    var boot = document.getElementById("boot");
-    var lignesBoot = [
-      "$ corvus boot --local --mesh",
-      "  [ok] bac à sable eBPF monté : permissions minimales",
-      "  [ok] mémoire de corvidé : 2048 nuits indexées",
-      "  [ok] escadrille locale : 41 machines synchronisées",
-      "  [..] surveillance enclenchée — la nuit peut commencer"
-    ];
-    if (boot && !reduire && !window.gsap) {
-      var li = 0, ci = 0, sortie = "";
-      (function taper() {
-        if (li >= lignesBoot.length) return;
-        var ligne = lignesBoot[li];
-        if (ci <= ligne.length) {
-          boot.innerHTML = sortie + ligne.slice(0, ci) + "<span class='curseur'></span>";
-          ci += 1; setTimeout(taper, 16);
-        } else {
-          sortie += ligne + "\n";
-          li += 1; ci = 0; setTimeout(taper, 200);
-        }
-      })();
-    } else if (boot) {
-      boot.textContent = lignesBoot.join("\n");
-    }
-
-    /* 3. Mots du Hero : reveal */
-    if (!reduire) {
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          document.querySelector(".hero").classList.add("pose");
-        });
+    // --- Copie CLI ---
+    function copyHaCli() {
+      const code = document.getElementById('ha-cli-code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('ha-copy-btn');
+        const old = btn.innerText;
+        btn.innerText = 'Initialisé ✓';
+        btn.style.background = '#ffffff';
+        setTimeout(() => {
+          btn.innerText = old;
+          btn.style.background = 'var(--ha-accent-cyan)';
+        }, 2200);
       });
-    } else {
-      document.querySelector(".hero").classList.add("pose");
     }
 
-    /* 4. Effet Scramble sur les étiquettes */
-    function scramble(el) {
-      var cible = el.getAttribute("data-scramble"), alphabet = "CORVUS0123456789<>/#_";
-      var i = 0;
-      (function pas() {
-        el.textContent = cible.split("").map(function (c, j) {
-          if (j < i) return c;
-          return c === " " ? " " : alphabet[Math.floor(Math.random() * alphabet.length)];
-        }).join("");
-        i += 2;
-        if (i <= cible.length) setTimeout(pas, 35);
-        else el.textContent = cible;
-      })();
-    }
-    var scr = document.querySelectorAll("[data-scramble]");
-    if (!reduire && "IntersectionObserver" in window) {
-      var oScr = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting) {
-            scramble(e.target);
-            oScr.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      scr.forEach(function (el) { oScr.observe(el); });
+    // --- Cyberdeck Scenario Switcher ---
+    const deckLogs = {
+      rotation: `<pre><span class="t-dim">[03:00:00.002]</span> <span class="t-cyan">CORVUS_DAEMON // ROTATION_CYCLE_ENGAGED</span>
+<span class="t-dim">[03:00:00.040]</span> Mapping inode table on local volume /dev/disk1s1...
+<span class="t-dim">[03:00:01.120]</span> Scanning 48 application directories for unrotated logs (> 14 days)
+<span class="t-dim">[03:00:02.480]</span> <span class="t-green">COMPACTION:</span> 1.84 GB compacted to 118 MB (gzip algorithm level 9)
+<span class="t-dim">[03:00:03.110]</span> Memory freed: 3,820 MB disk blocks returned to filesystem
+<span class="t-dim">[03:00:03.950]</span> Peak RAM allocated: 42.1 MB // CPU Core throttle: 2.1% (active limit: 15%)
+<span class="t-dim">[03:00:04.000]</span> <span class="t-cyan">STATUS:</span> Task 01 accomplished without warning. Next queue: Crypto Vault.</pre>`,
+
+      crypto: `<pre><span class="t-dim">[03:05:00.010]</span> <span class="t-cyan">ENCLAVE_HARDWARE_INTERFACE // LOCK_ACTIVE</span>
+<span class="t-dim">[03:05:00.080]</span> Deriving master key using Argon2id memory-hard primitive...
+<span class="t-dim">[03:05:00.240]</span> Generating differential snapshot: /vault/corvus-2026-10-18.tar.zst
+<span class="t-dim">[03:05:01.100]</span> Calculating Merkle tree root hash for filesystem state...
+<span class="t-cyan">[MERKLE ROOT]</span> 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+<span class="t-dim">[03:05:01.150]</span> <span class="t-green">SEAL VERIFIED:</span> 100% data integrity assured. Zero socket bindings open.</pre>`,
+
+      dormancy: `<pre><span class="t-dim">[03:15:00.001]</span> <span class="t-cyan">DORMANCY_TRANSITION // SLEEP_SIGNAL_DISPATCHED</span>
+<span class="t-dim">[03:15:00.020]</span> Terminating non-essential background worker threads...
+<span class="t-dim">[03:15:00.050]</span> Disengaging CPU core affinity (All cores returned to kernel scheduler)
+<span class="t-dim">[03:15:00.110]</span> Energy consumption audit: 0.038 Wh total consumed during run
+<span class="t-dim">[03:15:00.140]</span> Passive wake timer scheduled for: 05:30:00 UTC
+<span class="t-dim">[03:15:00.200]</span> <span class="t-green">STANDBY:</span> Corvus daemon dormant. Pure quiet compute achieved.</pre>`,
+
+      dawn: `<pre><span class="t-dim">[05:30:00.001]</span> <span class="t-cyan">DAWN_DISPATCH_WRITER // GENERATING_SUMMARY</span>
+<span class="t-dim">[05:30:00.030]</span> Formatting 3-line morning digest:
+-------------------------------------------------------------
+<span class="t-cyan">CORVUS SUMMARY DISPATCH // 05:30:00</span>
+1. Espace disque : 4.92 Go de résidus recyclés avec succès.
+2. Sauvegarde : Snapshot différentiel scellé sans erreur.
+3. Système : Veille nocturne respectée, processeur au repos.
+-------------------------------------------------------------
+<span class="t-dim">[05:30:00.080]</span> <span class="t-green">COMPLETED:</span> Written to ~/Desktop/corvus-report.txt. Returning to sleep.</pre>`
+    };
+
+    function switchHaDeck(key, btn) {
+      document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('ha-deck-output').innerHTML = deckLogs[key];
     }
 
-    /* 5. Reveals au Scroll avec Stagger Genjutsu (60ms) */
-    var cibles = document.querySelectorAll("[data-reveal]");
-    if (!reduire && "IntersectionObserver" in window) {
-      cibles.forEach(function (el) {
-        var pere = el.parentElement;
-        if (pere && pere.querySelectorAll("[data-reveal]").length > 1) {
-          var freres = Array.prototype.slice.call(pere.querySelectorAll("[data-reveal]"));
-          el.style.transitionDelay = (freres.indexOf(el) * 60) + "ms";
-        }
+    // --- Three.js Full-Screen Cyber Wireframe Tunnel ---
+    (function initCyberBg() {
+      const container = document.getElementById('cyber-bg-canvas');
+      if (!container) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 0, 5);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      container.appendChild(renderer.domElement);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Hyper-Tunnel Wireframe en Bleu Électrique et Cyan
+      const tunnelGeom = new THREE.CylinderGeometry(3.5, 3.5, 40, 24, 40, true);
+      const tunnelMat = new THREE.MeshBasicMaterial({
+        color: 0x0000f2,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35
       });
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-visible");
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      cibles.forEach(function (el) { io.observe(el); });
-    } else {
-      cibles.forEach(function (el) { el.classList.add("is-visible"); });
-    }
+      const tunnel = new THREE.Mesh(tunnelGeom, tunnelMat);
+      tunnel.rotation.x = Math.PI / 2;
+      group.add(tunnel);
 
-    /* 6. Compteurs numériques tabulaires */
-    function compte(el) {
-      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
-      var fmt = function (v) {
-        return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR");
-      };
-      if (reduire) { el.textContent = fmt(fin); return; }
-      var t0 = null;
-      (function pas(t) {
-        if (t0 === null) t0 = t;
-        var pr = Math.min((t - t0) / 1200, 1);
-        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
-        if (pr < 1) requestAnimationFrame(pas);
-      })(performance.now());
-    }
-    document.querySelectorAll("[data-compte]").forEach(function (el) {
-      if (!("IntersectionObserver" in window)) { compte(el); return; }
-      var o = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting) { compte(el); o.unobserve(el); }
-        });
-      }, { threshold: 0.3 });
-      o.observe(el);
-    });
-
-    /* 7. Pluie de caractères Canvas 2D (Signes Cyber-Corvus) */
-    var pluie = document.getElementById("pluie");
-    if (pluie && pluie.getContext && !reduire) {
-      var p2 = pluie.getContext("2d"), colonnes = [], largeur = 0, hauteur = 0, dpr = Math.min(devicePixelRatio || 1, 1.5);
-      function tailler() {
-        largeur = innerWidth; hauteur = innerHeight;
-        pluie.width = largeur * dpr; pluie.height = hauteur * dpr;
-        pluie.style.width = largeur + "px"; pluie.style.height = hauteur + "px";
-        p2.setTransform(dpr, 0, 0, dpr, 0, 0);
-        var n = Math.floor(largeur / 28);
-        colonnes = [];
-        for (var i = 0; i < n; i++) {
-          colonnes.push({ y: Math.random() * hauteur, v: 45 + Math.random() * 55 });
-        }
-      }
-      tailler();
-      addEventListener("resize", tailler);
-      var signes = "CORVUS0123456789<>/#_";
-      setInterval(function () {
-        if (document.hidden) return;
-        p2.clearRect(0, 0, largeur, hauteur);
-        p2.font = "12px 'Courier Prime', monospace";
-        colonnes.forEach(function (c, i) {
-          var x = i * 28 + 8;
-          p2.fillStyle = "rgba(62, 211, 188, 0.7)";
-          p2.fillText(signes[Math.floor(Math.random() * signes.length)], x, c.y);
-          p2.fillStyle = "rgba(242, 242, 242, 0.16)";
-          p2.fillText(signes[Math.floor(Math.random() * signes.length)], x, c.y - 18);
-          c.y += c.v / 10;
-          if (c.y > hauteur + 30) c.y = -20;
-        });
-      }, 90);
-    }
-  })();
-
-  /* Fonction utilitaire : Copie de la commande CLI */
-  function copierCommande() {
-    var txt = "curl -fsSL https://corvus.sh/install | sh";
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(txt).then(afficherToast);
-    } else {
-      afficherToast();
-    }
-  }
-
-  function afficherToast() {
-    var toast = document.getElementById("toast");
-    var btn = document.getElementById("btn-copy");
-    if (btn) btn.textContent = "✓ Copié";
-    if (toast) {
-      toast.classList.add("show");
-      setTimeout(function () {
-        toast.classList.remove("show");
-        if (btn) btn.textContent = "Copier";
-      }, 2500);
-    }
-  }
-
-  /* Scénarios de la Console Nocturne */
-  var fluxConsole = {
-    nuit: `<pre><span class="ligne-c"><span class="cyan">$ corvus veille --nuit --live</span></span>
-<span class="ligne-c"><span class="t">23:41:04</span>  [DISQUE] sauvegarde volume /mnt/storage atteint 94 % : compression lz4 enclenchée</span>
-<span class="ligne-c"><span class="t">01:07:22</span>  [DAEMON] service « photos-worker » tombé (code 137 OOM) : redémarrage isolé, limite mémoire relevée</span>
-<span class="ligne-c"><span class="t">03:12:49</span>  [PURGE] scan doublons binaires achevé : <span class="ok">118 Go libérés</span> sur partition NVMe</span>
-<span class="ligne-c"><span class="t">04:55:10</span>  [RÉSEAU] certificat TLS atelier : échéance J-72, tentative de renouvellement ACME (<span class="ko">échec ×2 dns</span>)</span>
-<span class="ligne-c"><span class="t">05:30:00</span>  [SCELLEMENT] <span class="ok">rapport signé Ed25519 déposé</span> : 3 lignes rédigées, 0 clic requis</span>
-<span class="ligne-c"><span class="cyan">$ corvus bilan --matin</span></span>
-<span class="ligne-c"><span class="t">bilan #2048 · 2 réparations autonomes · 0 escalade requise · intégrité 100%</span></span></pre>`,
-
-    disque: `<pre><span class="ligne-c"><span class="cyan">$ corvus audit --disque /mnt/storage</span></span>
-<span class="ligne-c"><span class="t">03:12:01</span>  analyse volumétrique : 1.8 To occupés sur 1.9 To (94.7%)</span>
-<span class="ligne-c"><span class="t">03:12:05</span>  détection : 14 archives .tar redondantes non dédupliquées</span>
-<span class="ligne-c"><span class="t">03:12:18</span>  compression différentielle multi-threads zstandard</span>
-<span class="ligne-c"><span class="t">03:13:02</span>  déplacement vers cold-storage chiffré local</span>
-<span class="ligne-c"><span class="t">03:13:15</span>  <span class="ok">succès</span> : partition retombée à 41.2% (118 Go immédiatement récupérés)</span>
-<span class="ligne-c"><span class="t">03:13:16</span>  signature rapport : <code>ed25519:7b9a4c12...f881</code></span></pre>`,
-
-    certificat: `<pre><span class="ligne-c"><span class="cyan">$ corvus certs --check --echeance 72h</span></span>
-<span class="ligne-c"><span class="t">04:50:00</span>  évaluation validité : domaine studio.atelier.lan (expire dans 71h58m)</span>
-<span class="ligne-c"><span class="t">04:50:02</span>  challenge http-01 lancé vers ACME local</span>
-<span class="ligne-c"><span class="t">04:51:14</span>  <span class="ko">tentative 1 échouée</span> : routeur local n'a pas répondu au port 80</span>
-<span class="ligne-c"><span class="t">04:53:20</span>  <span class="ko">tentative 2 échouée</span> : bascule vers challenge dns-01</span>
-<span class="ligne-c"><span class="t">04:55:00</span>  règle d'escalade atteinte : préparation alerte matinale ciblée (priorité P1)</span>
-<span class="ligne-c"><span class="t">04:55:01</span>  note rédigée : « Certificat atelier expire vendredi, vérifier bail routeur »</span></pre>`,
-
-    rapport: `<pre><span class="ligne-c"><span class="cyan">$ corvus rapport --lire --dernier</span></span>
-<span class="ligne-c">────────────────────────────────────────────────────────────────────────────</span>
-<span class="ligne-c"><span class="ok">CORVUS RAPPORT NOCTURNE #2048</span>  |  17 Octobre 2026, 05:30:00</span>
-<span class="ligne-c">────────────────────────────────────────────────────────────────────────────</span>
-<span class="ligne-c">1. Disque sauvegarde allégé : 118 Go libérés, seuil redescendu à 41 %.</span>
-<span class="ligne-c">2. Démon photos-worker relancé avec succès suite à pic de mémoire.</span>
-<span class="ligne-c">3. Alerte certificat : renouvellement échoué ×2, procédure prête pour validation.</span>
-<span class="ligne-c">────────────────────────────────────────────────────────────────────────────</span>
-<span class="ligne-c"><span class="t">Empreinte Ed25519 : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span></span>
-<span class="ligne-c"><span class="ok">Statut : Perchoir nominal · Aucune action requise avant le réveil.</span></span></pre>`
-  };
-
-  function changerScenario(nom, bouton) {
-    var flux = document.getElementById("console-flux");
-    var timer = document.getElementById("console-timer");
-    document.querySelectorAll(".console-tab").forEach(function (t) { t.classList.remove("active"); });
-    if (bouton) bouton.classList.add("active");
-    if (flux && fluxConsole[nom]) {
-      flux.innerHTML = fluxConsole[nom];
-    }
-    if (timer) {
-      if (nom === 'nuit') timer.textContent = "05:30:00 · CYCLE TERMINÉ";
-      else if (nom === 'disque') timer.textContent = "03:13:16 · PURGE EXÉCUTÉE";
-      else if (nom === 'certificat') timer.textContent = "04:55:01 · ALERTE RETENUE";
-      else if (nom === 'rapport') timer.textContent = "05:30:00 · RAPPORT SCELLÉ";
-    }
-  }
-  </script>
-
-  <!-- CHORÉGRAPHIE GSAP AVANCÉE (Genjutsu Pipeline) -->
-  <script>
-  (function () {
-    if (!window.gsap || !window.ScrollTrigger) return;
-    gsap.registerPlugin(ScrollTrigger);
-    if (window.ScrambleTextPlugin) gsap.registerPlugin(ScrambleTextPlugin);
-
-    var mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", function () {
-
-      /* 1. Scramble Trigger sur les étiquettes de sections */
-      if (window.ScrambleTextPlugin) {
-        document.querySelectorAll("[data-scramble]").forEach(function (el) {
-          gsap.to(el, {
-            duration: 1.1,
-            scrambleText: { text: el.getAttribute("data-scramble"), chars: "CORVUS0123456789<>/#_", speed: 0.4 },
-            scrollTrigger: { trigger: el, start: "top 88%", once: true }
-          });
-        });
+      // Anneaux Cyan d'Énergie
+      const ringGeom = new THREE.RingGeometry(2.5, 2.54, 32);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x3ed3bc, side: THREE.DoubleSide, transparent: true, opacity: 0.4 });
+      for (let i = 0; i < 5; i++) {
+        const ring = new THREE.Mesh(ringGeom, ringMat);
+        ring.position.z = -i * 6;
+        group.add(ring);
       }
 
-      /* 2. Mot géant héro : translation douce liée au scroll */
-      gsap.to(".hero .geant", {
-        xPercent: -12,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: true
-        }
+      // Éclairage minimal
+      const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambient);
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
       });
 
-      /* 3. Exposition de la progression du scroll au shader Three.js */
-      ScrollTrigger.create({
-        trigger: ".hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-        onUpdate: function (self) {
-          window.__corvusScroll = self.progress;
-        }
+      // Synchronisation au scroll de la page
+      let scrollY = 0;
+      window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
       });
-    });
-  })();
-  </script>
 
-  <!-- THREE.JS SKILLS : SHADERS, TUNNEL WIREFRAME, GÉOMÉTRIE POLYÉDRIQUE & INTERACTION -->
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"
-    }
-  }
-  </script>
-  <script type="module">
-    const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const modeste = (navigator.hardwareConcurrency || 4) <= 2;
-    let webgl = false;
-    try {
-      webgl = !!document.createElement("canvas").getContext("webgl2") || !!document.createElement("canvas").getContext("webgl");
-    } catch (e) {}
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
 
-    if (!reduire && !modeste && webgl) {
-      try {
-        const THREE = await import("three");
-        const hote = document.getElementById("tunnel");
-        const scene = new THREE.Scene();
-        
-        // Couleur signature : bleu électrique pur avec brume volumétrique
-        scene.background = new THREE.Color(0x0000f2);
-        scene.fog = new THREE.FogExp2(0x0000f2, 0.055);
+      function animate() {
+        requestAnimationFrame(animate);
 
-        const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 80);
-        camera.position.set(0, 0, 9);
+        tunnel.rotation.z += 0.002;
+        group.position.z = (scrollY * 0.008) % 12;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-        hote.appendChild(renderer.domElement);
+        group.rotation.y += (mouseX * 0.2 - group.rotation.y) * 0.05;
+        group.rotation.x += (mouseY * 0.15 - group.rotation.x) * 0.05;
 
-        // Tunnel Wireframe Infini (Three.js Geometry + Animation Skills)
-        const grilles = [];
-        const nbAnneaux = 16;
-        const espaceAnneau = 2.8;
-        const matLigne = new THREE.LineBasicMaterial({
-          color: 0x5a8bff,
-          transparent: true,
-          opacity: 0.5
-        });
-
-        for (let i = 0; i < nbAnneaux; i++) {
-          const g = new THREE.GridHelper(26, 12, 0x6e9bff, 0x3d70f0);
-          g.material = matLigne.clone();
-          g.position.z = -i * espaceAnneau;
-          scene.add(g);
-          grilles.push(g);
-        }
-
-        // Cœur géométrique (Noyau Icosaèdre Corvus Wireframe)
-        const geoNoyau = new THREE.IcosahedronGeometry(1.65, 1);
-        const geoBords = new THREE.EdgesGeometry(geoNoyau);
-        const matNoyau = new THREE.LineBasicMaterial({
-          color: 0xf2f2f2,
-          transparent: true,
-          opacity: 0.85
-        });
-        const noyau = new THREE.LineSegments(geoBords, matNoyau);
-        scene.add(noyau);
-
-        // Anneau orbital cyber-cyan
-        const geoAnneau = new THREE.TorusGeometry(2.4, 0.02, 16, 64);
-        const matAnneau = new THREE.MeshBasicMaterial({ color: 0x3ed3bc, transparent: true, opacity: 0.65 });
-        const anneau = new THREE.Mesh(geoAnneau, matAnneau);
-        anneau.rotation.x = Math.PI / 3;
-        scene.add(anneau);
-
-        // Essaim de micro-particules (Cyber-dust d'escadrille)
-        const nbParticules = 120;
-        const geoPart = new THREE.BufferGeometry();
-        const posPart = new Float32Array(nbParticules * 3);
-        for (let p = 0; p < nbParticules * 3; p += 3) {
-          posPart[p] = (Math.random() - 0.5) * 16;
-          posPart[p + 1] = (Math.random() - 0.5) * 10;
-          posPart[p + 2] = -Math.random() * 25;
-        }
-        geoPart.setAttribute('position', new THREE.BufferAttribute(posPart, 3));
-        const matPart = new THREE.PointsMaterial({
-          color: 0x8ecdf7,
-          size: 0.06,
-          transparent: true,
-          opacity: 0.6
-        });
-        const particules = new THREE.Points(geoPart, matPart);
-        scene.add(particules);
-
-        // Gestion de la Souris (Three.js Interaction Skill : Parallaxe lissée)
-        const souris = { x: 0, y: 0 };
-        const cibleSouris = { x: 0, y: 0 };
-        addEventListener("pointermove", (e) => {
-          cibleSouris.x = (e.clientX / innerWidth) * 2 - 1;
-          cibleSouris.y = (e.clientY / innerHeight) * 2 - 1;
-        }, { passive: true });
-
-        // Redimensionnement réactif
-        function taillerScene() {
-          const w = hote.clientWidth || innerWidth;
-          const h = hote.clientHeight || innerHeight;
-          camera.aspect = w / h;
-          camera.updateProjectionMatrix();
-          renderer.setSize(w, h);
-        }
-        taillerScene();
-        addEventListener("resize", taillerScene);
-
-        // Performance : pause hors viewport
-        let visible = true, actif = true;
-        new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: 0.01 }).observe(hote);
-        document.addEventListener("visibilitychange", () => { actif = !document.hidden; });
-
-        const horloge = new THREE.Clock();
-
-        // Boucle de rendu
-        (function animer() {
-          requestAnimationFrame(animer);
-          if (!visible || !actif) return;
-
-          const dt = horloge.getDelta();
-          const t = horloge.getElapsedTime();
-          const defilement = window.__corvusScroll || 0;
-
-          // Défilement du tunnel wireframe
-          const vitesseTunnel = 4.5 + defilement * 10;
-          grilles.forEach((g) => {
-            g.position.z += dt * vitesseTunnel;
-            if (g.position.z > 8) {
-              g.position.z -= nbAnneaux * espaceAnneau;
-            }
-            // Ondulation de luminosité au fil du défilement
-            g.material.opacity = 0.45 * (1 - defilement * 0.7);
-          });
-
-          // Rotation du noyau polyédrique & anneau
-          noyau.rotation.y = t * 0.35 + defilement * 2.5;
-          noyau.rotation.x = Math.sin(t * 0.4) * 0.25;
-          anneau.rotation.z = t * 0.5;
-
-          // Dérive des particules
-          particules.rotation.y = t * 0.05;
-
-          // Parallaxe souris à friction douce (lerp)
-          souris.x += (cibleSouris.x * 1.8 - souris.x) * 0.045;
-          souris.y += (-cibleSouris.y * 1.2 - souris.y) * 0.045;
-          camera.position.x = souris.x;
-          camera.position.y = souris.y;
-          camera.lookAt(0, 0, -6);
-
-          renderer.render(scene, camera);
-        })();
-
-      } catch (err) {
-        // En cas de problème WebGL, le fond reste le bleu électrique pur de tokens.css
+        renderer.render(scene, camera);
       }
-    }
+      animate();
+    })();
   </script>
-
 </body>
 </html>

@@ -1,57 +1,141 @@
 /* ============================================================
    STYLE CHANEL — tokens mesurés sur chanel.com/fr (2026-10-06)
+   Renforts : genjutsu (timing, reveals) + threejs-skills (tore porcelaine)
    ============================================================ */
 
 :root {
   /* --- Couleurs mesurées --- */
   --chanel-black: #000000;
-  --chanel-dark: #1d1d1d;
-  --chanel-gray: #333333;
-  --chanel-gray-light: #767676;
+  --chanel-dark: #121212;
+  --chanel-gray: #2c2c2c;
+  --chanel-gray-muted: #595959; /* Contraste WCAG AA renforcé (> 7:1 sur fond blanc) */
+  --chanel-border: #e2e2e2;
   --chanel-white: #ffffff;
-  --chanel-overlay: rgba(0, 0, 0, 0.45);
+  --chanel-overlay: rgba(0, 0, 0, 0.48);
 
   /* --- Typographie --- */
-  --chanel-font: "Jost", "Futura", "Century Gothic", Arial, sans-serif;
+  --chanel-font: "Jost", -apple-system, BlinkMacSystemFont, "Futura", "Century Gothic", Arial, sans-serif;
   --chanel-caps: uppercase;
-  --chanel-ls: 0.7px;
+  --chanel-ls: 0.8px;
+  --chanel-ls-wide: 3px;
   --chanel-nav-size: 12px;
   --chanel-weight: 600;
+
+  /* --- Formes & Mouvement --- */
+  --chanel-radius: 0px; /* Règle 4 : stricte rectangulaire */
   --chanel-dur: 0.4s;
+  --chanel-envol: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* --- Base --- */
-.ch { background: var(--chanel-white); color: var(--chanel-black); font-family: var(--chanel-font); }
-.ch h1, .ch h2, .ch h3, .ch .label { text-transform: var(--chanel-caps); letter-spacing: var(--chanel-ls); }
-.ch h1 { font-size: clamp(32px, 4vw, 56px); font-weight: var(--chanel-weight); }
-.ch h3 { font-size: 14px; }
-.ch .label { font-size: var(--chanel-nav-size); font-weight: var(--chanel-weight); }
-.ch a { color: inherit; text-decoration: none; }
+/* --- Base & Reset --- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body.ch {
+  margin: 0;
+  background: var(--chanel-white);
+  color: var(--chanel-black);
+  font-family: var(--chanel-font);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-/* --- Header --- */
-.ch .site-header { text-align: center; padding: 28px 0 0; }
-.ch .site-header .wordmark { font-size: clamp(28px, 3vw, 40px); letter-spacing: 6px; }
-.ch .site-header nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 28px; padding: 20px 16px; }
+::selection {
+  background: var(--chanel-black);
+  color: var(--chanel-white);
+}
 
-/* --- Boutons rectangulaires --- */
+.ch h1, .ch h2, .ch h3, .ch .label {
+  text-transform: var(--chanel-caps);
+  letter-spacing: var(--chanel-ls);
+  margin: 0;
+}
+
+.ch h1 {
+  font-size: clamp(34px, 4.5vw, 64px);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.ch h2 {
+  font-size: clamp(24px, 3.2vw, 42px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.ch .label {
+  font-size: var(--chanel-nav-size);
+  font-weight: var(--chanel-weight);
+  letter-spacing: var(--chanel-ls-wide);
+  color: var(--chanel-gray-muted);
+}
+
+.ch a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --- Boutons Rectangulaires Stricts --- */
 .ch .btn {
-  display: inline-block; padding: 14px 32px;
-  background: var(--chanel-black); color: var(--chanel-white);
-  border-radius: 0; text-transform: var(--chanel-caps); letter-spacing: var(--chanel-ls);
-  font-size: 12px; font-weight: var(--chanel-weight);
-  transition: opacity var(--chanel-dur) ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 36px;
+  background: var(--chanel-black);
+  color: var(--chanel-white);
+  border: 1px solid var(--chanel-black);
+  border-radius: var(--chanel-radius);
+  text-transform: var(--chanel-caps);
+  letter-spacing: 1.2px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--chanel-dur) var(--chanel-envol),
+              color var(--chanel-dur) var(--chanel-envol),
+              opacity var(--chanel-dur) var(--chanel-envol);
 }
-.ch .btn:hover { opacity: 0.8; }
-.ch .btn--outline { background: transparent; color: var(--chanel-white); border: 1px solid var(--chanel-white); }
 
-/* --- Photo reine --- */
-.ch .hero { position: relative; min-height: 86svh; display: grid; align-items: end; justify-items: center; overflow: hidden; }
-.ch .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.ch .hero .veil { position: absolute; inset: 0; background: var(--chanel-overlay); }
-.ch .hero .caption { position: relative; z-index: 1; color: var(--chanel-white); text-align: center; padding: 0 16px 12vh; }
+.ch .btn:hover {
+  background: var(--chanel-white);
+  color: var(--chanel-black);
+}
 
-/* --- Grille sobre --- */
-.ch .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; background: var(--chanel-black); }
-.ch .grid figure { margin: 0; position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--chanel-black); }
-.ch .grid img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
-.ch .grid figure:hover img { transform: scale(1.03); }
+.ch .btn--outline {
+  background: transparent;
+  color: var(--chanel-white);
+  border: 1px solid var(--chanel-white);
+}
+
+.ch .btn--outline:hover {
+  background: var(--chanel-white);
+  color: var(--chanel-black);
+}
+
+.ch a:focus-visible, .ch button:focus-visible, .ch summary:focus-visible {
+  outline: 2px solid var(--chanel-black);
+  outline-offset: 3px;
+}
+
+/* --- Reveals & Timing Genjutsu --- */
+.ch [data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--chanel-envol),
+              transform 0.5s var(--chanel-envol);
+}
+
+.ch [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ch *, body.ch *::before, body.ch *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  body.ch [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

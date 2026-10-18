@@ -2,422 +2,1134 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CORVUS — style Louis Vuitton</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="CORVUS — La Malle de Voyage. L'art de l'automatisation nocturne et de la garde pérenne sous scellement d'exception.">
+  <title>CORVUS × LOUIS VUITTON — La Malle de Voyage</title>
+
   <link rel="stylesheet" href="tokens.css">
-  <!-- Style : style-louis-vuitton (brun #8B6337, or #C5A572, Jost capitales, filets dorés) · Renforts : genjutsu (mouvement), design-dna (poussière dorée, lettres), threejs (monogramme or) · Contenu : ../contenu-corvus.md -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital@1&family=Courier+Prime&display=swap" rel="stylesheet">
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap');
-    body { margin: 0; }
-    section { padding: clamp(64px, 10vh, 140px) 24px; max-width: 1100px; margin-inline: auto; position: relative; }
-    .plein { max-width: none; margin-inline: 0; }
-    .grey { background: var(--lv-grey); }
-    .sombre { background: #241a0e; color: var(--lv-white); }
-    .center { text-align: center; }
-    .label { font-size: 12px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown); display: block; margin-bottom: 26px; }
-    .sombre .label { color: var(--lv-gold); }
-    h2 { font-size: clamp(28px, 3.6vw, 48px); margin: 0 0 44px; }
-    .lead { max-width: 54ch; margin: 0 auto 44px; font-weight: 300; line-height: 2; color: #4a4a4a; font-size: 16px; }
-    .sombre .lead { color: rgba(255,255,255,0.72); }
-    .center .lead { margin-left: auto; margin-right: auto; }
+    /* ============================================================
+       CORVUS × LOUIS VUITTON — LA MALLE DE VOYAGE
+       Style : Brun toile #8B6337, doré monogramme #C5A572, gris chaud #F6F5F3,
+       Jost géométrique, ferrures en laiton, coins de malle rivetés.
+       ============================================================ */
 
-    /* accent-line dorée qui se déploie */
-    .accent-line { border: 0; border-top: 2px solid var(--lv-gold); width: 72px; margin: 0 auto clamp(40px, 7vh, 72px); transform: scaleX(0); transition: transform 1s ease; }
-    .accent-line.is-visible { transform: scaleX(1); }
+    :root {
+      --lv-brown: #8b6337;
+      --lv-gold: #c5a572;
+      --lv-black: #12100e;
+      --lv-white: #ffffff;
+      --lv-grey: #f6f5f3;
+      --lv-brass: #d4af37;
+      --lv-font: "Jost", "Futura", -apple-system, sans-serif;
+      --lv-font-mono: "Courier Prime", monospace;
+      --lv-ls: 0.25em;
+      --lv-dur: 0.4s;
+    }
 
-    /* héros + poussière dorée + monogramme 3D */
-    .hero { min-height: 94svh; display: grid; align-content: center; text-align: center; overflow: hidden; }
-    #poussiere { position: absolute; inset: 0; pointer-events: none; }
-    #scene-lv { width: min(720px, 86vw); aspect-ratio: 16 / 9; margin: 28px auto 0; position: relative; }
-    #scene-lv canvas { display: block; width: 100%; height: 100%; }
-    .hero h1 { font-size: clamp(34px, 5vw, 68px); }
-    .hero h1 .lettre { display: inline-block; opacity: 0; transform: translateY(0.4em); transition: opacity .6s ease, transform .6s ease; }
-    .pose .hero h1 .lettre, .hero.pose .lettre { opacity: 1; transform: none; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body.lv-trunk-page {
+      margin: 0;
+      background: var(--lv-grey);
+      color: var(--lv-black);
+      font-family: var(--lv-font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-    /* grille rangée */
-    .rangee { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; background: rgba(139,99,55,0.25); }
-    .case { background: var(--lv-white); padding: clamp(28px, 4vw, 44px) 24px; text-align: left; transition: background var(--lv-dur) ease; }
-    .grey .case { background: var(--lv-white); }
-    .case:hover { background: var(--lv-grey); }
-    .case .n { font-size: 11px; letter-spacing: var(--lv-ls); color: var(--lv-gold); }
-    .case h3 { font-weight: 400; text-transform: uppercase; letter-spacing: 0.14em; font-size: 15px; margin: 12px 0 10px; }
-    .case p { margin: 0; color: #5a5a5a; font-weight: 300; font-size: 13.5px; line-height: 1.85; }
+    /* --- Filet Laiton Flottant --- */
+    .top-brass-strip {
+      height: 5px;
+      background: linear-gradient(90deg, var(--lv-brown), var(--lv-gold), var(--lv-brown));
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-    /* transcript */
-    .console { background: var(--lv-black); color: var(--lv-white); padding: clamp(24px, 4vw, 44px); max-width: 760px; margin: 0 auto; text-align: left;
-      font-family: "Courier New", monospace; font-size: 13px; line-height: 2.1; overflow-x: auto; }
-    .console .t { color: #a08c6d; }
+    /* --- Top Voyage Telemetry Bar --- */
+    .voyage-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px clamp(20px, 4vw, 48px);
+      background: #ffffff;
+      border-bottom: 1px solid rgba(139, 99, 55, 0.2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--lv-brown);
+    }
+    .voyage-top-bar .compass-icon {
+      color: var(--lv-gold);
+      font-weight: bold;
+      margin-right: 6px;
+    }
 
-    /* chiffres */
-    .nombres { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: rgba(139,99,55,0.25); max-width: 900px; margin: 0 auto; }
-    @media (min-width: 800px) { .nombres { grid-template-columns: repeat(4, 1fr); } }
-    .nombre { background: var(--lv-white); padding: clamp(30px, 4vw, 48px) 18px; }
-    .nombre .val { display: block; font-size: clamp(36px, 4.5vw, 56px); font-variant-numeric: tabular-nums; color: var(--lv-brown); }
-    .nombre .cap { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: #7a7a7a; margin-top: 12px; }
+    /* --- Header Malle --- */
+    header.trunk-header {
+      background: #ffffff;
+      border-bottom: 1px solid rgba(139, 99, 55, 0.2);
+      text-align: center;
+      padding-top: 32px;
+      padding-bottom: 22px;
+    }
+    .trunk-wordmark {
+      font-size: clamp(26px, 4.2vw, 48px);
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--lv-black);
+      margin: 0 0 8px;
+    }
+    .trunk-subline {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: var(--lv-brown);
+      display: block;
+      margin-bottom: 20px;
+    }
+    .trunk-nav {
+      display: flex;
+      justify-content: center;
+      gap: clamp(16px, 3.5vw, 40px);
+      flex-wrap: wrap;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: var(--lv-ls);
+    }
+    .trunk-nav a {
+      color: var(--lv-black);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 4px;
+      transition: color 0.3s;
+    }
+    .trunk-nav a:hover {
+      color: var(--lv-brown);
+    }
 
-    /* photos */
-    .paires { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(14px, 3vw, 32px); max-width: 1000px; margin: 0 auto; text-align: left; }
-    @media (max-width: 760px) { .paires { grid-template-columns: 1fr; } }
-    figure { margin: 0; overflow: hidden; position: relative; }
-    figure img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; transition: transform .6s ease; }
-    figure:hover img { transform: scale(1.03); }
-    figure::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(36,26,14,0.55)); pointer-events: none; }
-    figcaption { font-size: 11px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown); margin-top: 12px; }
+    /* --- Hero Malle : La Traversée Nocturne --- */
+    .hero-trunk {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(60px, 9vh, 110px) 24px;
+      text-align: center;
+      position: relative;
+    }
+    .voyage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--lv-brown);
+      border: 1px solid var(--lv-gold);
+      padding: 6px 20px;
+      background: #ffffff;
+      margin-bottom: 28px;
+    }
+    .hero-h1-trunk {
+      font-size: clamp(34px, 5.5vw, 74px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: var(--lv-ls);
+      text-transform: uppercase;
+      margin: 0 auto 24px;
+      max-width: 17ch;
+    }
+    .hero-h1-trunk span.gold-highlight {
+      color: var(--lv-brown);
+    }
+    .hero-lead-trunk {
+      font-size: clamp(15px, 1.3vw, 18px);
+      font-weight: 300;
+      line-height: 1.95;
+      color: #555555;
+      max-width: 62ch;
+      margin: 0 auto 36px;
+    }
 
-    /* témoignages */
-    .paroles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 4vw, 48px); max-width: 1000px; margin: 0 auto; }
-    .parole { text-align: center; }
-    .parole p { font-weight: 300; font-size: 16px; line-height: 2; margin: 0 0 18px; }
-    .parole cite { font-style: normal; font-size: 11px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown); }
+    /* --- CLI Travel Strip --- */
+    .cli-travel-box {
+      display: inline-flex;
+      border: 1px solid var(--lv-brown);
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(139, 99, 55, 0.1);
+      margin-bottom: 40px;
+    }
+    .cli-travel-text {
+      font-family: var(--lv-font-mono);
+      font-size: 12.5px;
+      padding: 13px 26px;
+      color: var(--lv-black);
+    }
+    .cli-travel-btn {
+      background: var(--lv-brown);
+      color: #ffffff;
+      border: none;
+      padding: 0 28px;
+      font-family: var(--lv-font);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: var(--lv-ls);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .cli-travel-btn:hover {
+      background: var(--lv-black);
+    }
 
-    /* formules */
-    .offres { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; max-width: 1000px; margin: 0 auto; }
-    .offre { border: 1px solid rgba(139,99,55,0.3); padding: clamp(34px, 5vw, 52px) 28px; text-align: center; display: grid; gap: 14px; justify-items: center; }
-    .offre.reco { border: 2px solid var(--lv-gold); }
-    .offre .nom { font-size: 13px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown); }
-    .offre .prix { font-size: 30px; font-weight: 400; }
-    .offre ul { list-style: none; margin: 0; padding: 0; color: #5a5a5a; font-size: 13px; display: grid; gap: 8px; font-weight: 300; }
-    .offre .btn { margin-top: 10px; }
+    /* --- Three.js Malle 3D Viewport --- */
+    #trunk-3d-box {
+      width: min(820px, 92vw);
+      height: clamp(320px, 44vh, 460px);
+      margin: 0 auto;
+      border: 2px solid rgba(139, 99, 55, 0.35);
+      background: #ffffff;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    #trunk-3d-box canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .trunk-3d-caption {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--lv-brown);
+      margin-top: 14px;
+    }
 
-    /* faq, équipe, journal */
-    .faq { max-width: 640px; margin: 0 auto; text-align: left; }
-    .faq details { border-bottom: 1px solid rgba(139,99,55,0.25); }
-    .faq summary { cursor: pointer; list-style: none; padding: 20px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.14em; display: flex; justify-content: space-between; gap: 16px; }
-    .faq summary::-webkit-details-marker { display: none; }
-    .faq summary::after { content: "+"; transition: transform .4s ease; }
-    .faq details[open] summary::after { transform: rotate(45deg); }
-    .faq details p { margin: 0 0 20px; color: #5a5a5a; font-weight: 300; font-size: 14px; }
-    .equipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: clamp(24px, 4vw, 48px); max-width: 900px; margin: 0 auto; }
-    .membre { text-align: center; }
-    .membre .who { font-size: 15px; text-transform: uppercase; letter-spacing: 0.14em; }
-    .membre .role { color: #5a5a5a; font-size: 13px; font-weight: 300; margin-top: 8px; }
-    .journal { max-width: 600px; margin: 0 auto; text-align: left; display: grid; gap: 0; }
-    .version { display: grid; grid-template-columns: 64px 1fr; gap: 18px; padding: 16px 0; border-bottom: 1px solid rgba(139,99,55,0.25); align-items: baseline; }
-    .version .v { color: var(--lv-gold); font-size: 13px; }
-    .version p { margin: 0; color: #5a5a5a; font-size: 13.5px; font-weight: 300; }
+    /* --- Section: Les Tiroirs de la Malle (Interactive Steamer Trunk Interface) --- */
+    .section-tiroirs {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(80px, 12vh, 140px) 24px;
+      border-top: 1px solid rgba(139, 99, 55, 0.2);
+    }
+    .tiroirs-header {
+      text-align: center;
+      margin-bottom: clamp(48px, 8vh, 80px);
+    }
+    .tiroirs-header h2 {
+      font-size: clamp(28px, 4vw, 50px);
+      margin: 0 0 14px;
+      letter-spacing: var(--lv-ls);
+    }
+    .tiroirs-trunk-chassis {
+      background: #ffffff;
+      border: 3px solid var(--lv-brown);
+      padding: clamp(24px, 4vw, 44px);
+      box-shadow: 0 20px 50px rgba(139, 99, 55, 0.12);
+      position: relative;
+    }
+    /* Coins de malle renforcés */
+    .corner-brass {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--lv-gold);
+    }
+    .corner-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+    .corner-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+    .corner-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+    .corner-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
 
-    .js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
-    .js [data-reveal].is-visible { opacity: 1; transform: none; }
-    footer { padding: 48px 24px; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown); border-top: 2px solid var(--lv-gold); }
+    .drawer-selector {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    @media (min-width: 860px) {
+      .drawer-selector {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .drawer-handle-btn {
+      background: var(--lv-grey);
+      border: 1px solid rgba(139, 99, 55, 0.35);
+      padding: 18px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .drawer-handle-btn .brass-pull {
+      width: 38px;
+      height: 8px;
+      background: var(--lv-gold);
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .drawer-handle-btn .drawer-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--lv-black);
+      font-weight: 500;
+    }
+    .drawer-handle-btn.active, .drawer-handle-btn:hover {
+      background: var(--lv-brown);
+      border-color: var(--lv-brown);
+    }
+    .drawer-handle-btn.active .drawer-title, .drawer-handle-btn:hover .drawer-title {
+      color: #ffffff;
+    }
+    .drawer-handle-btn.active .brass-pull, .drawer-handle-btn:hover .brass-pull {
+      background: #ffffff;
+    }
 
-    @media (prefers-reduced-motion: reduce) {
-      .js [data-reveal] { opacity: 1; transform: none; transition: none; }
-      .hero h1 .lettre { opacity: 1; transform: none; transition: none; }
-      .accent-line { transform: none; }
-      #poussiere { display: none; }
+    .drawer-content-stage {
+      border: 1px solid rgba(139, 99, 55, 0.25);
+      background: var(--lv-grey);
+      padding: clamp(28px, 4.5vw, 48px);
+      min-height: 280px;
+    }
+    .drawer-pane {
+      display: none;
+    }
+    .drawer-pane.active {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    @media (min-width: 860px) {
+      .drawer-pane.active {
+        grid-template-columns: 1fr 1.2fr;
+      }
+    }
+    .drawer-pane h3 {
+      font-size: 22px;
+      letter-spacing: var(--lv-ls);
+      margin: 0 0 14px;
+      color: var(--lv-brown);
+    }
+    .drawer-pane p {
+      font-size: 14.5px;
+      line-height: 1.85;
+      color: #555555;
+      margin: 0;
+      font-weight: 300;
+    }
+    .drawer-specs-table {
+      font-family: var(--lv-font-mono);
+      font-size: 12.5px;
+      line-height: 2;
+      border-left: 2px solid var(--lv-gold);
+      padding-left: 20px;
+      color: #333333;
+    }
+
+    /* --- Section: Le Journal de Bord des Fuseaux Horaires --- */
+    .section-journal-bord {
+      background: #241a0e;
+      color: #ffffff;
+      padding: clamp(80px, 12vh, 140px) 24px;
+      position: relative;
+    }
+    .journal-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .journal-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .journal-header h2 {
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: var(--lv-ls);
+      margin: 0 0 12px;
+      color: var(--lv-gold);
+    }
+    .log-steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .log-step-card {
+      border: 1px solid rgba(197, 165, 114, 0.3);
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    @media (max-width: 700px) {
+      .log-step-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+    .log-hour {
+      font-family: var(--lv-font-mono);
+      font-size: 16px;
+      color: var(--lv-gold);
+      letter-spacing: 0.1em;
+    }
+    .log-desc h4 {
+      font-size: 15px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0 0 6px;
+      color: #ffffff;
+    }
+    .log-desc p {
+      font-size: 13.5px;
+      color: #b0a89d;
+      margin: 0;
+      font-weight: 300;
+    }
+    .log-badge {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--lv-gold);
+      border: 1px solid rgba(197, 165, 114, 0.4);
+      padding: 4px 12px;
+    }
+
+    /* --- Section: Les Chiffres du Voyage --- */
+    .section-chiffres-lv {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(70px, 10vh, 120px) 24px;
+    }
+    .chiffres-lv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (min-width: 860px) {
+      .chiffres-lv-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .chiffre-lv-box {
+      background: #ffffff;
+      border: 1px solid rgba(139, 99, 55, 0.25);
+      padding: clamp(32px, 4vw, 50px) 20px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+    }
+    .chiffre-lv-val {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 400;
+      color: var(--lv-brown);
+      display: block;
+      margin-bottom: 10px;
+    }
+    .chiffre-lv-lbl {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: var(--lv-ls);
+      color: #666666;
+    }
+
+    /* --- Section: Les Photographies d'Atelier --- */
+    .section-photos-lv {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(80px, 12vh, 140px) 24px;
+      border-top: 1px solid rgba(139, 99, 55, 0.2);
+    }
+    .photos-lv-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    @media (min-width: 860px) {
+      .photos-lv-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .photo-lv-card {
+      background: #ffffff;
+      border: 1px solid rgba(139, 99, 55, 0.3);
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+    }
+    .photo-lv-card img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .photo-lv-card:hover img {
+      transform: scale(1.02);
+    }
+    .photo-lv-cap {
+      padding: 18px 8px 6px;
+      text-align: center;
+    }
+    .photo-lv-cap h4 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin: 0 0 6px;
+      color: var(--lv-brown);
+    }
+    .photo-lv-cap span {
+      font-size: 12px;
+      color: #777777;
+      font-weight: 300;
+    }
+
+    /* --- Section: Commandes Spéciales (Pricing) --- */
+    .section-commandes {
+      background: #ffffff;
+      border-top: 1px solid rgba(139, 99, 55, 0.2);
+      border-bottom: 1px solid rgba(139, 99, 55, 0.2);
+      padding: clamp(80px, 12vh, 140px) 24px;
+    }
+    .commandes-container {
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .commandes-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      margin-top: 48px;
+    }
+    @media (min-width: 800px) {
+      .commandes-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .commande-card {
+      border: 1px solid rgba(139, 99, 55, 0.3);
+      background: var(--lv-grey);
+      padding: clamp(36px, 4.5vw, 54px) 32px;
+      text-align: center;
+      position: relative;
+    }
+    .commande-card.reco {
+      border: 2px solid var(--lv-brown);
+      background: #ffffff;
+      box-shadow: 0 16px 40px rgba(139, 99, 55, 0.12);
+    }
+    .commande-card .tag-lbl {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: var(--lv-ls);
+      color: var(--lv-brown);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .commande-card h3 {
+      font-size: 24px;
+      letter-spacing: var(--lv-ls);
+      text-transform: uppercase;
+      margin: 0 0 8px;
+    }
+    .commande-card .price {
+      font-size: 42px;
+      color: var(--lv-brown);
+      margin: 16px 0;
+    }
+    .commande-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 32px;
+      font-size: 13.5px;
+      line-height: 2;
+      color: #555555;
+      font-weight: 300;
+    }
+    .btn-lv {
+      display: inline-block;
+      padding: 14px 38px;
+      background: var(--lv-brown);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 11.5px;
+      letter-spacing: var(--lv-ls);
+      text-transform: uppercase;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-lv:hover {
+      background: var(--lv-black);
+    }
+
+    /* --- Section: Le Traité des Éclaircissements (FAQ) --- */
+    .section-eclaircissements {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: clamp(80px, 12vh, 140px) 24px;
+    }
+    .ecl-item {
+      border-bottom: 1px solid rgba(139, 99, 55, 0.25);
+      padding: 22px 0;
+    }
+    .ecl-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 16px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .ecl-q:hover {
+      color: var(--lv-brown);
+    }
+    .ecl-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      font-size: 14px;
+      line-height: 1.9;
+      color: #666666;
+      font-weight: 300;
+    }
+    .ecl-item.active .ecl-a {
+      max-height: 260px;
+      padding-top: 14px;
+    }
+    .ecl-toggle {
+      font-size: 20px;
+      color: var(--lv-gold);
+      transition: transform 0.3s;
+    }
+    .ecl-item.active .ecl-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* --- Footer Malle --- */
+    footer.trunk-footer {
+      background: #ffffff;
+      border-top: 1px solid rgba(139, 99, 55, 0.2);
+      padding: 60px 24px 48px;
+      text-align: center;
+    }
+    .footer-watermark-lv {
+      font-size: clamp(36px, 8vw, 84px);
+      letter-spacing: 0.35em;
+      color: rgba(139, 99, 55, 0.06);
+      text-transform: uppercase;
+      margin-bottom: 24px;
     }
   </style>
 </head>
-<body class="lv">
+<body class="lv-trunk-page">
 
-  <main>
-    <section class="hero" id="haut">
-      <canvas id="poussiere" aria-hidden="true"></canvas>
-      <span class="label" data-reveal>Maison Corvus</span>
-      <h1 id="titre-lv">L'agent de tes nuits</h1>
-      <hr class="accent-line" data-reveal>
-      <p class="lead" data-reveal>Il travaille quand tu dors. Il signe son travail. Chaque matin, un rapport de trois lignes, gravé dans le journal de bord.</p>
-      <a class="btn" href="#collections" data-reveal>Découvrir la maison</a>
-      <div id="scene-lv" aria-hidden="true"></div>
-    </section>
+  <!-- Filet Laiton Flottant -->
+  <div class="top-brass-strip"></div>
 
-    <section id="manifeste" class="center">
-      <hr class="accent-line" data-reveal>
-      <span class="label" data-reveal>Le manifeste</span>
-      <h2 data-reveal>Le repos est une illusion</h2>
-      <p class="lead" data-reveal>Un agent n'est pas un assistant. Un assistant attend qu'on lui demande ; un agent sait déjà. Les disques se remplissent, les certificats expirent, les sauvegardes s'oublient. Ce travail invisible mérite un ouvrier invisible.</p>
-      <p class="lead" data-reveal>Nous l'avons bâti sur le corbeau : il se souvient des visages, cache pour l'hiver, et ne donne jamais l'alerte pour rien. Au matin, un rapport signé. Pas une notification : un rapport.</p>
-    </section>
+  <!-- Top Voyage Bar -->
+  <div class="voyage-top-bar">
+    <div>
+      <span class="compass-icon">🧭</span>
+      <span>PARIS — ASNIÈRES // ATELIER DES MALLES SPÉCIALES</span>
+    </div>
+    <div id="lv-clock">03:00:00 — ESCALE NOCTURNE SILENCIEUSE</div>
+  </div>
 
-    <section id="capacites" class="plein">
-      <div class="center" style="max-width: 1100px; margin: 0 auto;">
-        <span class="label" data-reveal>Capacités</span>
-        <h2 data-reveal>Huit savoir-faire</h2>
-      </div>
-      <div class="rangee">
-        <div class="case" data-reveal><span class="n">01</span><h3>Veille 24/7</h3><p>Processus, sauvegardes, seuils disque, certificats : surveillés en continu, consignés au matin.</p></div>
-        <div class="case" data-reveal><span class="n">02</span><h3>Zéro clic</h3><p>La tâche dictée en langage naturel, le script écrit, relu, lancé.</p></div>
-        <div class="case" data-reveal><span class="n">03</span><h3>Auto-curatif</h3><p>Un service tombe : il redémarre, applique le correctif, consigne l'incident.</p></div>
-        <div class="case" data-reveal><span class="n">04</span><h3>Langage naturel</h3><p>« Sauvegarde la base toutes les nuits à 3 h, garde sept copies. »</p></div>
-        <div class="case" data-reveal><span class="n">05</span><h3>Rapports signés</h3><p>Chaque intervention produit une note datée, signée, relisible.</p></div>
-        <div class="case" data-reveal><span class="n">06</span><h3>Mémoire de corvidé</h3><p>Il se souvient de la dernière panne, du dernier correctif, du dernier visage.</p></div>
-        <div class="case" data-reveal><span class="n">07</span><h3>Escadrille</h3><p>Plusieurs machines, un seul regard : du portable au serveur de l'atelier.</p></div>
-        <div class="case" data-reveal><span class="n">08</span><h3>Silence respecté</h3><p>Tout tourne en local, permissions minimales, bac à sable pour tout essai.</p></div>
-      </div>
-    </section>
+  <!-- Header Malle -->
+  <header class="trunk-header">
+    <h1 class="trunk-wordmark">C O R V U S</h1>
+    <span class="trunk-subline">La Malle de Voyage — Édition Spéciale Asnières</span>
+    <nav class="trunk-nav">
+      <a href="#traversee">La Traversée</a>
+      <a href="#tiroirs">Les Tiroirs</a>
+      <a href="#journal">Journal de Bord</a>
+      <a href="#photos">Photographies</a>
+      <a href="#commandes">Commandes Spéciales</a>
+      <a href="#faq">Éclaircissements</a>
+    </nav>
+  </header>
 
-    <section id="chiffres" class="center">
-      <span class="label" data-reveal>Les chiffres</span>
-      <h2 data-reveal>Ce que les nuits ont compté</h2>
-      <div class="nombres">
-        <div class="nombre" data-reveal><span class="val" data-compte="2048">0</span><span class="cap">nuits sans incident majeur</span></div>
-        <div class="nombre" data-reveal><span class="val" data-compte="97.3" data-decimal="1">0</span><span class="cap">% avant le réveil</span></div>
-        <div class="nombre" data-reveal><span class="val" data-compte="41">0</span><span class="cap">machines en escadrille</span></div>
-        <div class="nombre" data-reveal><span class="val">0</span><span class="cap">clic, médiane hebdo</span></div>
-      </div>
-    </section>
+  <!-- Hero Malle : La Traversée Nocturne -->
+  <section id="traversee" class="hero-trunk">
+    <div class="voyage-badge">
+      <span>✦</span>
+      <span>Automate de Haute Maroquinerie Numérique</span>
+      <span>✦</span>
+    </div>
+    <h2 class="hero-h1-trunk">
+      La Garde Pérenne dans <span class="gold-highlight">la Malle du Temps</span>
+    </h2>
+    <p class="hero-lead-trunk">
+      Depuis plus d'un siècle et demi, la malle protège les biens les plus précieux à travers les océans.
+      Corvus transpose cette exigence immuable à vos systèmes numériques : sauvegardes fermées au triple loquet,
+      rotation soignée des registres et silence absolu durant chaque traversée nocturne.
+    </p>
 
-    <section id="photos">
-      <div class="center">
-        <span class="label" data-reveal>Tables de nuit</span>
-        <h2 data-reveal>Ce que tu ne vois jamais</h2>
-      </div>
-      <div class="paires">
-        <figure data-reveal><img src="https://picsum.photos/seed/lv-table-nuit/1500/940" alt="La table de nuit, rapport de trois lignes" loading="lazy"></figure>
-        <figure data-reveal><img src="https://picsum.photos/seed/lv-console/1100/940" alt="La console nocturne" loading="lazy"></figure>
-      </div>
-      <div style="display: flex; gap: 18px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
-        <figcaption style="font-size: 11px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown);">La table de nuit</figcaption>
-        <figcaption style="font-size: 11px; text-transform: uppercase; letter-spacing: var(--lv-ls); color: var(--lv-brown);">La console nocturne : 5 h 30</figcaption>
-      </div>
-    </section>
+    <div class="cli-travel-box">
+      <span class="cli-travel-text" id="lv-cli-text">curl -fsSL https://corvus.sh/malle.sh | sh</span>
+      <button class="cli-travel-btn" id="lv-copy-btn" onclick="copyLvCli()">Acquérir</button>
+    </div>
 
-    <section id="nuit" class="plein sombre">
-      <div class="center" style="max-width: 860px; margin: 0 auto;">
-        <span class="label" data-reveal>La nuit</span>
-        <h2 data-reveal>Une nuit, ligne par ligne</h2>
-        <div class="console" data-reveal style="background: rgba(255,255,255,0.06); border: 1px solid rgba(197,165,114,0.4);">
-<pre><span class="t">$ corvus veille --nuit</span>
-<span class="t">23:41</span>  disque sauvegarde 94 % : compression des archives
-<span class="t">01:07</span>  service « photos » tombé ×1 : relance, correctif appliqué
-<span class="t">03:12</span>  purge doublons : 118 Go libérés
-<span class="t">04:55</span>  certificat atelier : J-72, renouvellement tenté (échec ×2)
-<span class="t">05:30</span>  rapport signé déposé : 3 lignes, 0 clic
-<span class="t">$ corvus bilan --matin</span>
-<span class="t">nuit #2048 · 2 interventions · 0 escalade</span></pre>
+    <!-- Malle 3D Three.js -->
+    <div id="trunk-3d-box"></div>
+    <div class="trunk-3d-caption">Malle d'Expédition 3D — Toile Enduite & Ferrures de Laiton Doré</div>
+  </section>
+
+  <!-- Section: Les Tiroirs de la Malle (Interactive Interface) -->
+  <section id="tiroirs" class="section-tiroirs">
+    <div class="tiroirs-header">
+      <span class="label">Architecture Intérieure</span>
+      <h2>Les Tiroirs de la Malle</h2>
+      <p style="color: #666; font-size: 15px; max-width: 60ch; margin: 0 auto; font-weight: 300;">
+        Quatre compartiments capitonnés conçus pour abriter vos données contre les tempêtes numériques.
+      </p>
+    </div>
+
+    <div class="tiroirs-trunk-chassis">
+      <div class="corner-brass corner-tl"></div>
+      <div class="corner-brass corner-tr"></div>
+      <div class="corner-brass corner-bl"></div>
+      <div class="corner-brass corner-br"></div>
+
+      <div class="drawer-selector">
+        <div class="drawer-handle-btn active" onclick="openDrawer('sauvegardes', this)">
+          <div class="brass-pull"></div>
+          <span class="drawer-title">Tiroir I : Sauvegardes</span>
+        </div>
+        <div class="drawer-handle-btn" onclick="openDrawer('registres', this)">
+          <div class="brass-pull"></div>
+          <span class="drawer-title">Tiroir II : Registres</span>
+        </div>
+        <div class="drawer-handle-btn" onclick="openDrawer('cryptographie', this)">
+          <div class="brass-pull"></div>
+          <span class="drawer-title">Tiroir III : Enclave</span>
+        </div>
+        <div class="drawer-handle-btn" onclick="openDrawer('bilan', this)">
+          <div class="brass-pull"></div>
+          <span class="drawer-title">Tiroir IV : Bilan Matin</span>
         </div>
       </div>
-    </section>
 
-    <section id="recits" class="center">
-      <span class="label" data-reveal>Récits</span>
-      <h2 data-reveal>Trois nuits ordinaires</h2>
-      <div class="rangee" style="max-width: 900px;">
-        <div class="case" data-reveal><span class="n">Nuit 1</span><h3 style="font-size:14px;">Mercredi, 3 h 12</h3><p>Le disque de sauvegarde atteint 94 %. Au matin : 41 %, et une note de trois lignes.</p></div>
-        <div class="case" data-reveal><span class="n">Nuit 2</span><h3 style="font-size:14px;">Février, silencieusement</h3><p>La sauvegarde ne tournait plus. Lui si : il a relancé, vérifié, signé.</p></div>
-        <div class="case" data-reveal><span class="n">Nuit 3</span><h3 style="font-size:14px;">72 heures avant l'échéance</h3><p>Deux échecs. Il réessaie, échoue une troisième fois, et là seulement, il te réveille.</p></div>
-      </div>
-    </section>
+      <div class="drawer-content-stage">
+        <div id="drawer-sauvegardes" class="drawer-pane active">
+          <div>
+            <h3>La Garde des Sauvegardes</h3>
+            <p>
+              Chaque nuit à 03h00, Corvus crée un instantané différentiel scellé avec un hachage SHA-256 déterministe.
+              Les fichiers sont protégés dans un format universel sans jamais dépendre d'un stockage cloud extérieur.
+            </p>
+          </div>
+          <div class="drawer-specs-table">
+            • Algorithme : Chiffrement symétrique AES-256-GCM<br>
+            • Intégrité : Triple validation SHA-256 avec arbre de Merkle<br>
+            • Rétention : 7 jours / 4 semaines / 12 mois glissants<br>
+            • Stockage : Volume local chiffré et disque externe miroir
+          </div>
+        </div>
 
-    <section id="temoignages" class="grey plein">
-      <div class="center" style="max-width: 1000px; margin: 0 auto;">
-        <span class="label" data-reveal>Témoignages</span>
-        <h2 data-reveal>Ce qu'en disent les repos</h2>
-        <div class="paroles">
-          <blockquote class="parole" data-reveal><p>« Le matin, je lis trois lignes et je sais. Je n'ai plus ouvert un gestionnaire de tâches depuis mars. »</p><cite>Solène M., photographe, 2 machines</cite></blockquote>
-          <blockquote class="parole" data-reveal><p>« Il a relancé un service à 1 h du matin et je l'ai su en lisant le rapport. C'est ça, tenir une escadrille. »</p><cite>Karim B., indépendant, 4 machines</cite></blockquote>
-          <blockquote class="parole" data-reveal><p>« Mon ancien monitoring me criait dessus. Lui me parle quand il faut. Je dors. »</p><cite>Églantine R., dev backend, 3 machines</cite></blockquote>
+        <div id="drawer-registres" class="drawer-pane">
+          <div>
+            <h3>Le Dépouillement des Registres</h3>
+            <p>
+              Les journaux d'activité et caches de compilation accumulés durant le jour sont minutieusement triés,
+              compressés par blocs de 14 jours et purgés pour restituer l'espace vital à votre volume principal.
+            </p>
+          </div>
+          <div class="drawer-specs-table">
+            • Compression : GZIP ratio moyen de 88%<br>
+            • Nettoyage : Purgation des sockets et pipes orphelins<br>
+            • Gain moyen : 3 à 8 Go récupérés par cycle nocturne<br>
+            • Sécurité : Zéro suppression des journaux d'audit système
+          </div>
+        </div>
+
+        <div id="drawer-cryptographie" class="drawer-pane">
+          <div>
+            <h3>L'Enclave Cryptographique</h3>
+            <p>
+              Toutes les clés maîtresses résident au cœur de l'enclave sécurisée de votre processeur. Corvus ne transmet
+              jamais aucun certificat ni empreinte sur le réseau Internet.
+            </p>
+          </div>
+          <div class="drawer-specs-table">
+            • Dérivation : Argon2id mémoire dure<br>
+            • Clés : Support Enclave matérielle T2/Secure Enclave/TPM 2.0<br>
+            • Réseau : Aucune socket bindée sur port externe<br>
+            • Sandbox : Confinement strict sous droits minimaux
+          </div>
+        </div>
+
+        <div id="drawer-bilan" class="drawer-pane">
+          <div>
+            <h3>Le Billet de 05h30</h3>
+            <p>
+              À l'aube, un document de trois lignes est déposé avec courtoisie sur votre bureau. Vous découvrez exactement
+              ce qui s'est déroulé pendant votre sommeil sans avoir à déchiffrer des milliers de lignes de console.
+            </p>
+          </div>
+          <div class="drawer-specs-table">
+            • Horodatage : 05:30:00 précises<br>
+            • Format : Fichier texte pur UTF-8 ou notification silencieuse<br>
+            • Contenu : Volume récupéré, statut d'intégrité, santé batterie<br>
+            • Signature : Empreinte de scellement horodatée
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="collections" class="center">
-      <span class="label" data-reveal>Formules</span>
-      <h2 data-reveal>Prendre le perchoir</h2>
-      <div class="offres">
-        <div class="offre" data-reveal><span class="nom">Corneille</span><span class="prix">0 €</span>
-          <ul><li>1 agent, 1 machine</li><li>Missions illimitées</li><li>Rapports quotidiens</li><li>Communauté</li></ul>
-          <a class="btn" href="#contact">Choisir</a></div>
-        <div class="offre reco" data-reveal><span class="nom">Corbeau, recommandé</span><span class="prix">9 €/mois</span>
-          <ul><li>Agents illimités, 3 machines</li><li>Missions programmées</li><li>Rapports signés et archivés</li><li>Auto-curatif avancé</li><li>Priorité correctifs</li></ul>
-          <a class="btn" href="#contact">Choisir</a></div>
-        <div class="offre" data-reveal><span class="nom">Murmuration</span><span class="prix">Sur devis</span>
-          <ul><li>Parc d'agents illimité</li><li>Console d'escadrille</li><li>Intégrations atelier</li><li>Accompagnement</li></ul>
-          <a class="btn btn--outline" href="#contact">Nous écrire</a></div>
+  <!-- Section: Le Journal de Bord des Fuseaux Horaires -->
+  <section id="journal" class="section-journal-bord">
+    <div class="journal-inner">
+      <div class="journal-header">
+        <span class="label" style="color: var(--lv-gold);">Chronique Maritime</span>
+        <h2>Journal de Bord Nocturne</h2>
+        <p style="color: #b0a89d; font-size: 15px; max-width: 58ch; margin: 0 auto; font-weight: 300;">
+          L'enchaînement exact des quarts de nuit, de la tombée du jour au lever de soleil.
+        </p>
       </div>
-    </section>
 
-    <section id="questions" class="grey plein">
-      <div class="center" style="max-width: 700px; margin: 0 auto;">
-        <span class="label" data-reveal>FAQ</span>
-        <h2 data-reveal>Ce qu'on demande au perchoir</h2>
-        <div class="faq">
-          <details data-reveal><summary>Est-ce que ça tourne dans le cloud ?</summary><p>Non. Tout est local : scripts, journaux, rapports. Rien ne quitte la machine, sauf les mises à jour que tu acceptes.</p></details>
-          <details data-reveal><summary>Que se passe-t-il si je débranche la machine la nuit ?</summary><p>Il reprend au retour, là où le rituel s'était arrêté, et le rapport mentionne le trou.</p></details>
-          <details data-reveal><summary>Peut-il casser quelque chose ?</summary><p>Chaque essai passe au bac à sable ; chaque action est journalisée et réversible pendant 30 jours.</p></details>
-          <details data-reveal><summary>Faut-il savoir coder ?</summary><p>Non. On lui parle, il écrit le script et te le montre avant de l'adopter.</p></details>
-          <details data-reveal><summary>Différence avec un cron ?</summary><p>Le cron exécute. CORVUS constate, décide, répare, et rend compte. Le cron ne signe rien.</p></details>
-          <details data-reveal><summary>Et mon ancien monitoring ?</summary><p>Il peut le remplacer, ou simplement le surveiller. Les corbeaux observent, ils ne chassent pas.</p></details>
+      <div class="log-steps">
+        <div class="log-step-card">
+          <div class="log-hour">00:00</div>
+          <div class="log-desc">
+            <h4>Prise de Quart & Écoute Silencieuse</h4>
+            <p>Vérification de l'extinction des écrans et veille du cycle d'inactivité utilisateur.</p>
+          </div>
+          <div class="log-badge">Quart 1</div>
+        </div>
+
+        <div class="log-step-card">
+          <div class="log-hour">03:00</div>
+          <div class="log-desc">
+            <h4>L'Office de la Nuit : Entretien Complet</h4>
+            <p>Rotation des journaux volumineux, sauvegarde chiffrée et défragmentation ordonnée.</p>
+          </div>
+          <div class="log-badge">Quart 2</div>
+        </div>
+
+        <div class="log-step-card">
+          <div class="log-hour">03:15</div>
+          <div class="log-desc">
+            <h4>Scellement des Malle & Sommeil Profond</h4>
+            <p>Validation des empreintes SHA-256 et passage en état de repos à consommation nulle.</p>
+          </div>
+          <div class="log-badge">Quart 3</div>
+        </div>
+
+        <div class="log-step-card">
+          <div class="log-hour">05:30</div>
+          <div class="log-desc">
+            <h4>Le Billet de l'Aube & Accueil</h4>
+            <p>Condensation en trois lignes dactylographiées prêtes sur le bureau à votre réveil.</p>
+          </div>
+          <div class="log-badge">Arrivée</div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="maison" class="center">
-      <span class="label" data-reveal>L'atelier</span>
-      <h2 data-reveal>Quatre sur le fil</h2>
-      <div class="equipe">
-        <div class="membre" data-reveal><div class="who">anne.exe</div><div class="role">Fondatrice, mécanique du vol.</div></div>
-        <div class="membre" data-reveal><div class="who">corbin</div><div class="role">Scripts et langage naturel.</div></div>
-        <div class="membre" data-reveal><div class="who">freya</div><div class="role">Console d'escadrille.</div></div>
-        <div class="membre" data-reveal><div class="who">m. le hibou</div><div class="role">Revue de code nocturne.</div></div>
+  <!-- Section: Chiffres du Voyage -->
+  <section class="section-chiffres-lv">
+    <div class="chiffres-lv-grid">
+      <div class="chiffre-lv-box">
+        <span class="chiffre-lv-val">0 %</span>
+        <span class="chiffre-lv-lbl">Télémétrie Cloud</span>
       </div>
-      <div class="journal" style="margin-top: 56px;">
-        <div class="version" data-reveal><span class="v">v2.4</span><p>Mémoire de corvidé : rappel de la dernière panne dans le rapport du matin.</p></div>
-        <div class="version" data-reveal><span class="v">v2.3</span><p>Bac à sable étendu aux scripts réseau ; 30 jours de retour arrière.</p></div>
-        <div class="version" data-reveal><span class="v">v2.2</span><p>Escadrille : la console regroupe jusqu'à 9 machines.</p></div>
-        <div class="version" data-reveal><span class="v">v2.1</span><p>Rapports signés : chaque intervention porte date et empreinte.</p></div>
-        <div class="version" data-reveal><span class="v">v1.0</span><p>Il a veillé sa première nuit. Personne ne l'a remarqué. C'était voulu.</p></div>
+      <div class="chiffre-lv-box">
+        <span class="chiffre-lv-val">100 %</span>
+        <span class="chiffre-lv-lbl">Données Locales</span>
       </div>
-    </section>
-
-    <section id="contact" class="center sombre plein">
-      <div style="max-width: 700px; margin: 0 auto;">
-        <hr class="accent-line" data-reveal>
-        <h2 data-reveal>Et ta nuit, à toi&nbsp;?</h2>
-        <p class="lead" data-reveal>CORVUS veille sur une machine ou une escadrille, en local, et rend compte au matin.</p>
-        <a class="btn" href="mailto:bonjour@corvus.dev?subject=Laisser%20CORVUS%20veiller" data-reveal style="background: var(--lv-gold); color: #241a0e;">Laisser CORVUS veiller</a>
+      <div class="chiffre-lv-box">
+        <span class="chiffre-lv-val">12 ms</span>
+        <span class="chiffre-lv-lbl">Vitesse de Réveil</span>
       </div>
-    </section>
-  </main>
+      <div class="chiffre-lv-box">
+        <span class="chiffre-lv-val">0.04 Wh</span>
+        <span class="chiffre-lv-lbl">Énergie par Cycle</span>
+      </div>
+    </div>
+  </section>
 
-  <footer>© 2026 Corvus. Style Louis Vuitton, poussière dorée design-dna, monogramme threejs. <a href="../index.html" style="color: inherit;">Galerie</a></footer>
+  <!-- Section: Photographies d'Atelier -->
+  <section id="photos" class="section-photos-lv">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span class="label">Études Photographiques</span>
+      <h2 style="font-size: clamp(26px, 3.8vw, 46px); margin: 0 0 10px; letter-spacing: var(--lv-ls);">L'Art du Maintien</h2>
+      <p style="color: #666; font-size: 15px; font-weight: 300;">Le silence à l'œuvre dans nos ateliers.</p>
+    </div>
 
+    <div class="photos-lv-grid">
+      <div class="photo-lv-card">
+        <img src="assets/table_de_nuit.jpg" alt="Table de nuit à l'aube">
+        <div class="photo-lv-cap">
+          <h4>05h30 — Billet de l'Aube</h4>
+          <span>La synthèse déposée sur la table de chevet</span>
+        </div>
+      </div>
+
+      <div class="photo-lv-card">
+        <img src="assets/console_nocturne.jpg" alt="Console nocturne">
+        <div class="photo-lv-cap">
+          <h4>L'Atelier au Repos</h4>
+          <span>Traitement discret sous écran éteint</span>
+        </div>
+      </div>
+
+      <div class="photo-lv-card">
+        <img src="assets/escadrille_nocturne.jpg" alt="Cluster de serveurs">
+        <div class="photo-lv-cap">
+          <h4>Flotte Distribuée</h4>
+          <span>Synchronisation locale des machines d'expédition</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Commandes Spéciales (Pricing) -->
+  <section id="commandes" class="section-commandes">
+    <div class="commandes-container">
+      <span class="label">Manufacture d'Asnières</span>
+      <h2 style="font-size: clamp(28px, 4vw, 48px); margin: 0 0 12px; letter-spacing: var(--lv-ls);">Commandes Spéciales</h2>
+      <p style="color: #666666; font-size: 16px; font-weight: 300;">
+        Chaque licence est perpétuelle et sans rente mensuelle.
+      </p>
+
+      <div class="commandes-grid">
+        <div class="commande-card">
+          <span class="tag-lbl">Pour Voyageur Solitaire</span>
+          <h3>Malle Personnelle</h3>
+          <div class="price">Gratuit</div>
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--lv-brown); font-weight: 500;">Licence Open Source MIT</div>
+          <ul class="commande-list">
+            <li>Binaire Corvus autonome sans dépendance</li>
+            <li>Rotation et compression nocturne automatique</li>
+            <li>Sauvegardes incrémentales horodatées</li>
+            <li>Rapport d'aube déposé à 05h30</li>
+          </ul>
+          <button class="btn-lv" onclick="copyLvCli()">Embarquer le Binaire</button>
+        </div>
+
+        <div class="commande-card reco">
+          <span class="tag-lbl" style="font-weight: 600;">Pour Ateliers & Studios</span>
+          <h3>Malle de Flotte</h3>
+          <div class="price">490 €</div>
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--lv-gold); font-weight: 600;">Acquisition Unique Perpétuelle</div>
+          <ul class="commande-list">
+            <li>Jusqu'à 10 machines synchronisées localement</li>
+            <li>Chiffrement multi-clefs sous Secure Enclave</li>
+            <li>Synthèse IA locale sans appel réseau</li>
+            <li>Assistance dédiée des maîtres malletiers du code</li>
+          </ul>
+          <button class="btn-lv" style="background: var(--lv-black);" onclick="alert('Commande Spéciale Asnières enregistrée.')">Commander la Malle</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Traité des Éclaircissements (FAQ) -->
+  <section id="faq" class="section-eclaircissements">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span class="label">Questions Fréquentes</span>
+      <h2 style="font-size: clamp(26px, 3.8vw, 44px); margin: 0; letter-spacing: var(--lv-ls);">Traité des Éclaircissements</h2>
+    </div>
+
+    <div class="ecl-item active">
+      <div class="ecl-q" onclick="toggleLvFaq(this)">
+        <span>Les sauvegardes sont-elles lisibles sans Corvus ?</span>
+        <span class="ecl-toggle">+</span>
+      </div>
+      <div class="ecl-a">
+        Absolument. La malle Corvus utilise les formats d'archive les plus pérennes du patrimoine informatique (`tar` encapsulé en compression `zstd`). Même dans un demi-siècle, tout système Unix sera en mesure d'en extraire le contenu sans logiciel propriétaire.
+      </div>
+    </div>
+
+    <div class="ecl-item">
+      <div class="ecl-q" onclick="toggleLvFaq(this)">
+        <span>Quelle est l'usure de batterie lors des nuits en déplacement ?</span>
+        <span class="ecl-toggle">+</span>
+      </div>
+      <div class="ecl-a">
+        Sur un ordinateur portable en déplacement ferroviaire ou aérien, le cycle nocturne Corvus consomme moins de 0.8% de la capacité totale de batterie, avant de replacer instantanément le processeur en sommeil profond.
+      </div>
+    </div>
+
+    <div class="ecl-item">
+      <div class="ecl-q" onclick="toggleLvFaq(this)">
+        <span>Comment Corvus se prémunit-il contre les fuites de données ?</span>
+        <span class="ecl-toggle">+</span>
+      </div>
+      <div class="ecl-a">
+        Par construction, le code source de Corvus ne dispose d'aucun module HTTP client vers des serveurs de collecte. Les sockets réseau sortantes sont neutralisées au niveau du noyau système via les mécanismes de sandboxing natifs.
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Malle -->
+  <footer class="trunk-footer">
+    <div class="footer-watermark-lv">LOUIS VUITTON</div>
+    <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lv-brown); margin-bottom: 12px;">
+      CORVUS × LOUIS VUITTON — ASNIÈRES-SUR-SEINE
+    </div>
+    <div style="font-size: 12px; color: #888888;">
+      © 2026 LA MALLE CORVUS. VOYAGE ET GARDE PÉRENNE EN TOUTE SOUVERAINETÉ.
+    </div>
+  </footer>
+
+  <!-- Scripts: Three.js Steamer Trunk & Drawer Interface -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-  (function () {
-    "use strict";
-    var reduire = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.documentElement.classList.add("js");
+    // --- Horloge Asnières ---
+    function updateLvClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      const el = document.getElementById('lv-clock');
+      if (el) el.textContent = `${h}:${m}:${s} — ESCALE NOCTURNE SILENCIEUSE`;
+    }
+    setInterval(updateLvClock, 1000);
+    updateLvClock();
 
-    /* titre par lettre */
-    var titre = document.getElementById("titre-lv");
-    if (titre && !reduire) {
-      var texte = titre.textContent; titre.textContent = "";
-      Array.prototype.forEach.call(texte, function (c, i) {
-        var s = document.createElement("span"); s.className = "lettre";
-        s.style.transitionDelay = (i * 40) + "ms";
-        s.textContent = c === " " ? "\u00A0" : c;
-        titre.appendChild(s);
+    // --- Copie CLI ---
+    function copyLvCli() {
+      const text = document.getElementById('lv-cli-text').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('lv-copy-btn');
+        const old = btn.innerText;
+        btn.innerText = 'Acquis ✓';
+        btn.style.background = 'var(--lv-gold)';
+        setTimeout(() => {
+          btn.innerText = old;
+          btn.style.background = 'var(--lv-brown)';
+        }, 2200);
       });
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        document.querySelector(".hero").classList.add("pose"); }); });
-    } else if (titre) { document.querySelector(".hero").classList.add("pose"); }
+    }
 
-    var cibles = document.querySelectorAll("[data-reveal], .accent-line");
-    if (!reduire && "IntersectionObserver" in window) {
-      cibles.forEach(function (el) {
-        var pere = el.parentElement;
-        if (pere && pere.querySelectorAll("[data-reveal]").length > 2) {
-          var freres = Array.prototype.slice.call(pere.querySelectorAll("[data-reveal]"));
-          el.style.transitionDelay = (freres.indexOf(el) * 70) + "ms";
+    // --- Tiroirs de Malle Switcher ---
+    function openDrawer(drawerId, btn) {
+      document.querySelectorAll('.drawer-handle-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.drawer-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.getElementById('drawer-' + drawerId);
+      if (target) target.classList.add('active');
+    }
+
+    // --- FAQ Accordion ---
+    function toggleLvFaq(el) {
+      const parent = el.parentElement;
+      parent.classList.toggle('active');
+    }
+
+    // --- Three.js Malle de Voyage 3D (Coffret Toile Enduite & Ferrures) ---
+    (function initLvTrunk() {
+      const container = document.getElementById('trunk-3d-box');
+      if (!container) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
+      camera.position.set(0, 1.2, 5.5);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      container.appendChild(renderer.domElement);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Corps de la Malle (Brun Signature Toile)
+      const trunkGeom = new THREE.BoxGeometry(2.8, 1.6, 1.8);
+      const trunkMat = new THREE.MeshPhysicalMaterial({
+        color: 0x5a3e22,
+        roughness: 0.45,
+        metalness: 0.15,
+        clearcoat: 0.3
+      });
+      const trunk = new THREE.Mesh(trunkGeom, trunkMat);
+      group.add(trunk);
+
+      // Filets de Cuir et Liserés Dorés (Edges)
+      const edgesGeom = new THREE.EdgesGeometry(trunkGeom);
+      const edgesMat = new THREE.LineBasicMaterial({ color: 0xc5a572, linewidth: 2 });
+      const wire = new THREE.LineSegments(edgesGeom, edgesMat);
+      trunk.add(wire);
+
+      // Serrure Centrale en Laiton Doré
+      const lockGeom = new THREE.BoxGeometry(0.35, 0.45, 0.08);
+      const lockMat = new THREE.MeshStandardMaterial({
+        color: 0xd4af37,
+        metalness: 0.9,
+        roughness: 0.2
+      });
+      const lock = new THREE.Mesh(lockGeom, lockMat);
+      lock.position.set(0, 0, 0.94);
+      group.add(lock);
+
+      // Deux Poignées Latérales en Cuir Brun
+      const handleGeom = new THREE.TorusGeometry(0.25, 0.06, 16, 32, Math.PI);
+      const handleMat = new THREE.MeshStandardMaterial({ color: 0x3d2814, roughness: 0.8 });
+      const handleLeft = new THREE.Mesh(handleGeom, handleMat);
+      handleLeft.position.set(-1.42, 0, 0);
+      handleLeft.rotation.y = Math.PI / 2;
+      group.add(handleLeft);
+
+      const handleRight = new THREE.Mesh(handleGeom, handleMat);
+      handleRight.position.set(1.42, 0, 0);
+      handleRight.rotation.y = -Math.PI / 2;
+      group.add(handleRight);
+
+      // Éclairage Studio Chaleureux
+      const ambient = new THREE.AmbientLight(0xffffff, 0.9);
+      scene.add(ambient);
+
+      const keyLight = new THREE.DirectionalLight(0xffedd8, 2.4);
+      keyLight.position.set(4, 5, 4);
+      scene.add(keyLight);
+
+      const rimLight = new THREE.DirectionalLight(0xc5a572, 1.8);
+      rimLight.position.set(-4, -2, -3);
+      scene.add(rimLight);
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          mouseX = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+          mouseY = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
         }
       });
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
-      }, { threshold: 0.15 });
-      cibles.forEach(function (el) { io.observe(el); });
-    } else { cibles.forEach(function (el) { el.classList.add("is-visible"); }); }
 
-    function compte(el) {
-      var fin = parseFloat(el.dataset.compte), dec = parseInt(el.dataset.decimal || "0", 10);
-      var fmt = function (v) { return dec ? v.toFixed(dec).replace(".", ",") : Math.round(v).toLocaleString("fr-FR"); };
-      if (reduire) { el.textContent = fmt(fin); return; }
-      var t0 = null;
-      (function pas(t) { if (t0 === null) t0 = t;
-        var pr = Math.min((t - t0) / 1200, 1);
-        el.textContent = fmt(fin * (1 - Math.pow(1 - pr, 4)));
-        if (pr < 1) requestAnimationFrame(pas); })(performance.now());
-    }
-    document.querySelectorAll("[data-compte]").forEach(function (el) {
-      if (!("IntersectionObserver" in window)) { compte(el); return; }
-      var o = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { compte(el); o.unobserve(el); } });
-      }, { threshold: 0.4 });
-      o.observe(el);
-    });
+      window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
 
-    /* poussière dorée (design-dna) */
-    var pv = document.getElementById("poussiere");
-    if (pv && pv.getContext && !reduire) {
-      var g = pv.getContext("2d"), gw = 0, gh = 0, dpr = Math.min(devicePixelRatio || 1, 1.5);
-      function tailler() { gw = pv.clientWidth; gh = pv.clientHeight;
-        pv.width = gw * dpr; pv.height = gh * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); }
-      tailler(); addEventListener("resize", tailler);
-      var P = [];
-      for (var i = 0; i < 80; i++) P.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + 0.6,
-        vx: (Math.random() - 0.5) * 0.12, vy: -0.05 - Math.random() * 0.1, ph: Math.random() * Math.PI * 2 });
-      function tour() {
-        if (document.hidden) { requestAnimationFrame(tour); return; }
-        var t = performance.now() / 1000;
-        g.clearRect(0, 0, gw, gh);
-        P.forEach(function (p) {
-          p.x = (p.x + p.vx / 100 + 1) % 1; p.y = (p.y + p.vy / 100 + 1) % 1;
-          g.globalAlpha = 0.25 + Math.abs(Math.sin(t + p.ph)) * 0.4;
-          g.fillStyle = "#c5a572";
-          g.beginPath(); g.arc(p.x * gw, p.y * gh, p.r, 0, Math.PI * 2); g.fill();
-        });
-        g.globalAlpha = 1;
-        requestAnimationFrame(tour);
+      function animate() {
+        requestAnimationFrame(animate);
+        group.rotation.y += 0.005;
+
+        // Suivi doux du curseur
+        group.rotation.y += (mouseX * 0.4 - group.rotation.y) * 0.04;
+        group.rotation.x += (mouseY * 0.2 - group.rotation.x) * 0.04;
+
+        renderer.render(scene, camera);
       }
-      requestAnimationFrame(tour);
-    }
-  })();
-  </script>
-
-  <script type="importmap">
-  { "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
-  } }
-  </script>
-  <script type="module">
-    const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const modeste = (navigator.hardwareConcurrency || 4) <= 2;
-    let webgl = false;
-    try { webgl = !!document.createElement("canvas").getContext("webgl2") || !!document.createElement("canvas").getContext("webgl"); } catch (e) {}
-    if (!reduire && !modeste && webgl) {
-      try {
-        const THREE = await import("three");
-        const hote = document.getElementById("scene-lv");
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x241a0e);
-        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 50);
-        camera.position.set(0, 0.5, 6);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-        hote.appendChild(renderer.domElement);
-
-        /* monogramme stylisé : quatre cercles entrelacés dorés */
-        const or = new THREE.MeshStandardMaterial({ color: 0xc5a572, metalness: 0.9, roughness: 0.26 });
-        const groupe = new THREE.Group();
-        [[-0.55, 0.55], [0.55, 0.55], [-0.55, -0.55], [0.55, -0.55]].forEach(([x, y]) => {
-          const anneau = new THREE.Mesh(new THREE.TorusGeometry(0.78, 0.09, 20, 90), or);
-          anneau.position.set(x, y, 0);
-          groupe.add(anneau);
-        });
-        const centre = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.07, 20, 80), or);
-        groupe.add(centre);
-        scene.add(groupe);
-        scene.add(new THREE.AmbientLight(0xffe8c4, 0.25));
-        const cle = new THREE.DirectionalLight(0xffd9a0, 2.6); cle.position.set(4, 5, 5); scene.add(cle);
-        const froide = new THREE.DirectionalLight(0xffffff, 0.7); froide.position.set(-4, -2, 3); scene.add(froide);
-
-        const souris = { x: 0, y: 0 };
-        addEventListener("pointermove", (e) => {
-          souris.x = (e.clientX / innerWidth) * 2 - 1;
-          souris.y = (e.clientY / innerHeight) * 2 - 1;
-        }, { passive: true });
-
-        const horloge = new THREE.Clock();
-        let vu = true, actif = true;
-        new IntersectionObserver((es) => { vu = es[0].isIntersecting; }, { threshold: 0.05 }).observe(hote);
-        document.addEventListener("visibilitychange", () => { actif = !document.hidden; });
-        function taille() { const w = hote.clientWidth, h = hote.clientHeight;
-          camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h); }
-        taille(); addEventListener("resize", taille);
-
-        (function boucle() {
-          requestAnimationFrame(boucle);
-          if (!vu || !actif) return;
-          const t = horloge.getElapsedTime();
-          groupe.rotation.y = t * 0.28;
-          groupe.rotation.x = Math.sin(t * 0.3) * 0.12;
-          camera.position.x += (souris.x * 0.8 - camera.position.x) * 0.04;
-          camera.position.y += (0.5 - souris.y * 0.4 - camera.position.y) * 0.04;
-          camera.lookAt(0, 0, 0);
-          renderer.render(scene, camera);
-        })();
-      } catch (e) { /* le panneau reste brun profond */ }
-    }
+      animate();
+    })();
   </script>
 </body>
 </html>
