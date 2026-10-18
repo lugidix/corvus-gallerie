@@ -1,79 +1,227 @@
 /* ============================================================
-   SITE TEST — tokens du skill style-hermes-agent (mesurés 2026-10-06)
-   Couleur signature conservée : bleu électrique #0000F2 (test du style)
+   CORVUS × style-hermes-agent (mesuré Nous Research 2026-10-06)
+   Renforts : genjutsu (4 bases) + threejs-skills (shaders/tunnel)
+   Couleur signature : bleu électrique #0000F2
    ============================================================ */
 
 :root {
   /* --- Couleurs --- */
   --ha-bg: #0000f2;
   --ha-bg-deep: #000091;
+  --ha-bg-night: #00005a;
   --ha-ink: #f2f2f2;
-  --ha-ink-soft: rgba(242, 242, 242, 0.6);
-  --ha-line: rgba(242, 242, 242, 0.2);
+  --ha-ink-soft: rgba(242, 242, 242, 0.82); /* Contraste WCAG AA rehaussé */
+  --ha-ink-muted: rgba(242, 242, 242, 0.55);
+  --ha-line: rgba(242, 242, 242, 0.22);
   --ha-line-strong: rgba(242, 242, 242, 0.9);
+  --ha-accent-cyan: #3ed3bc;
+
+  /* Statuts système */
+  --ha-ok: #7ce3b0;
+  --ha-ko: #ff8a80;
+  --ha-warn: #f5c97b;
 
   /* --- Typographie --- */
   --ha-font-h: "Oswald", "Archivo", Arial, sans-serif;
   --ha-font-body: "Archivo", Arial, sans-serif;
   --ha-font-mono: "Courier Prime", "Courier New", monospace;
-  --ha-size-giant: clamp(120px, 24vw, 380px);
-  --ha-size-h1: clamp(56px, 7.5vw, 108px);
-  --ha-size-h3: clamp(26px, 3vw, 48px);
+
+  --ha-size-giant: clamp(100px, 20vw, 360px);
+  --ha-size-h1: clamp(52px, 7vw, 104px);
+  --ha-size-h2: clamp(34px, 4.5vw, 64px);
+  --ha-size-h3: clamp(22px, 2.5vw, 36px);
   --ha-size-label: 11px;
 
-  /* --- Mouvement --- */
+  /* --- Mouvement & Easing (Genjutsu + Effets 06) --- */
   --ha-ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ha-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ha-envol: cubic-bezier(0.22, 1, 0.36, 1);
   --ha-dur-fast: 0.15s;
   --ha-dur-ui: 0.25s;
   --ha-dur-section: 0.6s;
+  --ha-dur-slow: 0.8s;
 
-  --ha-border: 0.8px solid var(--ha-ink-soft);
+  /* --- Arêtes vives & Frontières (Règle 3 : radius 0) --- */
+  --ha-radius: 0px;
+  --ha-border: 0.8px solid var(--ha-line-strong);
+  --ha-border-soft: 0.8px solid var(--ha-line);
   --ha-border-dotted: 0.8px dotted var(--ha-ink-soft);
 }
 
-/* --- Base --- */
-body.ha { margin: 0; background: var(--ha-bg); color: var(--ha-ink); font-family: var(--ha-font-body); }
-.ha h1, .ha h2, .ha h3 { font-family: var(--ha-font-h); text-transform: uppercase; }
-.ha .label { font-family: var(--ha-font-mono); font-size: var(--ha-size-label); text-transform: uppercase; letter-spacing: 1.4px; }
-.ha .btn { border-radius: 0; display: inline-block; padding: 14px 28px; border: 0.8px solid var(--ha-ink); color: var(--ha-ink); text-decoration: none; transition: background var(--ha-dur-fast) var(--ha-ease-standard), color var(--ha-dur-fast) var(--ha-ease-standard); }
-.ha .btn:hover { background: var(--ha-ink); color: var(--ha-bg); }
-.ha .btn--fill { background: var(--ha-ink); color: var(--ha-bg); }
-
-/* --- Keyframes du style --- */
-@keyframes ha-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-.ha-cursor { animation: ha-blink 1s step-end infinite; }
-
-@keyframes ha-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(167%); } }
-.ha .btn-sweep { position: relative; overflow: hidden; }
-.ha .btn-sweep::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
-  animation: ha-sweep 2.2s linear infinite;
+/* --- Base & Reset --- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body.ha {
+  margin: 0;
+  background: var(--ha-bg);
+  color: var(--ha-ink);
+  font-family: var(--ha-font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-@keyframes ha-march { to { background-position: 0.5rem 0; } }
+::selection {
+  background: var(--ha-ink);
+  color: var(--ha-bg);
+}
+
+.ha h1, .ha h2, .ha h3 {
+  font-family: var(--ha-font-h);
+  text-transform: uppercase;
+  font-weight: 200;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.ha .label {
+  font-family: var(--ha-font-mono);
+  font-size: var(--ha-size-label);
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  color: var(--ha-ink-soft);
+}
+
+/* --- Boutons Machine --- */
+.ha .btn {
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border: 0.8px solid var(--ha-ink);
+  color: var(--ha-ink);
+  background: transparent;
+  text-decoration: none;
+  font-family: var(--ha-font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background var(--ha-dur-fast) var(--ha-ease-standard),
+              color var(--ha-dur-fast) var(--ha-ease-standard),
+              transform var(--ha-dur-fast) var(--ha-ease-standard);
+}
+
+.ha .btn:hover {
+  background: var(--ha-ink);
+  color: var(--ha-bg);
+  transform: translateY(-1px);
+}
+
+.ha .btn:active {
+  transform: translateY(1px);
+}
+
+.ha .btn--fill {
+  background: var(--ha-ink);
+  color: var(--ha-bg);
+}
+
+.ha .btn--fill:hover {
+  background: #ffffff;
+  color: var(--ha-bg-deep);
+}
+
+.ha a:focus-visible, .ha button:focus-visible, .ha summary:focus-visible {
+  outline: 2px solid var(--ha-ink);
+  outline-offset: 3px;
+}
+
+/* --- Keyframes du style Hermes Agent --- */
+@keyframes ha-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.ha-cursor {
+  animation: ha-blink 1s step-end infinite;
+}
+
+@keyframes ha-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(180%); }
+}
+.ha .btn-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.ha .btn-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.4) 50%, transparent 60%);
+  animation: ha-sweep 2.4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes ha-march {
+  to { background-position: 0.5rem 0; }
+}
 .ha-marching {
   background-image: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 8px);
   background-size: 0.5rem 100%;
   animation: ha-march 0.6s linear infinite;
 }
 
-@keyframes ha-spin { to { transform: rotate(360deg); } }
-.ha-spin { animation: ha-spin 12s linear infinite; }
+@keyframes ha-spin {
+  to { transform: rotate(360deg); }
+}
+.ha-spin {
+  animation: ha-spin 12s linear infinite;
+}
 
-@keyframes ha-sheet-in { 0% { opacity: 0; transform: translateX(100%); } }
-.ha-sheet-in { animation: ha-sheet-in var(--ha-dur-section) var(--ha-ease-out) both; }
+/* --- Médias Tramés & Duotone --- */
+.ha .media {
+  overflow: hidden;
+  background: var(--ha-bg-deep);
+  position: relative;
+  border: var(--ha-border-soft);
+}
+.ha .media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1) contrast(1.18);
+  mix-blend-mode: luminosity;
+  transition: transform var(--ha-dur-slow) var(--ha-envol), filter var(--ha-dur-slow) var(--ha-envol);
+}
+.ha .media:hover img {
+  transform: scale(1.03);
+  filter: grayscale(0.5) contrast(1.1);
+}
 
-/* --- Images : duotone vers la couleur du fond --- */
-.ha .media { overflow: hidden; background: var(--ha-bg); position: relative; }
-.ha .media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1) contrast(1.15); mix-blend-mode: luminosity; }
+/* Trame matricielle de sécurité visuelle */
+.ha .media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(0, 0, 242, 0.45) 1px, transparent 0);
+  background-size: 4px 4px;
+  pointer-events: none;
+  opacity: 0.85;
+}
 
 /* --- Reveals --- */
-.ha [data-reveal] { opacity: 0; transform: translateY(40px); transition: opacity var(--ha-dur-section) var(--ha-ease-out), transform var(--ha-dur-section) var(--ha-ease-out); }
-.ha [data-reveal].is-visible { opacity: 1; transform: none; }
+.ha [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity var(--ha-dur-section) var(--ha-ease-out),
+              transform var(--ha-dur-section) var(--ha-ease-out);
+}
+.ha [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
 
+/* --- Accessibilité Reduced Motion --- */
 @media (prefers-reduced-motion: reduce) {
-  body.ha *, body.ha *::before, body.ha *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  body.ha [data-reveal] { opacity: 1; transform: none; }
+  body.ha *, body.ha *::before, body.ha *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  body.ha [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

@@ -23,12 +23,10 @@
 </head>
 <body>
   <header>
-    <h1>CORVUS × 13</h1>
-    <p>Le même agent, habillé par les treize skills de la bibliothèque. Chaque version
-    couple le style mesuré du site d'origine avec les effets du recueil
-    (duotone, parallaxe, marquees, survols dim/bright/lift, voiles…), et les dix thèmes
-    sont renforcés par les trois moteurs d'effets : genjutsu (mouvement), design-dna
-    (canvas, texte, images), threejs (scène 3D dans la palette du thème).</p>
+    <h1>CORVUS × 15</h1>
+    <p>Le même agent, décliné en quinze pages : dix thèmes purs, trois moteurs d'effets
+    (genjutsu, design-dna, threejs) et deux stacks expérimentales (PixiJS, GLSL brut).
+    Les dix thèmes sont renforcés par les moteurs, jamais déguisés.</p>
   </header>
 
   <div class="grid">
@@ -83,6 +81,14 @@
     <a class="card" href="threejs/index.html"><span class="n">Three.js</span>
       <span class="d">Scène r169 : murmuration de 600 points attirés par le curseur (clic = dispersion), plume iridescente PBR, bloom, grille, brouillard, parallaxe caméra.</span>
       <span class="s">tests/threejs · fundamentals+materials+interaction+postprocessing</span></a>
+
+    <a class="card" href="pixijs/index.html"><span class="n">PixiJS</span>
+      <span class="d">WebGL 2D v8 : 700 lucioles additives en murmuration, guidées au curseur, dispersées au clic, texture générée, pool sans allocation.</span>
+      <span class="s">tests/pixijs · sprites additifs GPU</span></a>
+
+    <a class="card" href="glsl/index.html"><span class="n">GLSL brut</span>
+      <span class="d">WebGL2 sans bibliothèque : un quad, un fragment shader fBm 5 octaves, fumée iridescente soufflée au curseur, repos GPU hors écran.</span>
+      <span class="s">tests/glsl · zéro dépendance</span></a>
   </div>
 -->
   <p class="note">Même produit, 10 systèmes : dix thèmes purs + trois moteurs d'effets (genjutsu, design-dna, threejs)
